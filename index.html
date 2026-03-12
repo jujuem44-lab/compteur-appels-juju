@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compteur Appels — Juju</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0b;
+    --surface: #111113;
+    --surface2: #18181c;
+    --surface3: #1f1f25;
+    --border: #2a2a32;
+    --border2: #35353f;
+    --accent: #f59e0b;
+    --accent-dim: rgba(245,158,11,0.12);
+    --accent-glow: rgba(245,158,11,0.25);
+    --green: #22c55e;
+    --green-dim: rgba(34,197,94,0.1);
+    --red: #ef4444;
+    --red-dim: rgba(239,68,68,0.1);
+    --blue: #3b82f6;
+    --blue-dim: rgba(59,130,246,0.1);
+    --purple: #a855f7;
+    --purple-dim: rgba(168,85,247,0.1);
+    --muted: #52525e;
+    --text: #e4e4eb;
+    --text-dim: #8b8b98;
+    --font-ui: 'Barlow Condensed', sans-serif;
+    --font-num: 'JetBrains Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-ui);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ─── LOGIN SCREEN ─── */
+  #loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+    padding: 24px;
+  }
+  .login-logo {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: center;
+  }
+  .login-logo span { display: block; color: var(--text-dim); font-size: 13px; font-weight: 400; letter-spacing: 0.08em; margin-top: 4px; }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px 36px;
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .login-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .login-input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    padding: 11px 14px;
+    font-family: var(--font-num);
+    font-size: 16px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    letter-spacing: 0.1em;
+  }
+  .login-input:focus { border-color: var(--accent); }
+  .login-input.error { border-color: var(--red); animation: shake 0.3s ease; }
+  .login-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .login-btn:hover { opacity: 0.9; }
+  .login-btn:active { transform: scale(0.98); }
+  .login-error {
+    font-size: 12px;
+    color: var(--red);
+    text-align: center;
+    height: 14px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* ─── APP (hidden until login) ─── */
+  #app { display: none; }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .header-date {
+    font-family: var(--font-num);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .btn-logout {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-logout:hover { color: var(--red); border-color: var(--red); }
+
+  /* TABS */
+  .tabs-wrapper {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .tab {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 20px 10px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-total { font-family: var(--font-num); font-size: 10px; color: var(--muted); display: block; text-align: center; margin-top: 1px; }
+  .tab.active .tab-total { color: var(--accent); opacity: 0.7; }
+
+  /* CONTENT */
+  .content { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  .team-panel { display: none; }
+  .team-panel.active { display: block; }
+
+  /* TEAM HEADER */
+  .team-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .team-title { font-size: 22px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .team-subtitle { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+  .btn-reset {
+    font-family: var(--font-ui); font-size: 12px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    background: var(--surface2); color: var(--muted);
+    border: 1px solid var(--border); padding: 7px 16px;
+    border-radius: 4px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-reset:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+
+  /* SECTIONS */
+  .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .section-header {
+    padding: 10px 16px 9px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+  .s-activite .section-header { background: rgba(245,158,11,0.08); color: var(--accent); border-bottom: 1px solid rgba(245,158,11,0.15); }
+  .s-activite .section-dot { background: var(--accent); }
+  .s-connexion .section-header { background: rgba(59,130,246,0.08); color: var(--blue); border-bottom: 1px solid rgba(59,130,246,0.15); }
+  .s-connexion .section-dot { background: var(--blue); }
+  .s-qualification .section-header { background: rgba(239,68,68,0.08); color: var(--red); border-bottom: 1px solid rgba(239,68,68,0.15); }
+  .s-qualification .section-dot { background: var(--red); }
+  .s-rdv .section-header { background: rgba(34,197,94,0.08); color: var(--green); border-bottom: 1px solid rgba(34,197,94,0.15); }
+  .s-rdv .section-dot { background: var(--green); }
+  .s-sets .section-header { background: rgba(245,158,11,0.08); color: var(--accent); border-bottom: 1px solid rgba(245,158,11,0.15); }
+  .s-sets .section-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+  .s-conv .section-header { background: rgba(168,85,247,0.08); color: var(--purple); border-bottom: 1px solid rgba(168,85,247,0.15); }
+  .s-conv .section-dot { background: var(--purple); }
+
+  .section-body { padding: 8px 0; }
+
+  /* METRIC ROW */
+  .metric { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 5px 16px; gap: 12px; transition: background 0.1s; }
+  .metric:hover { background: var(--surface2); }
+  .metric.sub { padding-left: 28px; }
+  .metric.sub .metric-label::before { content: '›'; margin-right: 5px; color: var(--muted); }
+  .metric-label { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.2; }
+  .metric.sub .metric-label { font-size: 13px; color: var(--text-dim); }
+  .metric-controls { display: flex; align-items: center; }
+  .btn-counter {
+    width: 26px; height: 26px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text-dim);
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.1s; line-height: 1; flex-shrink: 0;
+  }
+  .btn-counter.minus { border-radius: 4px 0 0 4px; }
+  .btn-counter.plus { border-radius: 0 4px 4px 0; }
+  .btn-counter.minus:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+  .btn-counter.plus:hover { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+  .btn-counter:active { transform: scale(0.92); }
+  .metric-value {
+    font-family: var(--font-num); font-size: 18px; font-weight: 700;
+    color: var(--text); min-width: 44px; text-align: center;
+    background: var(--surface3); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s;
+  }
+  .metric-value.nonzero { color: var(--accent); }
+  .s-sets .metric-value.nonzero { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
+
+  /* SUMMARY BAR */
+  .summary-bar {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;
+    display: flex; flex-wrap: wrap; gap: 20px;
+  }
+  .summary-item { display: flex; flex-direction: column; gap: 2px; }
+  .summary-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .summary-val { font-family: var(--font-num); font-size: 22px; font-weight: 700; }
+  .sv-calls { color: var(--blue); }
+  .sv-sets { color: var(--accent); }
+  .sv-rdv { color: var(--green); }
+  .sv-conv { color: var(--purple); }
+  .sv-qual { color: var(--text); }
+
+  @keyframes pulse-num {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  .metric-value.pulse { animation: pulse-num 0.15s ease; }
+
+  @media (max-width: 600px) {
+    .content { padding: 16px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    header { padding: 12px 16px; }
+    .tabs-wrapper { padding: 0 12px; }
+    .login-box { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── LOGIN ─── -->
+<div id="loginScreen">
+  <div class="login-logo">
+    Call Counter
+    <span>Juju</span>
+  </div>
+  <div class="login-box">
+    <div class="login-label">Mot de passe</div>
+    <input
+      class="login-input"
+      type="password"
+      id="pwdInput"
+      placeholder="••••••••"
+      autocomplete="current-password"
+    />
+    <div class="login-error" id="loginError"></div>
+    <button class="login-btn" onclick="doLogin()">Accéder</button>
+  </div>
+</div>
+
+<!-- ─── APP ─── -->
+<div id="app">
+  <header>
+    <div class="logo">Call Counter <span>/ Closers Group</span></div>
+    <div class="header-right">
+      <div class="header-date" id="headerDate"></div>
+      <button class="btn-logout" onclick="doLogout()">⏏ Déconnexion</button>
+    </div>
+  </header>
+  <div class="tabs-wrapper" id="tabsWrapper"></div>
+  <div class="content" id="mainContent"></div>
+</div>
+
+<script>
+// ─── MOT DE PASSE ─────────────────────────────────────────────────────────────
+// Change "CLOSERS2026" par le mot de passe de ton choix
+const PASSWORD = '01062016JUJU';
+const SESSION_KEY = 'cg_auth_v1';
+const STORAGE_KEY = 'cg_call_counter_v3';
+
+function doLogin() {
+  const input = document.getElementById('pwdInput');
+  const errEl = document.getElementById('loginError');
+  if (input.value === PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    input.classList.add('error');
+    errEl.textContent = 'Mot de passe incorrect.';
+    input.value = '';
+    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1500);
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('pwdInput').value = '';
+}
+
+// Entrée au clavier
+document.getElementById('pwdInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+// Vérif session au chargement
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+}
+
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const TEAMS = ['Team 1', 'Team 2', 'Team 3', 'Team 4', 'Team 5'];
+
+const METRICS = [
+  { id: 'new_leads',     label: 'Nbr new leads pris',   group: 'activite' },
+  { id: 'calls_sortants',label: 'Nbr calls sortants',   group: 'activite' },
+  { id: 'nrp',           label: 'Nbr NRP',              group: 'connexion' },
+  { id: 'joints',        label: 'Nbr joints',           group: 'connexion' },
+  { id: 'jamais_joints', label: 'Nbr jamais joints',    group: 'connexion' },
+  { id: 'qualifies',     label: 'Nbr qualifiés',        group: 'qualification' },
+  { id: 'non_qual',      label: 'Nbr non qualifiés',    group: 'qualification' },
+  { id: 'nq_finances',   label: 'Non qual finances',    group: 'qualification', sub: true },
+  { id: 'nq_autres',     label: 'Non qual autres',      group: 'qualification', sub: true },
+  { id: 'pas_interesse', label: 'Pas/Plus intéressés',  group: 'qualification', sub: true },
+  { id: 'raccroche',     label: 'Raccroché au nez',     group: 'qualification', sub: true },
+  { id: 'mauvais_num',   label: 'Mauvais numéro',       group: 'qualification', sub: true },
+  { id: 'rdv_bookes',    label: 'Nbr RDV bookés',       group: 'rdv' },
+  { id: 'fup',           label: 'Nbr FUP',              group: 'rdv' },
+  { id: 'rdv_prevus',    label: 'Nbr RDV prévus',       group: 'rdv' },
+  { id: 'rdv_honores',   label: 'Nbr RDV honorés',      group: 'rdv' },
+  { id: 'no_shows',      label: 'Nbr No shows',         group: 'rdv' },
+  { id: 'sets',          label: 'Nbr sets',             group: 'sets' },
+  { id: 'conv1',         label: 'Nbr Conv1',            group: 'conv' },
+  { id: 'conv2',         label: 'Nbr Conv2',            group: 'conv' },
+  { id: 'conv3',         label: 'Nbr Conv3',            group: 'conv' },
+];
+
+const GROUPS = {
+  activite:      { label: 'Activité',      cls: 's-activite' },
+  connexion:     { label: 'Connexion',     cls: 's-connexion' },
+  qualification: { label: 'Qualification', cls: 's-qualification' },
+  rdv:           { label: 'RDV',           cls: 's-rdv' },
+  sets:          { label: 'Sets',          cls: 's-sets' },
+  conv:          { label: 'Conversations', cls: 's-conv' },
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+function defaultState() {
+  const s = { activeTeam: 0, teams: {} };
+  TEAMS.forEach((_, ti) => {
+    s.teams[ti] = {};
+    METRICS.forEach(m => { s.teams[ti][m.id] = 0; });
+  });
+  return s;
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    TEAMS.forEach((_, ti) => {
+      if (!parsed.teams[ti]) parsed.teams[ti] = {};
+      METRICS.forEach(m => { if (parsed.teams[ti][m.id] === undefined) parsed.teams[ti][m.id] = 0; });
+    });
+    return parsed;
+  } catch { return defaultState(); }
+}
+
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+
+let STATE;
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function teamTotal(ti) { return STATE.teams[ti]['calls_sortants'] || 0; }
+
+function updateDate() {
+  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  const el = document.getElementById('headerDate');
+  if (el) el.textContent = new Date().toLocaleDateString('fr-FR', opts);
+}
+
+function renderTabs() {
+  const wrap = document.getElementById('tabsWrapper');
+  wrap.innerHTML = '';
+  TEAMS.forEach((name, ti) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (ti === STATE.activeTeam ? ' active' : '');
+    btn.innerHTML = `${name}<span class="tab-total">${teamTotal(ti)} appels</span>`;
+    btn.onclick = () => { STATE.activeTeam = ti; saveState(STATE); renderAll(); };
+    wrap.appendChild(btn);
+  });
+}
+
+function renderSummaryBar(ti) {
+  const t = STATE.teams[ti];
+  return `<div class="summary-bar">
+    <div class="summary-item"><div class="summary-label">Calls sortants</div><div class="summary-val sv-calls">${t.calls_sortants}</div></div>
+    <div class="summary-item"><div class="summary-label">Joints</div><div class="summary-val sv-qual">${t.joints}</div></div>
+    <div class="summary-item"><div class="summary-label">Qualifiés</div><div class="summary-val sv-qual">${t.qualifies}</div></div>
+    <div class="summary-item"><div class="summary-label">RDV bookés</div><div class="summary-val sv-rdv">${t.rdv_bookes}</div></div>
+    <div class="summary-item"><div class="summary-label">Sets</div><div class="summary-val sv-sets">${t.sets}</div></div>
+    <div class="summary-item"><div class="summary-label">Conv1</div><div class="summary-val sv-conv">${t.conv1}</div></div>
+    <div class="summary-item"><div class="summary-label">Conv2</div><div class="summary-val sv-conv">${t.conv2}</div></div>
+    <div class="summary-item"><div class="summary-label">Conv3</div><div class="summary-val sv-conv">${t.conv3}</div></div>
+  </div>`;
+}
+
+function renderMetricRow(m, ti) {
+  const val = STATE.teams[ti][m.id];
+  return `<div class="metric${m.sub ? ' sub' : ''}">
+    <div class="metric-label">${m.label}</div>
+    <div class="metric-controls">
+      <button class="btn-counter minus" onclick="adjust(${ti},'${m.id}',-1)">−</button>
+      <div class="metric-value${val > 0 ? ' nonzero' : ''}" id="val-${ti}-${m.id}">${val}</div>
+      <button class="btn-counter plus" onclick="adjust(${ti},'${m.id}',1)">+</button>
+    </div>
+  </div>`;
+}
+
+function renderSection(groupKey, metrics, ti) {
+  const g = GROUPS[groupKey];
+  return `<div class="section ${g.cls}">
+    <div class="section-header"><span class="section-dot"></span>${g.label}</div>
+    <div class="section-body">${metrics.map(m => renderMetricRow(m, ti)).join('')}</div>
+  </div>`;
+}
+
+function renderTeamPanel(ti) {
+  const byGroup = {};
+  METRICS.forEach(m => { if (!byGroup[m.group]) byGroup[m.group] = []; byGroup[m.group].push(m); });
+  const sections = Object.keys(GROUPS).map(gk => byGroup[gk] ? renderSection(gk, byGroup[gk], ti) : '').join('');
+  return `<div class="team-panel active" id="team-${ti}">
+    <div class="team-header">
+      <div>
+        <div class="team-title">${TEAMS[ti]}</div>
+        <div class="team-subtitle">KPI session — ${new Date().toLocaleDateString('fr-FR')}</div>
+      </div>
+      <button class="btn-reset" onclick="resetTeam(${ti})">↺ Reset ${TEAMS[ti]}</button>
+    </div>
+    ${renderSummaryBar(ti)}
+    <div class="sections-grid">${sections}</div>
+  </div>`;
+}
+
+function renderAll() {
+  renderTabs();
+  document.getElementById('mainContent').innerHTML = renderTeamPanel(STATE.activeTeam);
+}
+
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+function adjust(ti, metricId, delta) {
+  STATE.teams[ti][metricId] = Math.max(0, (STATE.teams[ti][metricId] || 0) + delta);
+  saveState(STATE);
+  const el = document.getElementById(`val-${ti}-${metricId}`);
+  if (el) {
+    const v = STATE.teams[ti][metricId];
+    el.textContent = v;
+    el.className = 'metric-value' + (v > 0 ? ' nonzero' : '');
+    el.classList.add('pulse');
+    setTimeout(() => el.classList.remove('pulse'), 150);
+  }
+  refreshSummary(ti);
+  const tabs = document.querySelectorAll('.tab');
+  if (tabs[ti]) tabs[ti].querySelector('.tab-total').textContent = `${teamTotal(ti)} appels`;
+}
+
+function refreshSummary(ti) {
+  const bar = document.querySelector(`#team-${ti} .summary-bar`);
+  if (!bar) return;
+  const t = STATE.teams[ti];
+  const vals = bar.querySelectorAll('.summary-val');
+  [t.calls_sortants, t.joints, t.qualifies, t.rdv_bookes, t.sets, t.conv1, t.conv2, t.conv3]
+    .forEach((v, i) => { vals[i].textContent = v; });
+}
+
+function resetTeam(ti) {
+  if (!confirm(`Remettre tous les compteurs de ${TEAMS[ti]} à zéro ?`)) return;
+  METRICS.forEach(m => { STATE.teams[ti][m.id] = 0; });
+  saveState(STATE);
+  renderAll();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+function initApp() {
+  STATE = loadState();
+  updateDate();
+  renderAll();
+}
+
+// Auto-init si déjà connecté
+if (sessionStorage.getItem(SESSION_KEY) === '1') initApp();
+</script>
+</body>
+</html>
