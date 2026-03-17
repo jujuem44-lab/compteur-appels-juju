@@ -597,11 +597,22 @@ function renderMetricRow(m, ti) {
   </div>`;
 }
 
+function renderTotalPerdus(ti) {
+  const t = STATE.teams[ti];
+  const total = (t['nq_finances']||0) + (t['nq_autres']||0) + (t['pas_interesse']||0) + (t['raccroche']||0) + (t['mauvais_num']||0);
+  return `<div class="metric" style="border-top:1px solid var(--border);margin-top:4px;">
+    <div class="metric-label" style="color:var(--red);font-weight:700;">Total perdus</div>
+    <div class="metric-controls">
+      <div class="metric-value${total > 0 ? ' nonzero' : ''}" id="val-${ti}-total_perdus" style="min-width:44px;">${total}</div>
+    </div>
+  </div>`;
+}
+
 function renderSection(groupKey, metrics, ti) {
   const g = GROUPS[groupKey];
   return `<div class="section ${g.cls}">
     <div class="section-header"><span class="section-dot"></span>${g.label}</div>
-    <div class="section-body">${metrics.map(m => renderMetricRow(m, ti)).join('')}</div>
+    <div class="section-body">${metrics.map(m => renderMetricRow(m, ti)).join('')}${groupKey === 'qualification' ? renderTotalPerdus(ti) : ''}</div>
   </div>`;
 }
 
@@ -643,9 +654,18 @@ function adjust(ti, metricId, delta) {
     el.classList.add('pulse');
     setTimeout(() => el.classList.remove('pulse'), 150);
   }
-  refreshSummary(ti);
+  refreshTotalPerdus(ti);
   const tabs = document.querySelectorAll('.tab');
   if (tabs[ti]) tabs[ti].querySelector('.tab-total').textContent = `${teamTotal(ti)} appels`;
+}
+
+function refreshTotalPerdus(ti) {
+  const el = document.getElementById(`val-${ti}-total_perdus`);
+  if (!el) return;
+  const t = STATE.teams[ti];
+  const total = (t['nq_finances']||0) + (t['nq_autres']||0) + (t['pas_interesse']||0) + (t['raccroche']||0) + (t['mauvais_num']||0);
+  el.textContent = total;
+  el.className = 'metric-value' + (total > 0 ? ' nonzero' : '');
 }
 
 function refreshSummary(ti) {
