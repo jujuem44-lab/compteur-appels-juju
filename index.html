@@ -4,900 +4,986 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compteur Appels — Juju</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0b;
-    --surface: #111113;
-    --surface2: #18181c;
-    --surface3: #1f1f25;
-    --border: #2a2a32;
-    --border2: #35353f;
-    --accent: #f59e0b;
-    --accent-dim: rgba(245,158,11,0.12);
-    --accent-glow: rgba(245,158,11,0.25);
-    --green: #22c55e;
-    --green-dim: rgba(34,197,94,0.1);
-    --red: #ef4444;
-    --red-dim: rgba(239,68,68,0.1);
-    --blue: #3b82f6;
-    --blue-dim: rgba(59,130,246,0.1);
-    --purple: #a855f7;
-    --purple-dim: rgba(168,85,247,0.1);
-    --muted: #52525e;
-    --text: #e4e4eb;
-    --text-dim: #8b8b98;
-    --font-ui: 'Barlow Condensed', sans-serif;
-    --font-num: 'JetBrains Mono', monospace;
-  }
+:root{
+  --bg:#0a0a0b;--surface:#111113;--surface2:#18181c;--surface3:#1f1f25;
+  --border:#2a2a32;--border2:#35353f;
+  --accent:#f59e0b;--accent-dim:rgba(245,158,11,.12);--accent-glow:rgba(245,158,11,.25);
+  --green:#22c55e;--green-dim:rgba(34,197,94,.1);
+  --red:#ef4444;--red-dim:rgba(239,68,68,.1);
+  --blue:#3b82f6;--blue-dim:rgba(59,130,246,.1);
+  --purple:#a855f7;--purple-dim:rgba(168,85,247,.1);
+  --muted:#52525e;--text:#e4e4eb;--text-dim:#8b8b98;
+  --font-ui:'Barlow Condensed',sans-serif;--font-num:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* LOGIN */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;padding:24px;}
+.login-logo{font-weight:700;font-size:22px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);text-align:center;}
+.login-logo span{display:block;color:var(--text-dim);font-size:13px;font-weight:400;margin-top:4px;}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:32px 36px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:16px;}
+.l-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.l-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:11px 14px;font-family:var(--font-num);font-size:16px;color:var(--text);outline:none;transition:border-color .15s;letter-spacing:.1em;}
+.l-input:focus{border-color:var(--accent);}
+.l-input.error{border-color:var(--red);}
+.l-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:6px;padding:12px;font-family:var(--font-ui);font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;}
+.l-btn:hover{opacity:.9;}
+.l-err{font-size:12px;color:var(--red);text-align:center;height:14px;font-weight:600;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
 
-  body {
-    font-family: var(--font-ui);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-    letter-spacing: 0.01em;
-  }
+/* APP */
+#app{display:none;}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
+.logo{font-weight:700;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
+.logo span{color:var(--text-dim);font-weight:400;}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.hdr-date{font-family:var(--font-num);font-size:11px;color:var(--muted);}
+.sync-badge{font-family:var(--font-num);font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--muted);transition:all .3s;}
+.sync-badge.syncing{color:var(--accent);border-color:var(--accent);}
+.sync-badge.ok{color:var(--green);border-color:var(--green);}
+.sync-badge.err{color:var(--red);border-color:var(--red);}
+.hbtn{background:none;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:4px;cursor:pointer;font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;}
+.hbtn:hover{color:var(--text);border-color:var(--border2);}
 
-  /* ─── LOGIN ─── */
-  #loginScreen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 32px;
-    padding: 24px;
-  }
-  .login-logo {
-    font-family: var(--font-ui);
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-align: center;
-  }
-  .login-logo span { display: block; color: var(--text-dim); font-size: 13px; font-weight: 400; letter-spacing: 0.08em; margin-top: 4px; }
-  .login-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 32px 36px;
-    width: 100%;
-    max-width: 340px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .login-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .login-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 11px 14px;
-    font-family: var(--font-num);
-    font-size: 16px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    letter-spacing: 0.1em;
-  }
-  .login-input:focus { border-color: var(--accent); }
-  .login-input.error { border-color: var(--red); animation: shake 0.3s ease; }
-  .login-btn {
-    width: 100%;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    font-family: var(--font-ui);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-  .login-btn:hover { opacity: 0.9; }
-  .login-btn:active { transform: scale(0.98); }
-  .login-error { font-size: 12px; color: var(--red); text-align: center; height: 14px; font-weight: 600; letter-spacing: 0.06em; }
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
-  }
+/* TABS */
+.tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:2px;overflow-x:auto;align-items:center;}
+.tab{font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;padding:11px 18px 9px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab.dash-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab .tsub{font-family:var(--font-num);font-size:10px;color:var(--muted);display:block;text-align:center;margin-top:1px;}
+.tab.active .tsub{color:inherit;opacity:.7;}
+.btn-addteam{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--muted);border:1px dashed var(--border2);padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .15s;margin-left:6px;white-space:nowrap;}
+.btn-addteam:hover{color:var(--accent);border-color:var(--accent);}
 
-  /* ─── APP ─── */
-  #app { display: none; }
+/* CONTENT */
+.content{max-width:1200px;margin:0 auto;padding:20px;}
+.panel{display:none;}
+.panel.active{display:block;}
 
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo { font-family: var(--font-ui); font-weight: 700; font-size: 17px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-  .logo span { color: var(--text-dim); font-weight: 400; }
-  .header-right { display: flex; align-items: center; gap: 16px; }
-  .header-date { font-family: var(--font-num); font-size: 12px; color: var(--muted); }
-  .btn-logout {
-    font-family: var(--font-ui); font-size: 11px; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    background: none; color: var(--muted);
-    border: 1px solid var(--border); padding: 5px 12px;
-    border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
-  .btn-logout:hover { color: var(--red); border-color: var(--red); }
+/* SUMMARY BAR */
+.sum-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:18px;}
+.si{display:flex;flex-direction:column;gap:2px;}
+.si-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+.si-val{font-family:var(--font-num);font-size:20px;font-weight:700;}
+.c-blue{color:var(--blue);}.c-acc{color:var(--accent);}.c-green{color:var(--green);}.c-purple{color:var(--purple);}.c-txt{color:var(--text);}
 
-  /* TABS */
-  .tabs-wrapper {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    align-items: center;
-  }
-  .tab {
-    font-family: var(--font-ui); font-weight: 600; font-size: 13px;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--text-dim); background: none; border: none;
-    border-bottom: 2px solid transparent;
-    padding: 12px 20px 10px; cursor: pointer;
-    transition: color 0.15s, border-color 0.15s; white-space: nowrap;
-  }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-  .tab-total { font-family: var(--font-num); font-size: 10px; color: var(--muted); display: block; text-align: center; margin-top: 1px; }
-  .tab.active .tab-total { color: var(--accent); opacity: 0.7; }
+/* SECTIONS */
+.sections-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.sec-hdr{padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:7px;}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.s-act .sec-hdr{background:rgba(245,158,11,.08);color:var(--accent);border-bottom:1px solid rgba(245,158,11,.15);}
+.s-act .sdot{background:var(--accent);}
+.s-con .sec-hdr{background:rgba(59,130,246,.08);color:var(--blue);border-bottom:1px solid rgba(59,130,246,.15);}
+.s-con .sdot{background:var(--blue);}
+.s-qua .sec-hdr{background:rgba(239,68,68,.08);color:var(--red);border-bottom:1px solid rgba(239,68,68,.15);}
+.s-qua .sdot{background:var(--red);}
+.s-rdv .sec-hdr{background:rgba(34,197,94,.08);color:var(--green);border-bottom:1px solid rgba(34,197,94,.15);}
+.s-rdv .sdot{background:var(--green);}
+.s-set .sec-hdr{background:rgba(245,158,11,.08);color:var(--accent);border-bottom:1px solid rgba(245,158,11,.15);}
+.s-set .sdot{background:var(--accent);box-shadow:0 0 6px var(--accent);}
+.s-cvn .sec-hdr{background:rgba(168,85,247,.08);color:var(--purple);border-bottom:1px solid rgba(168,85,247,.15);}
+.s-cvn .sdot{background:var(--purple);}
+.sec-body{padding:6px 0;}
 
-  /* Bouton + Team dans les tabs */
-  .btn-add-team {
-    font-family: var(--font-ui); font-size: 12px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    background: none; color: var(--muted);
-    border: 1px dashed var(--border2); padding: 5px 12px;
-    border-radius: 4px; cursor: pointer; transition: all 0.15s;
-    margin-left: 8px; white-space: nowrap; flex-shrink: 0;
-  }
-  .btn-add-team:hover { color: var(--accent); border-color: var(--accent); }
+/* METRIC ROW */
+.mrow{display:grid;grid-template-columns:1fr auto;align-items:center;padding:4px 14px;gap:10px;transition:background .1s;}
+.mrow:hover{background:var(--surface2);}
+.mrow.sub{padding-left:26px;}
+.mrow.sub .mlbl::before{content:'›';margin-right:5px;color:var(--muted);}
+.mlbl{font-size:13px;font-weight:500;color:#ffffff;line-height:1.2;}
+.mlbl.caps{text-transform:uppercase;font-weight:700;font-size:13px;letter-spacing:.04em;}
+.mrow.sub .mlbl{font-size:12px;color:var(--text-dim);font-weight:400;}
+.mctrl{display:flex;align-items:center;}
+.cbtn{width:26px;height:26px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1;flex-shrink:0;}
+.cbtn.m{border-radius:4px 0 0 4px;}
+.cbtn.p{border-radius:0 4px 4px 0;}
+.cbtn.m:hover{background:var(--red-dim);color:var(--red);border-color:var(--red);}
+.cbtn.p:hover{background:var(--green-dim);color:var(--green);border-color:var(--green);}
+.cbtn:active{transform:scale(.92);}
+.mval{font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--text);min-width:44px;text-align:center;background:var(--surface3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);height:26px;display:flex;align-items:center;justify-content:center;transition:color .15s;}
+.mval.nz{color:var(--accent);}
+.s-set .mval.nz{text-shadow:0 0 12px var(--accent-glow);}
+.mro{display:grid;grid-template-columns:1fr auto;align-items:center;padding:4px 14px;background:rgba(239,68,68,.04);}
+.mro-lbl{font-size:13px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:.04em;}
+.mro-val{font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--text-dim);min-width:44px;text-align:center;background:var(--surface3);border:1px solid var(--border);border-radius:4px;height:26px;display:flex;align-items:center;justify-content:center;}
+.mro-val.nz{color:var(--red);}
+.mtot{display:grid;grid-template-columns:1fr auto;align-items:center;padding:5px 14px;background:rgba(239,68,68,.06);border-top:1px solid rgba(239,68,68,.15);margin-top:2px;}
+.mtot-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);}
+.mtot-val{font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--red);min-width:44px;text-align:center;}
+@keyframes pn{0%{transform:scale(1);}50%{transform:scale(1.2);}100%{transform:scale(1);}}
+.mval.pulse{animation:pn .15s ease;}
 
-  /* CONTENT */
-  .content { max-width: 1200px; margin: 0 auto; padding: 24px; }
-  .team-panel { display: none; }
-  .team-panel.active { display: block; }
+/* TEAM ACTIONS */
+.team-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.team-title{font-size:20px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.team-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.team-acts{display:flex;gap:6px;flex-wrap:wrap;}
+.btn-save{background:var(--accent);color:#000;border:none;border-radius:6px;padding:8px 16px;font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+.btn-save:hover{opacity:.9;}
+.btn-copy{background:var(--green);color:#000;border:none;border-radius:6px;padding:8px 14px;font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+.btn-sm{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:4px;cursor:pointer;transition:all .15s;}
+.btn-sm:hover{background:var(--red-dim);color:var(--red);border-color:var(--red);}
 
-  /* TEAM HEADER */
-  .team-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-  .team-title { font-size: 22px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
-  .team-subtitle { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
-  .team-actions { display: flex; gap: 8px; }
-  .btn-reset {
-    font-family: var(--font-ui); font-size: 12px; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    background: var(--surface2); color: var(--muted);
-    border: 1px solid var(--border); padding: 7px 16px;
-    border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
-  .btn-reset:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
-  .btn-delete-team {
-    font-family: var(--font-ui); font-size: 12px; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    background: var(--surface2); color: var(--muted);
-    border: 1px solid var(--border); padding: 7px 16px;
-    border-radius: 4px; cursor: pointer; transition: all 0.15s;
-  }
-  .btn-delete-team:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
+/* ─── DASHBOARD ─── */
+.dash-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.dash-title{font-size:20px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);}
+.dash-sub{font-size:12px;color:var(--text-dim);margin-top:3px;}
+.dash-ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.dsel{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--font-ui);font-size:13px;font-weight:600;outline:none;cursor:pointer;}
+.btn-refresh{background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:7px 12px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
+.btn-refresh:hover{background:var(--blue);color:#000;}
+.dash-loading{text-align:center;padding:60px;color:var(--muted);font-family:var(--font-num);font-size:13px;}
 
-  /* SECTIONS */
-  .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
-  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .section-header {
-    padding: 10px 16px 9px; font-size: 11px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;}
+.kpi-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.kpi-val{font-family:var(--font-num);font-size:24px;font-weight:700;margin-bottom:4px;}
+.kpi-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+.kpi-bar{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden;}
+.kpi-fill{height:100%;border-radius:2px;transition:width .6s ease;}
+.st-ok .kpi-val{color:var(--green);} .st-ok .kpi-fill{background:var(--green);}
+.st-warn .kpi-val{color:var(--accent);} .st-warn .kpi-fill{background:var(--accent);}
+.st-bad .kpi-val{color:var(--red);} .st-bad .kpi-fill{background:var(--red);}
+.st-neutral .kpi-val{color:var(--blue);} .st-neutral .kpi-fill{background:var(--blue);}
+.st-none .kpi-val{color:var(--text);}
 
-  .s-activite .section-header { background: rgba(245,158,11,0.08); color: var(--accent); border-bottom: 1px solid rgba(245,158,11,0.15); }
-  .s-activite .section-dot { background: var(--accent); }
-  .s-connexion .section-header { background: rgba(59,130,246,0.08); color: var(--blue); border-bottom: 1px solid rgba(59,130,246,0.15); }
-  .s-connexion .section-dot { background: var(--blue); }
-  .s-qualification .section-header { background: rgba(239,68,68,0.08); color: var(--red); border-bottom: 1px solid rgba(239,68,68,0.15); }
-  .s-qualification .section-dot { background: var(--red); }
-  .s-rdv .section-header { background: rgba(34,197,94,0.08); color: var(--green); border-bottom: 1px solid rgba(34,197,94,0.15); }
-  .s-rdv .section-dot { background: var(--green); }
-  .s-sets .section-header { background: rgba(245,158,11,0.08); color: var(--accent); border-bottom: 1px solid rgba(245,158,11,0.15); }
-  .s-sets .section-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
-  .s-conv .section-header { background: rgba(168,85,247,0.08); color: var(--purple); border-bottom: 1px solid rgba(168,85,247,0.15); }
-  .s-conv .section-dot { background: var(--purple); }
+/* FUNNEL */
+.funnel-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
+.sec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.funrow{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.funlbl{font-size:12px;color:var(--text-dim);width:160px;flex-shrink:0;}
+.funbar{flex:1;height:18px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.funfill{height:100%;border-radius:3px;transition:width .6s ease;}
+.funnum{font-family:var(--font-num);font-size:12px;font-weight:700;color:var(--text);width:46px;text-align:right;flex-shrink:0;}
+.funpct{font-family:var(--font-num);font-size:11px;color:var(--muted);width:42px;text-align:right;flex-shrink:0;}
 
-  /* Ligne calculée lecture seule (Nbr non qualifiés + Total perdus) */
-  .metric-readonly {
-    display: grid; grid-template-columns: 1fr auto;
-    align-items: center; padding: 5px 16px;
-    background: rgba(239,68,68,0.04);
-  }
-  .metric-readonly-label {
-    font-size: 14px; font-weight: 600;
-    color: var(--text-dim);
-  }
-  .metric-readonly-value {
-    font-family: var(--font-num); font-size: 18px; font-weight: 700;
-    color: var(--text-dim); min-width: 44px; text-align: center;
-    background: var(--surface3); border: 1px solid var(--border);
-    border-radius: 4px; height: 26px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .metric-readonly-value.nonzero { color: var(--red); }
+/* ALERTS */
+.alerts-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
+.alert-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:5px;margin-bottom:5px;}
+.alert-row.st-ok{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);}
+.alert-row.st-warn{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);}
+.alert-row.st-bad{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);}
+.alert-row.st-none{background:var(--surface2);border:1px solid var(--border);}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.st-ok .adot{background:var(--green);} .st-warn .adot{background:var(--accent);} .st-bad .adot{background:var(--red);} .st-none .adot{background:var(--muted);}
+.albl{flex:1;font-size:13px;color:var(--text);}
+.aval{font-family:var(--font-num);font-size:13px;font-weight:700;}
+.st-ok .aval{color:var(--green);} .st-warn .aval{color:var(--accent);} .st-bad .aval{color:var(--red);} .st-none .aval{color:var(--text-dim);}
+.atgt{font-size:10px;color:var(--muted);margin-left:6px;white-space:nowrap;}
 
-  /* Ligne Total perdus — lecture seule */
-  .metric-total {
-    display: grid; grid-template-columns: 1fr auto;
-    align-items: center; padding: 6px 16px;
-    background: rgba(239,68,68,0.06);
-    border-top: 1px solid rgba(239,68,68,0.15);
-    margin-top: 2px;
-  }
-  .metric-total-label {
-    font-size: 12px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--red);
-  }
-  .metric-total-value {
-    font-family: var(--font-num); font-size: 18px; font-weight: 700;
-    color: var(--red); min-width: 44px; text-align: center;
-  }
+/* HISTORY TABLE */
+.hist-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;overflow-x:auto;}
+.htable{width:100%;border-collapse:collapse;font-size:12px;}
+.htable th{text-align:left;padding:6px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+.htable td{padding:7px 8px;border-bottom:1px solid var(--border);font-family:var(--font-num);white-space:nowrap;}
+.htable tr:last-child td{border-bottom:none;}
+.htable td:first-child,.htable td:nth-child(2){font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--text);}
+.td-ok{color:var(--green);} .td-warn{color:var(--accent);} .td-bad{color:var(--red);}
 
-  .section-body { padding: 8px 0; }
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:26px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:16px;}
+.modal-title{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
+.modal-desc{font-size:12px;color:var(--text-dim);line-height:1.6;}
+.mlbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.minput{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--font-num);font-size:13px;color:var(--text);outline:none;transition:border-color .15s;}
+.minput:focus{border-color:var(--accent);}
+.minput.err{border-color:var(--red);}
+.merr{font-size:11px;color:var(--red);height:14px;font-weight:600;}
+.mactions{display:flex;gap:8px;}
+.mbtn-ok{flex:1;background:var(--accent);color:#000;border:none;border-radius:6px;padding:9px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+.mbtn-cancel{flex:1;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:9px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+.mstatus{padding:9px 12px;border-radius:6px;font-size:12px;font-weight:600;display:none;}
+.mstatus.ok{display:block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
+.mstatus.err{display:block;background:var(--red-dim);border:1px solid rgba(239,68,68,.3);color:var(--red);}
 
-  /* METRIC ROW */
-  .metric { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 5px 16px; gap: 12px; transition: background 0.1s; }
-  .metric:hover { background: var(--surface2); }
-  .metric.sub { padding-left: 28px; }
-  .metric.sub .metric-label::before { content: '›'; margin-right: 5px; color: var(--muted); }
-  .metric-label { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.2; }
-  .metric.sub .metric-label { font-size: 13px; color: var(--text-dim); }
-  .metric-controls { display: flex; align-items: center; }
-  .btn-counter {
-    width: 26px; height: 26px; border: 1px solid var(--border);
-    background: var(--surface2); color: var(--text-dim);
-    font-size: 16px; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.1s; line-height: 1; flex-shrink: 0;
-  }
-  .btn-counter.minus { border-radius: 4px 0 0 4px; }
-  .btn-counter.plus { border-radius: 0 4px 4px 0; }
-  .btn-counter.minus:hover { background: var(--red-dim); color: var(--red); border-color: var(--red); }
-  .btn-counter.plus:hover { background: var(--green-dim); color: var(--green); border-color: var(--green); }
-  .btn-counter:active { transform: scale(0.92); }
-  .metric-value {
-    font-family: var(--font-num); font-size: 18px; font-weight: 700;
-    color: var(--text); min-width: 44px; text-align: center;
-    background: var(--surface3); border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border); height: 26px;
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s;
-  }
-  .metric-value.nonzero { color: var(--accent); }
-  .s-sets .metric-value.nonzero { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
+/* PARAMS PANEL */
+.params-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
+.param-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
+.param-row:last-child{border-bottom:none;}
+.param-name{flex:1;font-size:13px;color:var(--text);}
+.param-inputs{display:flex;gap:8px;align-items:center;}
+.param-inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:5px 8px;font-family:var(--font-num);font-size:12px;color:var(--text);outline:none;width:70px;}
+.param-inp:focus{border-color:var(--accent);}
+.param-toggle{width:36px;height:20px;border-radius:10px;background:var(--border);cursor:pointer;position:relative;transition:background .2s;border:none;flex-shrink:0;}
+.param-toggle.on{background:var(--green);}
+.param-toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .2s;}
+.param-toggle.on::after{transform:translateX(16px);}
 
-  /* SUMMARY BAR */
-  .summary-bar {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 16px 20px; margin-bottom: 20px;
-    display: flex; flex-wrap: wrap; gap: 20px;
-  }
-  .summary-item { display: flex; flex-direction: column; gap: 2px; }
-  .summary-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .summary-val { font-family: var(--font-num); font-size: 22px; font-weight: 700; }
-  .sv-calls { color: var(--blue); }
-  .sv-sets { color: var(--accent); }
-  .sv-rdv { color: var(--green); }
-  .sv-conv { color: var(--purple); }
-  .sv-qual { color: var(--text); }
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#000;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:9px 18px;border-radius:6px;transition:transform .3s ease;z-index:300;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.acc{background:var(--accent);}
+.toast.err{background:var(--red);color:white;}
 
-  @keyframes pulse-num {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
-  .metric-value.pulse { animation: pulse-num 0.15s ease; }
-
-  /* BOUTON COPIER */
-  .copy-btn-wrap { margin-bottom: 20px; }
-  .btn-copy {
-    width: 100%;
-    background: var(--green);
-    color: #000;
-    border: none;
-    border-radius: 6px;
-    padding: 13px;
-    font-family: var(--font-ui);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-  .btn-copy:hover { opacity: 0.9; }
-  .btn-copy:active { transform: scale(0.98); }
-
-  /* MODAL */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px;
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  .modal-title {
-    font-size: 16px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--accent);
-  }
-  .modal-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .modal-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border2);
-    border-radius: 6px;
-    padding: 10px 14px;
-    font-family: var(--font-ui);
-    font-size: 15px;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    letter-spacing: 0.05em;
-  }
-  .modal-input:focus { border-color: var(--accent); }
-  .modal-input.error { border-color: var(--red); }
-  .modal-error { font-size: 12px; color: var(--red); height: 14px; font-weight: 600; }
-  .modal-actions { display: flex; gap: 10px; }
-  .btn-modal-confirm {
-    flex: 1; background: var(--accent); color: #000;
-    border: none; border-radius: 6px; padding: 10px;
-    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .btn-modal-confirm:hover { opacity: 0.9; }
-  .btn-modal-cancel {
-    flex: 1; background: var(--surface2); color: var(--muted);
-    border: 1px solid var(--border); border-radius: 6px; padding: 10px;
-    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn-modal-cancel:hover { color: var(--text); border-color: var(--border2); }
-
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--green); color: #000;
-    font-family: var(--font-ui); font-size: 13px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 10px 20px; border-radius: 6px;
-    transition: transform 0.3s ease; z-index: 300;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  @media (max-width: 600px) {
-    .content { padding: 16px; }
-    .sections-grid { grid-template-columns: 1fr; }
-    header { padding: 12px 16px; }
-    .tabs-wrapper { padding: 0 12px; }
-    .login-box { padding: 24px 20px; }
-  }
+@media(max-width:600px){
+  .content{padding:12px;}
+  .sections-grid{grid-template-columns:1fr;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  header{padding:10px 12px;}
+}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <div class="login-logo">
-    Call Counter
-    <span>Juju</span>
-  </div>
+  <div class="login-logo">Call Counter<span>📊 Sales OS — Terrain</span></div>
   <div class="login-box">
-    <div class="login-label">Mot de passe</div>
-    <input class="login-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password" />
-    <div class="login-error" id="loginError"></div>
-    <button class="login-btn" onclick="doLogin()">Accéder</button>
+    <div class="l-label">Mot de passe</div>
+    <input class="l-input" type="password" id="pwdInput" placeholder="••••••••" autocomplete="current-password">
+    <div class="l-err" id="loginError"></div>
+    <button class="l-btn" onclick="doLogin()">Accéder</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <header>
-    <div class="logo">Call Counter <span>/ Closers Group</span></div>
-    <div class="header-right">
-      <div class="header-date" id="headerDate"></div>
-      <button class="btn-logout" onclick="doLogout()">⏏ Déconnexion</button>
+    <div class="logo">Call Counter <span>/ Sales OS</span></div>
+    <div class="hdr-right">
+      <div class="hdr-date" id="hdrDate"></div>
+      <div class="sync-badge" id="syncBadge">⬡ local</div>
+      <button class="hbtn" onclick="openSettings()">⚙ Sync</button>
+      <button class="hbtn" onclick="openParams()">⚡ Paramètres</button>
+      <button class="hbtn" onclick="doLogout()">⏏</button>
     </div>
   </header>
-  <div class="tabs-wrapper" id="tabsWrapper"></div>
+  <div class="tabs" id="tabsWrap"></div>
   <div class="content" id="mainContent"></div>
 </div>
 
-<!-- MODAL AJOUTER TEAM -->
-<div class="modal-overlay" id="modalAddTeam">
+<!-- MODAL SETTINGS -->
+<div class="overlay" id="overlaySettings">
   <div class="modal">
-    <div class="modal-title">➕ Ajouter une team</div>
-    <div>
-      <div class="modal-label">Nom de la team</div>
-      <input class="modal-input" type="text" id="newTeamInput" placeholder="Ex : DV W S" maxlength="30" />
-      <div class="modal-error" id="newTeamError"></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-modal-cancel" onclick="closeAddTeam()">Annuler</button>
-      <button class="btn-modal-confirm" onclick="confirmAddTeam()">Ajouter</button>
+    <div class="modal-title">⚙ Configuration Airtable</div>
+    <div class="modal-desc">Token stocké uniquement dans ce navigateur — jamais dans le code.<br>
+    <strong style="color:var(--accent)">airtable.com → profil → Developer Hub → Personal access tokens</strong></div>
+    <div><div class="mlbl">Token (pat…)</div><input class="minput" type="password" id="atTokenInput" placeholder="patXXXXX…"></div>
+    <div class="mstatus" id="atStatus"></div>
+    <div class="mactions">
+      <button class="mbtn-cancel" onclick="closeSettings()">Fermer</button>
+      <button class="mbtn-ok" onclick="saveToken()">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
+<!-- MODAL ADD TEAM -->
+<div class="overlay" id="overlayAddTeam">
+  <div class="modal">
+    <div class="modal-title">➕ Ajouter une team</div>
+    <div><div class="mlbl">Nom de la team</div>
+    <input class="minput" type="text" id="newTeamInput" placeholder="Ex : DV W S" maxlength="30">
+    <div class="merr" id="newTeamErr"></div></div>
+    <div class="mactions">
+      <button class="mbtn-cancel" onclick="closeAddTeam()">Annuler</button>
+      <button class="mbtn-ok" onclick="confirmAddTeam()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARAMS -->
+<div class="overlay" id="overlayParams">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-title">⚡ Paramètres KPI & Objectifs</div>
+    <div class="modal-desc">Active/désactive les KPIs et modifie les objectifs. Cible et minimum en % (ex: 35 pour 35%).</div>
+    <div id="paramsContent"></div>
+    <div class="mactions">
+      <button class="mbtn-cancel" onclick="closeParams()">Fermer</button>
+      <button class="mbtn-ok" onclick="saveParams()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ─── MOT DE PASSE ─────────────────────────────────────────────────────────────
-const PASSWORD = 'Juju1506';
-const SESSION_KEY = 'cg_auth_v1';
-const STORAGE_KEY = 'cg_call_counter_v5'; // v5
+/* ══════════════════════════════════
+   CONFIG AIRTABLE
+══════════════════════════════════ */
+const AT_BASE     = 'appOoMhNQEG3pHwpy';
+const AT_SESSIONS = 'tbl7CBa6QlZJQ4XkA';
+const AT_LEADS    = 'tblij8Zh1dUrrqn9z';
+
+/* ══════════════════════════════════
+   AUTH
+══════════════════════════════════ */
+const PWD = 'Juju1506';
+const S_AUTH = 'cg_auth_v1';
+const S_TOKEN = 'cg_at_token_v3';
+const S_STATE = 'cg_counter_v6';
+const S_TEAMS = 'cg_teams_v4';
+const S_PARAMS = 'cg_kpi_params_v1';
 
 function doLogin() {
-  const input = document.getElementById('pwdInput');
-  const errEl = document.getElementById('loginError');
-  if (input.value === PASSWORD) {
-    sessionStorage.setItem(SESSION_KEY, '1');
+  const inp = document.getElementById('pwdInput'), err = document.getElementById('loginError');
+  if (inp.value === PWD) {
+    sessionStorage.setItem(S_AUTH, '1');
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
     initApp();
   } else {
-    input.classList.add('error');
-    errEl.textContent = 'Mot de passe incorrect.';
-    input.value = '';
-    setTimeout(() => { input.classList.remove('error'); errEl.textContent = ''; }, 1500);
+    inp.classList.add('error'); err.textContent = 'Mot de passe incorrect.'; inp.value = '';
+    setTimeout(() => { inp.classList.remove('error'); err.textContent = ''; }, 1500);
   }
 }
-
 function doLogout() {
-  sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(S_AUTH);
   document.getElementById('app').style.display = 'none';
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('pwdInput').value = '';
 }
+document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 
-document.getElementById('pwdInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+/* ══════════════════════════════════
+   TOKEN
+══════════════════════════════════ */
+const getToken = () => localStorage.getItem(S_TOKEN) || '';
+const hasToken = () => !!getToken();
 
-if (sessionStorage.getItem(SESSION_KEY) === '1') {
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+function openSettings() {
+  const tok = getToken();
+  document.getElementById('atTokenInput').value = tok ? '••••••••••••' : '';
+  document.getElementById('atStatus').className = 'mstatus';
+  if (tok) showModalStatus('✅ Token configuré — sync active', 'ok');
+  document.getElementById('overlaySettings').classList.add('show');
+}
+function closeSettings() { document.getElementById('overlaySettings').classList.remove('show'); }
+function showModalStatus(msg, type) {
+  const el = document.getElementById('atStatus');
+  el.textContent = msg; el.className = 'mstatus ' + type;
+}
+function saveToken() {
+  const v = document.getElementById('atTokenInput').value.trim();
+  if (!v || v === '••••••••••••') { showModalStatus('⚠ Saisis un token valide', 'err'); return; }
+  localStorage.setItem(S_TOKEN, v);
+  showModalStatus('✅ Token enregistré !', 'ok');
+  setSyncBadge('idle');
 }
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-const DEFAULT_TEAMS = ['DV W S', 'ALE VSL S', 'ALE SPE S', 'ARYA S', 'INDCO S'];
+function setSyncBadge(state) {
+  const el = document.getElementById('syncBadge');
+  if (!hasToken()) { el.textContent = '⬡ local'; el.className = 'sync-badge'; return; }
+  const map = { syncing:['⟳ sync…','syncing'], ok:['✓ sync','ok'], err:['✕ erreur','err'], idle:['⬡ Airtable',''] };
+  const [t,c] = map[state] || map.idle;
+  el.textContent = t; el.className = 'sync-badge ' + c;
+}
 
-const METRICS = [
-  { id: 'new_leads',     label: 'Nbr new leads pris',   group: 'activite' },
-  { id: 'calls_sortants',label: 'Nbr calls sortants',   group: 'activite' },
-  { id: 'nrp',           label: 'Nbr NRP',              group: 'connexion' },
-  { id: 'joints',        label: 'Nbr joints',           group: 'connexion' },
-  { id: 'jamais_joints', label: 'Nbr jamais joints',    group: 'connexion' },
-  { id: 'qualifies',     label: 'Nbr qualifiés',        group: 'qualification' },
-  { id: 'nq_finances',   label: 'Non qual finances',    group: 'qualification', sub: true },
-  { id: 'nq_autres',     label: 'Non qual autres',      group: 'qualification', sub: true },
-  { id: 'pas_interesse', label: 'Pas/Plus intéressés',  group: 'qualification', sub: true },
-  { id: 'raccroche',     label: 'Raccroché au nez',     group: 'qualification', sub: true },
-  { id: 'mauvais_num',   label: 'Mauvais numéro',       group: 'qualification', sub: true },
-  { id: 'rdv_bookes',    label: 'Nbr RDV bookés',       group: 'rdv' },
-  { id: 'fup',           label: 'Nbr FUP',              group: 'rdv' },
-  { id: 'rdv_prevus',    label: 'Nbr RDV prévus',       group: 'rdv' },
-  { id: 'rdv_honores',   label: 'Nbr RDV honorés',      group: 'rdv' },
-  { id: 'no_shows',      label: 'Nbr No shows',         group: 'rdv' },
-  { id: 'sets',          label: 'Nbr sets',             group: 'sets' },
-  { id: 'conv1',         label: 'Nbr Conv1',            group: 'conv' },
-  { id: 'conv2',         label: 'Nbr Conv2',            group: 'conv' },
-  { id: 'conv3',         label: 'Nbr Conv3',            group: 'conv' },
+/* ══════════════════════════════════
+   KPI CONFIG & PARAMS
+══════════════════════════════════ */
+const KPI_DEFAULTS = [
+  { id:'joign',    label:'Joignabilité',          fmt:'%', cible:35, min:25, inv:false, active:true },
+  { id:'qual',     label:'Qualification',          fmt:'%', cible:50, min:35, inv:false, active:true },
+  { id:'transf',   label:'Taux de transfert',      fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'booking',  label:'Booking rate',           fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'showup',   label:'Show-up rate',           fmt:'%', cible:80, min:65, inv:false, active:true },
+  { id:'noshow',   label:'No-show rate',           fmt:'%', cible:20, min:35, inv:true,  active:true },
+  { id:'close',    label:'Close rate',             fmt:'%', cible:30, min:20, inv:false, active:true },
+  { id:'funnel',   label:'Conversion funnel',      fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'conv1',    label:'Taux Conv1',             fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'conv2',    label:'Taux Conv2',             fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'conv3',    label:'Taux Conv3',             fmt:'%', cible:null, min:null, inv:false, active:true },
+  { id:'rpl',      label:'RPL (€/lead)',           fmt:'€', cible:null, min:null, inv:false, active:true },
 ];
 
+function getParams() {
+  try {
+    const raw = localStorage.getItem(S_PARAMS);
+    if (!raw) return JSON.parse(JSON.stringify(KPI_DEFAULTS));
+    const saved = JSON.parse(raw);
+    return KPI_DEFAULTS.map(def => {
+      const s = saved.find(x => x.id === def.id);
+      return s ? {...def, ...s} : def;
+    });
+  } catch { return JSON.parse(JSON.stringify(KPI_DEFAULTS)); }
+}
+
+function openParams() {
+  const params = getParams();
+  document.getElementById('paramsContent').innerHTML = `
+    <div class="params-section">
+      <div style="display:grid;grid-template-columns:1fr 70px 70px 40px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">
+        <span>KPI</span><span>Cible %</span><span>Min %</span><span>ON</span>
+      </div>
+      ${params.map(p => `
+        <div class="param-row">
+          <div class="param-name">${p.label}</div>
+          <div class="param-inputs">
+            <input class="param-inp" type="number" id="p-cible-${p.id}" value="${p.cible !== null ? p.cible : ''}" placeholder="—" min="0" max="100">
+            <input class="param-inp" type="number" id="p-min-${p.id}" value="${p.min !== null ? p.min : ''}" placeholder="—" min="0" max="100">
+            <button class="param-toggle ${p.active?'on':''}" id="p-tog-${p.id}" onclick="this.classList.toggle('on')"></button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('overlayParams').classList.add('show');
+}
+function closeParams() { document.getElementById('overlayParams').classList.remove('show'); }
+function saveParams() {
+  const params = getParams().map(p => ({
+    ...p,
+    cible: document.getElementById(`p-cible-${p.id}`).value !== '' ? parseFloat(document.getElementById(`p-cible-${p.id}`).value) : null,
+    min: document.getElementById(`p-min-${p.id}`).value !== '' ? parseFloat(document.getElementById(`p-min-${p.id}`).value) : null,
+    active: document.getElementById(`p-tog-${p.id}`).classList.contains('on'),
+  }));
+  localStorage.setItem(S_PARAMS, JSON.stringify(params));
+  closeParams();
+  showToast('✅ Paramètres enregistrés');
+}
+
+/* ══════════════════════════════════
+   METRICS CONFIG
+══════════════════════════════════ */
+const DEFAULT_TEAMS = ['DV W S','ALE VSL S','ALE SPE S','ARYA S','INDCO S'];
+const METRICS = [
+  { id:'new_leads',     label:'Nbr new leads pris',  group:'act' },
+  { id:'calls_sortants',label:'Nbr calls sortants',  group:'act' },
+  { id:'nrp',           label:'Nbr NRP',             group:'con' },
+  { id:'joints',        label:'Nbr joints',          group:'con' },
+  { id:'jamais_joints', label:'Nbr jamais joints',   group:'con' },
+  { id:'qualifies',     label:'Nbr qualifiés',       group:'qua' },
+  { id:'nq_finances',   label:'Non qual finances',   group:'qua', sub:true },
+  { id:'nq_autres',     label:'Non qual autres',     group:'qua', sub:true },
+  { id:'pas_interesse', label:'Pas/Plus intéressés', group:'qua', sub:true },
+  { id:'raccroche',     label:'Raccroché au nez',    group:'qua', sub:true },
+  { id:'mauvais_num',   label:'Mauvais numéro',      group:'qua', sub:true },
+  { id:'rdv_bookes',    label:'Nbr RDV bookés',      group:'rdv' },
+  { id:'fup',           label:'Nbr FUP',             group:'rdv' },
+  { id:'rdv_prevus',    label:'Nbr RDV prévus',      group:'rdv' },
+  { id:'rdv_honores',   label:'Nbr RDV honorés',     group:'rdv' },
+  { id:'no_shows',      label:'Nbr No shows',        group:'rdv' },
+  { id:'sets',          label:'Nbr sets',            group:'set' },
+  { id:'conv1',         label:'Nbr Conv1',           group:'cvn' },
+  { id:'conv2',         label:'Nbr Conv2',           group:'cvn' },
+  { id:'conv3',         label:'Nbr Conv3',           group:'cvn' },
+];
 const GROUPS = {
-  activite:      { label: 'Activité',      cls: 's-activite' },
-  connexion:     { label: 'Connexion',     cls: 's-connexion' },
-  qualification: { label: 'Qualification', cls: 's-qualification' },
-  rdv:           { label: 'RDV',           cls: 's-rdv' },
-  sets:          { label: 'Sets',          cls: 's-sets' },
-  conv:          { label: 'Conversations', cls: 's-conv' },
+  act:{ label:'Activité',      cls:'s-act' },
+  con:{ label:'Connexion',     cls:'s-con' },
+  qua:{ label:'Qualification', cls:'s-qua' },
+  rdv:{ label:'RDV',          cls:'s-rdv' },
+  set:{ label:'Sets',         cls:'s-set' },
+  cvn:{ label:'Conversations', cls:'s-cvn' },
 };
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
-function getTeams() {
-  try {
-    const raw = localStorage.getItem('cg_teams_v4');
-    if (!raw) return [...DEFAULT_TEAMS];
-    return JSON.parse(raw);
-  } catch { return [...DEFAULT_TEAMS]; }
+/* ══════════════════════════════════
+   STATE
+══════════════════════════════════ */
+const getTeams = () => { try { const r=localStorage.getItem(S_TEAMS); return r?JSON.parse(r):[...DEFAULT_TEAMS]; } catch { return [...DEFAULT_TEAMS]; } };
+const saveTeams = t => localStorage.setItem(S_TEAMS, JSON.stringify(t));
+const defData = () => { const d={}; METRICS.forEach(m=>d[m.id]=0); return d; };
+const loadState = () => { try { const r=localStorage.getItem(S_STATE); return r?JSON.parse(r):{activeTab:'dashboard',activeTeam:0,teams:{}}; } catch { return {activeTab:'dashboard',activeTeam:0,teams:{}}; } };
+const saveState = s => localStorage.setItem(S_STATE, JSON.stringify(s));
+function ensureTeam(ti) {
+  if (!STATE.teams[ti]) STATE.teams[ti]=defData();
+  METRICS.forEach(m=>{ if(STATE.teams[ti][m.id]===undefined) STATE.teams[ti][m.id]=0; });
 }
+let STATE, TEAMS;
 
-function saveTeams(t) {
-  localStorage.setItem('cg_teams_v4', JSON.stringify(t));
-}
-
-function defaultTeamData() {
-  const d = {};
-  METRICS.forEach(m => { d[m.id] = 0; });
-  return d;
-}
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { activeTeam: 0, teams: {} };
-    return JSON.parse(raw);
-  } catch { return { activeTeam: 0, teams: {} }; }
-}
-
-function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
-
-function ensureTeamData(ti) {
-  if (!STATE.teams[ti]) STATE.teams[ti] = defaultTeamData();
-  METRICS.forEach(m => { if (STATE.teams[ti][m.id] === undefined) STATE.teams[ti][m.id] = 0; });
-}
-
-let STATE;
-let TEAMS;
-
-// ─── RENDER ───────────────────────────────────────────────────────────────────
-function teamTotal(ti) {
-  if (!STATE.teams[ti]) return 0;
-  return STATE.teams[ti]['calls_sortants'] || 0;
-}
-
-function updateDate() {
-  const opts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-  const el = document.getElementById('headerDate');
-  if (el) el.textContent = new Date().toLocaleDateString('fr-FR', opts);
-}
+/* ══════════════════════════════════
+   TABS
+══════════════════════════════════ */
+const teamTotal = ti => STATE.teams[ti]?(STATE.teams[ti]['calls_sortants']||0):0;
 
 function renderTabs() {
-  const wrap = document.getElementById('tabsWrapper');
+  const wrap = document.getElementById('tabsWrap');
   wrap.innerHTML = '';
-  TEAMS.forEach((name, ti) => {
+  const dashBtn = document.createElement('button');
+  dashBtn.className = 'tab dash-tab'+(STATE.activeTab==='dashboard'?' active':'');
+  dashBtn.innerHTML = '📊 Dashboard<span class="tsub">vue globale</span>';
+  dashBtn.onclick = () => { STATE.activeTab='dashboard'; saveState(STATE); renderAll(); };
+  wrap.appendChild(dashBtn);
+  TEAMS.forEach((name,ti) => {
     const btn = document.createElement('button');
-    btn.className = 'tab' + (ti === STATE.activeTeam ? ' active' : '');
-    btn.innerHTML = `${name}<span class="tab-total">${teamTotal(ti)} appels</span>`;
-    btn.onclick = () => { STATE.activeTeam = ti; saveState(STATE); renderAll(); };
+    btn.className = 'tab'+(STATE.activeTab===`team-${ti}`?' active':'');
+    btn.innerHTML = `${name}<span class="tsub">${teamTotal(ti)} appels</span>`;
+    btn.onclick = () => { STATE.activeTab=`team-${ti}`; STATE.activeTeam=ti; saveState(STATE); renderAll(); };
     wrap.appendChild(btn);
   });
-  // Bouton + Team
   const addBtn = document.createElement('button');
-  addBtn.className = 'btn-add-team';
+  addBtn.className = 'btn-addteam';
   addBtn.textContent = '+ Team';
-  addBtn.onclick = () => openAddTeam();
+  addBtn.onclick = openAddTeam;
   wrap.appendChild(addBtn);
-}
-
-function renderSummaryBar(ti) {
-  const t = STATE.teams[ti];
-  return `<div class="summary-bar">
-    <div class="summary-item"><div class="summary-label">Calls sortants</div><div class="summary-val sv-calls">${t.calls_sortants}</div></div>
-    <div class="summary-item"><div class="summary-label">Joints</div><div class="summary-val sv-qual">${t.joints}</div></div>
-    <div class="summary-item"><div class="summary-label">Qualifiés</div><div class="summary-val sv-qual">${t.qualifies}</div></div>
-    <div class="summary-item"><div class="summary-label">RDV bookés</div><div class="summary-val sv-rdv">${t.rdv_bookes}</div></div>
-    <div class="summary-item"><div class="summary-label">Sets</div><div class="summary-val sv-sets">${t.sets}</div></div>
-    <div class="summary-item"><div class="summary-label">Conv1</div><div class="summary-val sv-conv">${t.conv1}</div></div>
-    <div class="summary-item"><div class="summary-label">Conv2</div><div class="summary-val sv-conv">${t.conv2}</div></div>
-    <div class="summary-item"><div class="summary-label">Conv3</div><div class="summary-val sv-conv">${t.conv3}</div></div>
-  </div>`;
-}
-
-function renderMetricRow(m, ti) {
-  const val = STATE.teams[ti][m.id];
-  return `<div class="metric${m.sub ? ' sub' : ''}">
-    <div class="metric-label">${m.label}</div>
-    <div class="metric-controls">
-      <button class="btn-counter minus" onclick="adjust(${ti},'${m.id}',-1)">−</button>
-      <div class="metric-value${val > 0 ? ' nonzero' : ''}" id="val-${ti}-${m.id}">${val}</div>
-      <button class="btn-counter plus" onclick="adjust(${ti},'${m.id}',1)">+</button>
-    </div>
-  </div>`;
-}
-
-function renderSection(groupKey, metrics, ti) {
-  const g = GROUPS[groupKey];
-  let body = '';
-  if (groupKey === 'qualification') {
-    const t = STATE.teams[ti];
-    const nonQual = (t['nq_finances']||0) + (t['nq_autres']||0);
-    const totalPerdus = nonQual + (t['pas_interesse']||0) + (t['raccroche']||0) + (t['mauvais_num']||0);
-    // 1. Nbr qualifiés (compteur)
-    const qualMetric = metrics.find(m => m.id === 'qualifies');
-    const subMetrics = metrics.filter(m => m.sub);
-    body += qualMetric ? renderMetricRow(qualMetric, ti) : '';
-    // 2. Nbr non qualifiés (calculé NQF + NQA)
-    body += `<div class="metric-readonly">
-      <div class="metric-readonly-label">Nbr non qualifiés</div>
-      <div class="metric-readonly-value${nonQual > 0 ? ' nonzero' : ''}" id="non-qual-${ti}">${nonQual}</div>
-    </div>`;
-    // 3. Les 5 sous-catégories
-    body += subMetrics.map(m => renderMetricRow(m, ti)).join('');
-    // 4. Total perdus (calculé les 5)
-    body += `<div class="metric-total">
-      <div class="metric-total-label">Total perdus</div>
-      <div class="metric-total-value" id="total-perdus-${ti}">${totalPerdus}</div>
-    </div>`;
-  } else {
-    body = metrics.map(m => renderMetricRow(m, ti)).join('');
-  }
-  return `<div class="section ${g.cls}">
-    <div class="section-header"><span class="section-dot"></span>${g.label}</div>
-    <div class="section-body">${body}</div>
-  </div>`;
-}
-
-function renderTeamPanel(ti) {
-  const byGroup = {};
-  METRICS.forEach(m => { if (!byGroup[m.group]) byGroup[m.group] = []; byGroup[m.group].push(m); });
-  const sections = Object.keys(GROUPS).map(gk => byGroup[gk] ? renderSection(gk, byGroup[gk], ti) : '').join('');
-  return `<div class="team-panel active" id="team-${ti}">
-    <div class="team-header">
-      <div>
-        <div class="team-title">${TEAMS[ti]}</div>
-        <div class="team-subtitle">KPI session — ${new Date().toLocaleDateString('fr-FR')}</div>
-      </div>
-      <div class="team-actions">
-        <button class="btn-copy" onclick="copyData(${ti})">📋 Copier pour DB_QUO</button>
-        <button class="btn-reset" onclick="resetTeam(${ti})">↺ Reset</button>
-        <button class="btn-delete-team" onclick="deleteTeam(${ti})">🗑 Supprimer</button>
-      </div>
-    </div>
-    ${renderSummaryBar(ti)}
-    <div class="sections-grid">${sections}</div>
-  </div>`;
 }
 
 function renderAll() {
   renderTabs();
-  document.getElementById('mainContent').innerHTML = renderTeamPanel(STATE.activeTeam);
+  if (STATE.activeTab==='dashboard') {
+    document.getElementById('mainContent').innerHTML = '<div id="dashPanel" class="panel active"></div>';
+    loadDashboard();
+  } else {
+    document.getElementById('mainContent').innerHTML = renderTeamPanel(STATE.activeTeam);
+  }
 }
 
-// ─── ACTIONS ──────────────────────────────────────────────────────────────────
-function adjust(ti, metricId, delta) {
-  STATE.teams[ti][metricId] = Math.max(0, (STATE.teams[ti][metricId] || 0) + delta);
+/* ══════════════════════════════════
+   TEAM PANEL
+══════════════════════════════════ */
+function renderTeamPanel(ti) {
+  const byG={};
+  METRICS.forEach(m=>{ if(!byG[m.group]) byG[m.group]=[]; byG[m.group].push(m); });
+  const sections = Object.keys(GROUPS).map(gk => {
+    if (!byG[gk]) return '';
+    const g = GROUPS[gk];
+    let body = '';
+    if (gk==='qua') {
+      const t=STATE.teams[ti];
+      const nq=(t.nq_finances||0)+(t.nq_autres||0);
+      const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
+      const qual=byG[gk].find(m=>m.id==='qualifies');
+      body += qual?mrow(qual,ti,true):'';
+      body += `<div class="mro"><div class="mro-lbl">Nbr non qualifiés</div><div class="mro-val${nq>0?' nz':''}" id="nq-${ti}">${nq}</div></div>`;
+      body += byG[gk].filter(m=>m.sub).map(m=>mrow(m,ti,false)).join('');
+      body += `<div class="mtot"><div class="mtot-lbl">Total perdus</div><div class="mtot-val" id="tp-${ti}">${tp}</div></div>`;
+    } else {
+      body = byG[gk].map(m=>mrow(m,ti,false)).join('');
+    }
+    return `<div class="sec ${g.cls}"><div class="sec-hdr"><span class="sdot"></span>${g.label}</div><div class="sec-body">${body}</div></div>`;
+  }).join('');
+
+  const t=STATE.teams[ti];
+  return `<div class="panel active" id="team-${ti}">
+    <div class="team-hdr">
+      <div><div class="team-title">${TEAMS[ti]}</div><div class="team-sub">Session du ${new Date().toLocaleDateString('fr-FR')}</div></div>
+      <div class="team-acts">
+        ${hasToken()?`<button class="btn-save" onclick="saveSession(${ti})">💾 Enregistrer Airtable</button>`:'<button class="btn-save" style="background:var(--muted);cursor:default;">⚙ Config Airtable</button>'}
+        <button class="btn-copy" onclick="copyData(${ti})">📋 Copier GSheet</button>
+        <button class="btn-sm" onclick="resetTeam(${ti})">↺ Reset</button>
+        <button class="btn-sm" onclick="deleteTeam(${ti})">🗑</button>
+      </div>
+    </div>
+    <div class="sum-bar">
+      <div class="si"><div class="si-lbl">Calls</div><div class="si-val c-blue" id="sb-calls-${ti}">${t.calls_sortants||0}</div></div>
+      <div class="si"><div class="si-lbl">Joints</div><div class="si-val c-txt" id="sb-joints-${ti}">${t.joints||0}</div></div>
+      <div class="si"><div class="si-lbl">Qualifiés</div><div class="si-val c-txt" id="sb-qual-${ti}">${t.qualifies||0}</div></div>
+      <div class="si"><div class="si-lbl">RDV bookés</div><div class="si-val c-green" id="sb-rdv-${ti}">${t.rdv_bookes||0}</div></div>
+      <div class="si"><div class="si-lbl">Sets</div><div class="si-val c-acc" id="sb-sets-${ti}">${t.sets||0}</div></div>
+      <div class="si"><div class="si-lbl">Conv1</div><div class="si-val c-purple" id="sb-c1-${ti}">${t.conv1||0}</div></div>
+      <div class="si"><div class="si-lbl">Conv2</div><div class="si-val c-purple" id="sb-c2-${ti}">${t.conv2||0}</div></div>
+      <div class="si"><div class="si-lbl">Conv3</div><div class="si-val c-purple" id="sb-c3-${ti}">${t.conv3||0}</div></div>
+    </div>
+    <div class="sections-grid">${sections}</div>
+  </div>`;
+}
+
+function mrow(m, ti, caps) {
+  const val=STATE.teams[ti][m.id]||0;
+  const isSub=!!m.sub;
+  const clr=isSub?'#8b8b98':'#ffffff';
+  const fw=isSub?400:caps?700:500;
+  const fs=isSub?'12px':'13px';
+  const tt=caps?'text-transform:uppercase;letter-spacing:.04em;':'';
+  return `<div class="mrow${isSub?' sub':''}">
+    <div class="mlbl" style="color:${clr};font-size:${fs};font-weight:${fw};${tt}">${m.label}</div>
+    <div class="mctrl">
+      <button class="cbtn m" onclick="adj(${ti},'${m.id}',-1)">-</button>
+      <div class="mval${val>0?' nz':''}" id="val-${ti}-${m.id}">${val}</div>
+      <button class="cbtn p" onclick="adj(${ti},'${m.id}',1)">+</button>
+    </div>
+  </div>`;
+}
+
+function adj(ti, id, d) {
+  STATE.teams[ti][id]=Math.max(0,(STATE.teams[ti][id]||0)+d);
   saveState(STATE);
-  const el = document.getElementById(`val-${ti}-${metricId}`);
+  const el=document.getElementById(`val-${ti}-${id}`);
   if (el) {
-    const v = STATE.teams[ti][metricId];
-    el.textContent = v;
-    el.className = 'metric-value' + (v > 0 ? ' nonzero' : '');
-    el.classList.add('pulse');
-    setTimeout(() => el.classList.remove('pulse'), 150);
+    const v=STATE.teams[ti][id];
+    el.textContent=v; el.className='mval'+(v>0?' nz':'');
+    el.classList.add('pulse'); setTimeout(()=>el.classList.remove('pulse'),150);
   }
-  refreshSummary(ti);
-  const tabs = document.querySelectorAll('.tab');
-  if (tabs[ti]) tabs[ti].querySelector('.tab-total').textContent = `${teamTotal(ti)} appels`;
+  refreshSummaryBar(ti);
 }
 
-function refreshSummary(ti) {
-  const bar = document.querySelector(`#team-${ti} .summary-bar`);
-  if (bar) {
-    const t = STATE.teams[ti];
-    const vals = bar.querySelectorAll('.summary-val');
-    [t.calls_sortants, t.joints, t.qualifies, t.rdv_bookes, t.sets, t.conv1, t.conv2, t.conv3]
-      .forEach((v, i) => { vals[i].textContent = v; });
-  }
-  const t = STATE.teams[ti];
-  // Mise à jour Nbr non qualifiés (NQF + NQA)
-  const nonQual = (t['nq_finances']||0) + (t['nq_autres']||0);
-  const nonQualEl = document.getElementById(`non-qual-${ti}`);
-  if (nonQualEl) {
-    nonQualEl.textContent = nonQual;
-    nonQualEl.className = 'metric-readonly-value' + (nonQual > 0 ? ' nonzero' : '');
-  }
-  // Mise à jour Total perdus (les 5 catégories)
-  const totalPerdus = nonQual + (t['pas_interesse']||0) + (t['raccroche']||0) + (t['mauvais_num']||0);
-  const totalPerduEl = document.getElementById(`total-perdus-${ti}`);
-  if (totalPerduEl) totalPerduEl.textContent = totalPerdus;
+function refreshSummaryBar(ti) {
+  const t=STATE.teams[ti];
+  const map=[['calls','calls_sortants'],['joints','joints'],['qual','qualifies'],['rdv','rdv_bookes'],['sets','sets'],['c1','conv1'],['c2','conv2'],['c3','conv3']];
+  map.forEach(([k,f])=>{ const el=document.getElementById(`sb-${k}-${ti}`); if(el) el.textContent=t[f]||0; });
+  const nq=(t.nq_finances||0)+(t.nq_autres||0);
+  const nqEl=document.getElementById(`nq-${ti}`); if(nqEl){nqEl.textContent=nq;nqEl.className='mro-val'+(nq>0?' nz':'');}
+  const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
+  const tpEl=document.getElementById(`tp-${ti}`); if(tpEl) tpEl.textContent=tp;
+  document.querySelectorAll('.tab').forEach(tab=>{
+    const tsub=tab.querySelector('.tsub');
+    if(tsub && tab.textContent.includes(TEAMS[ti])) tsub.textContent=`${teamTotal(ti)} appels`;
+  });
 }
 
 function resetTeam(ti) {
-  if (!confirm(`Remettre tous les compteurs de ${TEAMS[ti]} à zéro ?`)) return;
-  METRICS.forEach(m => { STATE.teams[ti][m.id] = 0; });
-  saveState(STATE);
-  renderAll();
+  if(!confirm(`Reset ${TEAMS[ti]} ?`)) return;
+  METRICS.forEach(m=>STATE.teams[ti][m.id]=0);
+  saveState(STATE); renderAll();
 }
 
-// ─── GESTION TEAMS DYNAMIQUE ──────────────────────────────────────────────────
-function openAddTeam() {
-  document.getElementById('newTeamInput').value = '';
-  document.getElementById('newTeamError').textContent = '';
-  document.getElementById('newTeamInput').classList.remove('error');
-  document.getElementById('modalAddTeam').classList.add('show');
-  setTimeout(() => document.getElementById('newTeamInput').focus(), 100);
+/* ══════════════════════════════════
+   SAVE SESSION TO AIRTABLE
+══════════════════════════════════ */
+function weekNum(d) {
+  const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const day=date.getUTCDay()||7;
+  date.setUTCDate(date.getUTCDate()+4-day);
+  const y=new Date(Date.UTC(date.getUTCFullYear(),0,1));
+  return Math.ceil((((date-y)/86400000)+1)/7);
 }
 
-function closeAddTeam() {
-  document.getElementById('modalAddTeam').classList.remove('show');
-}
-
-document.getElementById('newTeamInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') confirmAddTeam();
-  if (e.key === 'Escape') closeAddTeam();
-});
-
-function confirmAddTeam() {
-  const input = document.getElementById('newTeamInput');
-  const errEl = document.getElementById('newTeamError');
-  const name = input.value.trim().toUpperCase();
-
-  if (!name) {
-    input.classList.add('error');
-    errEl.textContent = 'Le nom ne peut pas être vide.';
-    return;
+async function saveSession(ti) {
+  const token=getToken();
+  if(!token){showToast('⚙ Configure ton token Airtable','acc');openSettings();return;}
+  const t=STATE.teams[ti], now=new Date();
+  const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
+  const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
+  const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
+  const fields={
+    'Date':now.toISOString().split('T')[0],'Team':TEAMS[ti],
+    'New leads':t.new_leads||0,'Calls sortants':t.calls_sortants||0,
+    'NRP':t.nrp||0,'Joints':joints,'RDV bookés':t.rdv_bookes||0,'FUP':t.fup||0,
+    'Non qualifiés':nonQual,'Qualifiés':t.qualifies||0,'Sets':t.sets||0,
+    'Jamais joints':t.jamais_joints||0,'RDV prévus':t.rdv_prevus||0,
+    'RDV honorés':rdvHon,'No shows':t.no_shows||0,
+    'NQ finances':t.nq_finances||0,'NQ autres':t.nq_autres||0,
+    'Pas intéressés':t.pas_interesse||0,'Raccroché':t.raccroche||0,'Mauvais numéro':t.mauvais_num||0,
+    'Conv1':t.conv1||0,'Conv2':t.conv2||0,'Conv3':t.conv3||0,
+    'Semaine':weekNum(now),'Mois':now.getMonth()+1,
+    'Trimestre':Math.ceil((now.getMonth()+1)/3),'Année':now.getFullYear(),
+  };
+  setSyncBadge('syncing');
+  try {
+    const res=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`,{
+      method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      body:JSON.stringify({fields})
+    });
+    if(!res.ok) throw new Error(res.status);
+    setSyncBadge('ok'); showToast(`✓ ${TEAMS[ti]} enregistré`);
+    setTimeout(()=>setSyncBadge('idle'),3000);
+  } catch(e) {
+    setSyncBadge('err'); showToast(`✕ Erreur: ${e.message}`,'err');
+    setTimeout(()=>setSyncBadge('idle'),4000);
   }
-  if (TEAMS.includes(name)) {
-    input.classList.add('error');
-    errEl.textContent = 'Cette team existe déjà.';
-    return;
-  }
-
-  TEAMS.push(name);
-  saveTeams(TEAMS);
-  const newTi = TEAMS.length - 1;
-  STATE.teams[newTi] = defaultTeamData();
-  STATE.activeTeam = newTi;
-  saveState(STATE);
-  closeAddTeam();
-  renderAll();
-  showToast(`✅ Team "${name}" ajoutée`);
 }
 
-function deleteTeam(ti) {
-  if (TEAMS.length <= 1) {
-    showToast('❌ Impossible de supprimer la dernière team');
-    return;
-  }
-  if (!confirm(`Supprimer la team "${TEAMS[ti]}" et toutes ses données ?`)) return;
-
-  // Reconstruire les teams et données sans cet index
-  const newTeams = [];
-  const newTeamsData = {};
-  TEAMS.forEach((name, i) => {
-    if (i !== ti) {
-      const newIdx = newTeams.length;
-      newTeams.push(name);
-      newTeamsData[newIdx] = STATE.teams[i] || defaultTeamData();
-    }
-  });
-
-  TEAMS.length = 0;
-  newTeams.forEach(n => TEAMS.push(n));
-  saveTeams(TEAMS);
-
-  STATE.teams = newTeamsData;
-  STATE.activeTeam = Math.min(STATE.activeTeam, TEAMS.length - 1);
-  if (STATE.activeTeam < 0) STATE.activeTeam = 0;
-  saveState(STATE);
-  renderAll();
-  showToast(`🗑 Team supprimée`);
-}
-
-// ─── COPIER DONNÉES → DB_QUO ──────────────────────────────────────────────────
+/* ══════════════════════════════════
+   COPY (GSheet legacy)
+══════════════════════════════════ */
 function copyData(ti) {
-  const t = STATE.teams[ti];
-  const dateStr = new Date().toLocaleDateString('fr-FR');
+  const t=STATE.teams[ti], d=new Date();
+  const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
+  const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
+  const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
+  const row=[d.toLocaleDateString('fr-FR'),TEAMS[ti],t.new_leads||0,t.calls_sortants||0,t.nrp||0,joints,
+    t.rdv_bookes||0,t.fup||0,nonQual,t.qualifies||0,t.sets||0,t.jamais_joints||0,t.rdv_prevus||0,
+    rdvHon,t.no_shows||0,t.nq_finances||0,t.nq_autres||0,t.pas_interesse||0,t.raccroche||0,
+    t.mauvais_num||0,t.conv1||0,t.conv2||0,t.conv3||0].join('\t');
+  navigator.clipboard.writeText(row).then(()=>showToast('📋 Copié !')).catch(()=>prompt('Copie:',row));
+}
 
-  // Valeurs saisies
-  const calls_sortants  = t['calls_sortants']  || 0;
-  const new_leads       = t['new_leads']        || 0;
-  const nrp             = t['nrp']              || 0;
-  const jamais_joints   = t['jamais_joints']    || 0;
-  const rdv_bookes      = t['rdv_bookes']       || 0;
-  const fup             = t['fup']              || 0;
-  const qualifies       = t['qualifies']        || 0; // saisie manuelle
-  const nq_finances     = t['nq_finances']      || 0;
-  const nq_autres       = t['nq_autres']        || 0;
-  const pas_interesse   = t['pas_interesse']    || 0;
-  const raccroche       = t['raccroche']        || 0;
-  const mauvais_num     = t['mauvais_num']      || 0;
-  const sets            = t['sets']             || 0;
-  const rdv_prevus      = t['rdv_prevus']       || 0;
-  const no_shows        = t['no_shows']         || 0;
-  const conv1           = t['conv1']            || 0;
-  const conv2           = t['conv2']            || 0;
-  const conv3           = t['conv3']            || 0;
+/* ══════════════════════════════════
+   DASHBOARD
+══════════════════════════════════ */
+let SESS_RECORDS=[], LEAD_RECORDS=[];
+let dashPeriod='week', dashTeam='Toutes';
 
-  // Valeurs calculées (même logique que les formules DB_QUO)
-  const joints      = Math.max(0, calls_sortants - nrp - jamais_joints);  // col F
-  const non_qual    = nq_finances + nq_autres;                             // col I
-  const rdv_honores = Math.max(0, rdv_prevus - no_shows);                  // col N
+async function loadDashboard() {
+  const panel=document.getElementById('dashPanel');
+  if(!panel) return;
+  if(!hasToken()) { panel.innerHTML=noTokenHTML(); return; }
+  panel.innerHTML='<div class="dash-loading">⟳ Chargement Airtable…</div>';
+  const token=getToken();
+  try {
+    const [sessRes, leadRes] = await Promise.all([
+      fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}}),
+      fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_LEADS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}})
+    ]);
+    if(!sessRes.ok||!leadRes.ok) throw new Error('Erreur API');
+    const [sd,ld]=await Promise.all([sessRes.json(),leadRes.json()]);
+    SESS_RECORDS=sd.records.map(r=>r.fields);
+    LEAD_RECORDS=ld.records.map(r=>r.fields);
+    renderDashboard();
+  } catch(e) {
+    panel.innerHTML=`<div class="dash-loading" style="color:var(--red);">✕ Erreur: ${e.message}</div>${localSummaryHTML()}`;
+  }
+}
 
-  // Ordre exact des colonnes DB_QUO (A à W)
-  const row = [
-    dateStr,          // A - Date
-    TEAMS[ti],        // B - Team
-    new_leads,        // C - Nbr new leads pris
-    calls_sortants,   // D - Nbr calls sortants
-    nrp,              // E - Nbr NRP
-    joints,           // F - Nbr joints (calculé)
-    rdv_bookes,       // G - Nbr RDV bookés
-    fup,              // H - Nbr FUP
-    non_qual,         // I - Nbr non qualifiés (calculé)
-    qualifies,        // J - Nbr qualifiés (saisi manuellement dans l'app)
-    sets,             // K - Nbr sets
-    jamais_joints,    // L - Nbr jamais joints
-    rdv_prevus,       // M - Nbr RDV prévus
-    rdv_honores,      // N - Nbr RDV honorés (calculé)
-    no_shows,         // O - Nbr no-shows
-    nq_finances,      // P - Perdus Non qual finances
-    nq_autres,        // Q - Perdus Non qual autres
-    pas_interesse,    // R - Perdus Pas intéressés
-    raccroche,        // S - Perdus Raccroché
-    mauvais_num,      // T - Perdus Mauvais numéro
-    conv1,            // U - Nbr Conv1
-    conv2,            // V - Nbr Conv2
-    conv3,            // W - Nbr Conv3
-  ].join('\t');
+function noTokenHTML() {
+  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;">
+    <div style="color:var(--accent);font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:8px;">⚙ SYNC AIRTABLE NON CONFIGURÉE</div>
+    <div style="color:var(--text-dim);font-size:13px;">Configure ton token via <strong style="color:var(--accent)">⚙ Sync</strong> pour voir le dashboard historique.</div>
+  </div>${localSummaryHTML()}`;
+}
 
-  navigator.clipboard.writeText(row).then(() => {
-    showToast('📋 Copié ! Colle dans DB_QUO (Ctrl+V)');
-  }).catch(() => {
-    // Fallback si clipboard non disponible
-    prompt('Copie cette ligne dans DB_QUO :', row);
+function renderDashboard() {
+  const panel=document.getElementById('dashPanel');
+  if(!panel) return;
+  const now=new Date(), cW=weekNum(now), cM=now.getMonth()+1, cY=now.getFullYear(), cQ=Math.ceil(cM/3);
+
+  const filterPeriod = r => {
+    if(dashPeriod==='week') return r['Semaine']===cW && r['Année']===cY;
+    if(dashPeriod==='month') return r['Mois']===cM && r['Année']===cY;
+    if(dashPeriod==='quarter') return r['Trimestre']===cQ && r['Année']===cY;
+    return r['Année']===cY;
+  };
+
+  let sessRecs = SESS_RECORDS.filter(filterPeriod);
+  let leadRecs = LEAD_RECORDS.filter(r => {
+    const d=new Date(r['Date']||'');
+    if(isNaN(d)) return false;
+    const rW=weekNum(d), rM=d.getMonth()+1, rY=d.getFullYear(), rQ=Math.ceil(rM/3);
+    if(dashPeriod==='week') return rW===cW&&rY===cY;
+    if(dashPeriod==='month') return rM===cM&&rY===cY;
+    if(dashPeriod==='quarter') return rQ===cQ&&rY===cY;
+    return rY===cY;
   });
+
+  if(dashTeam!=='Toutes') {
+    sessRecs=sessRecs.filter(r=>r['Team']===dashTeam);
+    leadRecs=leadRecs.filter(r=>r['Team']===dashTeam);
+  }
+
+  const sAgg=aggSessions(sessRecs);
+  const lAgg=aggLeads(leadRecs);
+  const kpis=calcKPIs(sAgg,lAgg);
+  const params=getParams().filter(p=>p.active);
+  const allTeams=[...new Set(SESS_RECORDS.map(r=>r['Team']).filter(Boolean))].sort();
+  const periodLabel=dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
+
+  panel.innerHTML=`
+    <div class="dash-hdr">
+      <div>
+        <div class="dash-title">📊 Dashboard KPI Setting</div>
+        <div class="dash-sub">${periodLabel} · ${dashTeam} · ${sessRecs.length} sessions · ${leadRecs.length} leads</div>
+      </div>
+      <div class="dash-ctrls">
+        <select class="dsel" onchange="dashTeam=this.value;renderDashboard()">
+          <option value="Toutes">Toutes les teams</option>
+          ${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}
+        </select>
+        <select class="dsel" onchange="dashPeriod=this.value;renderDashboard()">
+          <option value="week" ${dashPeriod==='week'?'selected':''}>Cette semaine</option>
+          <option value="month" ${dashPeriod==='month'?'selected':''}>Ce mois</option>
+          <option value="quarter" ${dashPeriod==='quarter'?'selected':''}>Ce trimestre</option>
+          <option value="year" ${dashPeriod==='year'?'selected':''}>Cette année</option>
+        </select>
+        <button class="btn-refresh" onclick="loadDashboard()">↻</button>
+      </div>
+    </div>
+    ${renderKPICards(kpis, sAgg, lAgg, params)}
+    ${renderFunnel(sAgg, lAgg)}
+    ${renderAlerts(kpis, params)}
+    ${renderHistoryTable(allTeams, cW, cM, cY, cQ)}
+    ${localSummaryHTML()}`;
 }
 
-// ─── TOAST ────────────────────────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+function aggSessions(recs) {
+  const fields=['New leads','Calls sortants','NRP','Joints','RDV bookés','FUP','Non qualifiés','Qualifiés','Sets','Jamais joints','RDV prévus','RDV honorés','No shows','NQ finances','NQ autres','Pas intéressés','Raccroché','Mauvais numéro','Conv1','Conv2','Conv3'];
+  const a={};
+  fields.forEach(f=>a[f]=recs.reduce((s,r)=>s+(r[f]||0),0));
+  return a;
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+function aggLeads(recs) {
+  return {
+    ventes_c1: recs.filter(r=>r['Conv1']).length,
+    ventes_c2: recs.filter(r=>r['Conv2']).length,
+    ventes_c3: recs.filter(r=>r['Conv3']).length,
+    ca_total: recs.reduce((s,r)=>s+(r['Montant vente']||0),0),
+  };
+}
+
+function calcKPIs(s, l) {
+  const safe=(n,d)=>d>0?n/d:0;
+  const ventes=l.ventes_c1+l.ventes_c2+l.ventes_c3;
+  return {
+    joign:   safe(s['Joints'], s['Calls sortants']),
+    qual:    safe(s['Qualifiés'], s['Joints']),
+    transf:  safe(s['Conv1'], s['Joints']),
+    booking: safe(s['RDV bookés'], s['Qualifiés']),
+    showup:  safe(s['RDV honorés'], s['RDV bookés']),
+    noshow:  safe(s['No shows'], s['RDV bookés']),
+    close:   safe(ventes, s['RDV honorés']),
+    funnel:  safe(ventes, s['New leads']),
+    conv1:   safe(l.ventes_c1, s['New leads']),
+    conv2:   safe(l.ventes_c2, s['New leads']),
+    conv3:   safe(l.ventes_c3, s['New leads']),
+    rpl:     s['New leads']>0 ? l.ca_total/s['New leads'] : 0,
+    _ventes: ventes, _ca: l.ca_total,
+  };
+}
+
+function kpiStatus(pid, val, params) {
+  const p=params.find(x=>x.id===pid); if(!p||p.cible===null) return 'none';
+  const v=val*100;
+  if(p.inv) return v<=p.cible?'ok':v<=p.min?'warn':'bad';
+  return v>=p.cible?'ok':v>=p.min?'warn':'bad';
+}
+
+function fmtKPI(pid, val) {
+  if(pid==='rpl') return val.toFixed(0)+'€';
+  return (val*100).toFixed(1)+'%';
+}
+
+function renderKPICards(kpis, s, l, params) {
+  const allParams=getParams();
+  const cards=allParams.filter(p=>p.active).map(p=>{
+    const val=kpis[p.id]||0;
+    const st=kpiStatus(p.id,val,allParams);
+    const cible=p.cible;
+    const barPct=cible?Math.min(100,(val*100/cible)*100):0;
+    let sub='';
+    const subs={joign:`${s['Joints']} / ${s['Calls sortants']}`,qual:`${s['Qualifiés']} / ${s['Joints']}`,transf:`${s['Conv1']} / ${s['Joints']}`,booking:`${s['RDV bookés']} / ${s['Qualifiés']}`,showup:`${s['RDV honorés']} / ${s['RDV bookés']}`,noshow:`${s['No shows']} / ${s['RDV bookés']}`,close:`${kpis._ventes} ventes / ${s['RDV honorés']} honorés`,funnel:`${kpis._ventes} ventes / ${s['New leads']} leads`,conv1:`${l.ventes_c1} / ${s['New leads']}`,conv2:`${l.ventes_c2} / ${s['New leads']}`,conv3:`${l.ventes_c3} / ${s['New leads']}`,rpl:`CA ${kpis._ca.toFixed(0)}€ / ${s['New leads']} leads`};
+    sub=subs[p.id]||'';
+    return `<div class="kpi-card st-${st}">
+      <div class="kpi-lbl">${p.label}</div>
+      <div class="kpi-val">${fmtKPI(p.id,val)}</div>
+      <div class="kpi-sub">${sub}</div>
+      ${cible?`<div class="kpi-bar"><div class="kpi-fill" style="width:${barPct}%"></div></div>`:''}
+    </div>`;
+  }).join('');
+  return `<div class="kpi-grid">${cards}</div>`;
+}
+
+function renderFunnel(s, l) {
+  const max=s['Calls sortants']||1;
+  const ventes=l.ventes_c1+l.ventes_c2+l.ventes_c3;
+  const rows=[
+    {lbl:'Calls sortants', val:s['Calls sortants'], col:'var(--blue)'},
+    {lbl:'Joints',         val:s['Joints'],         col:'var(--blue)'},
+    {lbl:'Qualifiés',      val:s['Qualifiés'],      col:'var(--accent)'},
+    {lbl:'RDV bookés',     val:s['RDV bookés'],     col:'var(--green)'},
+    {lbl:'RDV honorés',    val:s['RDV honorés'],    col:'var(--green)'},
+    {lbl:'Sets',           val:s['Sets'],           col:'var(--accent)'},
+    {lbl:'Conv1',          val:l.ventes_c1,          col:'var(--purple)'},
+    {lbl:'Conv2',          val:l.ventes_c2,          col:'var(--purple)'},
+    {lbl:'Conv3',          val:l.ventes_c3,          col:'var(--purple)'},
+    {lbl:'Ventes totales', val:ventes,               col:'var(--purple)'},
+  ];
+  return `<div class="funnel-wrap"><div class="sec-title">Entonnoir de conversion</div>
+    ${rows.map(r=>{
+      const w=max>0?Math.max(2,(r.val/max)*100):0;
+      const p=max>0?((r.val/max)*100).toFixed(0)+'%':'—';
+      return `<div class="funrow"><div class="funlbl">${r.lbl}</div><div class="funbar"><div class="funfill" style="width:${w}%;background:${r.col};opacity:.75;"></div></div><div class="funnum">${r.val}</div><div class="funpct">${p}</div></div>`;
+    }).join('')}
+  </div>`;
+}
+
+function renderAlerts(kpis, params) {
+  const rows=getParams().filter(p=>p.active&&p.cible!==null).map(p=>{
+    const val=kpis[p.id]||0;
+    const st=kpiStatus(p.id,val,getParams());
+    const msg=st==='ok'?'✅ Objectif atteint':st==='warn'?'⚠ Sous objectif':'🔴 Sous minimum';
+    return `<div class="alert-row st-${st}"><span class="adot"></span><div class="albl">${p.label}</div><div class="aval">${fmtKPI(p.id,val)}</div><div class="atgt">cible ${p.cible}% / min ${p.min}%</div></div>`;
+  }).join('');
+  return `<div class="alerts-wrap"><div class="sec-title">Alertes KPI</div>${rows}</div>`;
+}
+
+function renderHistoryTable(allTeams, cW, cM, cY, cQ) {
+  const filterTeam = recs => dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
+  const periods=[
+    {label:'Semaine', recs:filterTeam(SESS_RECORDS.filter(r=>r['Semaine']===cW&&r['Année']===cY)), leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&weekNum(d)===cW&&d.getFullYear()===cY;}))},
+    {label:'Mois',    recs:filterTeam(SESS_RECORDS.filter(r=>r['Mois']===cM&&r['Année']===cY)),    leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&d.getMonth()+1===cM&&d.getFullYear()===cY;}))},
+    {label:'Trimestre',recs:filterTeam(SESS_RECORDS.filter(r=>r['Trimestre']===cQ&&r['Année']===cY)),leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&Math.ceil((d.getMonth()+1)/3)===cQ&&d.getFullYear()===cY;}))},
+    {label:'Année',   recs:filterTeam(SESS_RECORDS.filter(r=>r['Année']===cY)),                    leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&d.getFullYear()===cY;}))},
+  ];
+  const cols=['Calls sortants','Joints','Qualifiés','RDV bookés','RDV honorés','Sets'];
+  const rows=periods.map(p=>{
+    const s=aggSessions(p.recs), l=aggLeads(p.leadRecs), k=calcKPIs(s,l);
+    const td=(v,fmt)=>`<td>${fmt?fmt(v):v}</td>`;
+    const tdKpi=(id,v)=>{const st=kpiStatus(id,v,getParams());return `<td class="td-${st==='none'?'':st}">${fmtKPI(id,v)}</td>`;};
+    return `<tr><td>${p.label}</td>${cols.map(f=>`<td>${s[f]||0}</td>`).join('')}${tdKpi('joign',k.joign)}${tdKpi('qual',k.qual)}${tdKpi('showup',k.showup)}${tdKpi('close',k.close)}<td style="color:var(--purple)">${l.ventes_c1+l.ventes_c2+l.ventes_c3}</td><td style="color:var(--purple)">${l.ca_total.toFixed(0)}€</td></tr>`;
+  });
+  return `<div class="hist-wrap"><div class="sec-title">Récapitulatif historique</div>
+    <table class="htable"><thead><tr>
+      <th>Période</th>${cols.map(c=>`<th>${c.replace('Nbr ','')}</th>`).join('')}<th>Joign.</th><th>Qual.</th><th>Show-up</th><th>Close</th><th>Ventes</th><th>CA</th>
+    </tr></thead><tbody>${rows.join('')}</tbody></table>
+  </div>`;
+}
+
+function localSummaryHTML() {
+  const fields=['calls_sortants','joints','qualifies','rdv_bookes','sets','conv1','conv2','conv3'];
+  const tot={};
+  fields.forEach(f=>tot[f]=0);
+  TEAMS.forEach((_,ti)=>{ if(STATE.teams[ti]) fields.forEach(f=>tot[f]+=(STATE.teams[ti][f]||0)); });
+  return `<div class="sum-bar" style="margin-top:14px;">
+    <div style="width:100%;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Session en cours (local)</div>
+    <div class="si"><div class="si-lbl">Calls</div><div class="si-val c-blue">${tot.calls_sortants}</div></div>
+    <div class="si"><div class="si-lbl">Joints</div><div class="si-val c-txt">${tot.joints}</div></div>
+    <div class="si"><div class="si-lbl">Qualifiés</div><div class="si-val c-txt">${tot.qualifies}</div></div>
+    <div class="si"><div class="si-lbl">RDV</div><div class="si-val c-green">${tot.rdv_bookes}</div></div>
+    <div class="si"><div class="si-lbl">Sets</div><div class="si-val c-acc">${tot.sets}</div></div>
+    <div class="si"><div class="si-lbl">Conv1</div><div class="si-val c-purple">${tot.conv1}</div></div>
+    <div class="si"><div class="si-lbl">Conv2</div><div class="si-val c-purple">${tot.conv2}</div></div>
+    <div class="si"><div class="si-lbl">Conv3</div><div class="si-val c-purple">${tot.conv3}</div></div>
+  </div>`;
+}
+
+/* ══════════════════════════════════
+   TEAM MANAGEMENT
+══════════════════════════════════ */
+function openAddTeam() {
+  document.getElementById('newTeamInput').value='';
+  document.getElementById('newTeamErr').textContent='';
+  document.getElementById('overlayAddTeam').classList.add('show');
+  setTimeout(()=>document.getElementById('newTeamInput').focus(),100);
+}
+function closeAddTeam() { document.getElementById('overlayAddTeam').classList.remove('show'); }
+document.getElementById('newTeamInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmAddTeam();if(e.key==='Escape')closeAddTeam();});
+function confirmAddTeam() {
+  const inp=document.getElementById('newTeamInput'), err=document.getElementById('newTeamErr');
+  const name=inp.value.trim().toUpperCase();
+  if(!name){inp.classList.add('err');err.textContent='Nom requis.';return;}
+  if(TEAMS.includes(name)){inp.classList.add('err');err.textContent='Team déjà existante.';return;}
+  TEAMS.push(name); saveTeams(TEAMS);
+  const ti=TEAMS.length-1;
+  STATE.teams[ti]=defData(); STATE.activeTeam=ti; STATE.activeTab=`team-${ti}`;
+  saveState(STATE); closeAddTeam(); renderAll();
+  showToast(`✅ ${name} ajoutée`);
+}
+function deleteTeam(ti) {
+  if(TEAMS.length<=1){showToast('Impossible — dernière team','err');return;}
+  if(!confirm(`Supprimer ${TEAMS[ti]} ?`)) return;
+  const nt=[],nd={};
+  TEAMS.forEach((n,i)=>{if(i!==ti){const ni=nt.length;nt.push(n);nd[ni]=STATE.teams[i]||defData();}});
+  TEAMS.length=0;nt.forEach(n=>TEAMS.push(n));saveTeams(TEAMS);
+  STATE.teams=nd;STATE.activeTeam=Math.min(STATE.activeTeam,TEAMS.length-1);
+  STATE.activeTab='dashboard';saveState(STATE);renderAll();
+  showToast('🗑 Team supprimée');
+}
+
+/* ══════════════════════════════════
+   TOAST
+══════════════════════════════════ */
+let toastT;
+function showToast(msg,type) {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(type?' '+type:'');
+  t.classList.add('show'); clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
 function initApp() {
-  TEAMS = getTeams();
-  STATE = loadState();
-  // S'assurer que toutes les teams ont leurs données
-  TEAMS.forEach((_, ti) => ensureTeamData(ti));
-  // S'assurer que l'activeTeam est valide
-  if (STATE.activeTeam >= TEAMS.length) STATE.activeTeam = 0;
-  updateDate();
+  TEAMS=getTeams(); STATE=loadState();
+  TEAMS.forEach((_,ti)=>ensureTeam(ti));
+  if(STATE.activeTeam>=TEAMS.length) STATE.activeTeam=0;
+  if(!STATE.activeTab) STATE.activeTab='dashboard';
+  document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+  setSyncBadge('idle');
   renderAll();
 }
 
-if (sessionStorage.getItem(SESSION_KEY) === '1') initApp();
+if(sessionStorage.getItem(S_AUTH)==='1'){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').style.display='block';
+  initApp();
+}
 </script>
 </body>
 </html>
