@@ -13,14 +13,12 @@
   --green:#22c55e;--green-dim:rgba(34,197,94,.1);
   --red:#ef4444;--red-dim:rgba(239,68,68,.1);
   --blue:#3b82f6;--blue-dim:rgba(59,130,246,.1);
-  --purple:#a855f7;--purple-dim:rgba(168,85,247,.1);
+  --purple:#a855f7;
   --muted:#52525e;--text:#e4e4eb;--text-dim:#8b8b98;
   --font-ui:'Barlow Condensed',sans-serif;--font-num:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;}
-
-/* LOGIN */
 #loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:32px;padding:24px;}
 .login-logo{font-weight:700;font-size:22px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);text-align:center;}
 .login-logo span{display:block;color:var(--text-dim);font-size:13px;font-weight:400;margin-top:4px;}
@@ -32,9 +30,6 @@ body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-heigh
 .l-btn{width:100%;background:var(--accent);color:#000;border:none;border-radius:6px;padding:12px;font-family:var(--font-ui);font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;}
 .l-btn:hover{opacity:.9;}
 .l-err{font-size:12px;color:var(--red);text-align:center;height:14px;font-weight:600;}
-@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
-
-/* APP */
 #app{display:none;}
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
 .logo{font-weight:700;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
@@ -47,8 +42,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .sync-badge.err{color:var(--red);border-color:var(--red);}
 .hbtn{background:none;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:4px;cursor:pointer;font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;}
 .hbtn:hover{color:var(--text);border-color:var(--border2);}
-
-/* TABS */
 .tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:2px;overflow-x:auto;align-items:center;}
 .tab{font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;padding:11px 18px 9px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .tab:hover{color:var(--text);}
@@ -58,20 +51,14 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .tab.active .tsub{color:inherit;opacity:.7;}
 .btn-addteam{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--muted);border:1px dashed var(--border2);padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .15s;margin-left:6px;white-space:nowrap;}
 .btn-addteam:hover{color:var(--accent);border-color:var(--accent);}
-
-/* CONTENT */
 .content{max-width:1200px;margin:0 auto;padding:20px;}
 .panel{display:none;}
 .panel.active{display:block;}
-
-/* SUMMARY BAR */
 .sum-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:18px;}
 .si{display:flex;flex-direction:column;gap:2px;}
 .si-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .si-val{font-family:var(--font-num);font-size:20px;font-weight:700;}
 .c-blue{color:var(--blue);}.c-acc{color:var(--accent);}.c-green{color:var(--green);}.c-purple{color:var(--purple);}.c-txt{color:var(--text);}
-
-/* SECTIONS */
 .sections-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
 .sec{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .sec-hdr{padding:9px 14px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:7px;}
@@ -89,15 +76,12 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .s-cvn .sec-hdr{background:rgba(168,85,247,.08);color:var(--purple);border-bottom:1px solid rgba(168,85,247,.15);}
 .s-cvn .sdot{background:var(--purple);}
 .sec-body{padding:6px 0;}
-
-/* METRIC ROW */
 .mrow{display:grid;grid-template-columns:1fr auto;align-items:center;padding:4px 14px;gap:10px;transition:background .1s;}
 .mrow:hover{background:var(--surface2);}
 .mrow.sub{padding-left:26px;}
 .mrow.sub .mlbl::before{content:'›';margin-right:5px;color:var(--muted);}
-.mlbl{font-size:13px;font-weight:500;color:#ffffff;line-height:1.2;}
-.mlbl.caps{text-transform:uppercase;font-weight:700;font-size:13px;letter-spacing:.04em;}
-.mrow.sub .mlbl{font-size:12px;color:var(--text-dim);font-weight:400;}
+.mlbl{font-size:13px;font-weight:500;color:var(--text);line-height:1.2;}
+.mrow.sub .mlbl{font-size:12px;color:var(--text-dim);}
 .mctrl{display:flex;align-items:center;}
 .cbtn{width:26px;height:26px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1;flex-shrink:0;}
 .cbtn.m{border-radius:4px 0 0 4px;}
@@ -109,7 +93,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mval.nz{color:var(--accent);}
 .s-set .mval.nz{text-shadow:0 0 12px var(--accent-glow);}
 .mro{display:grid;grid-template-columns:1fr auto;align-items:center;padding:4px 14px;background:rgba(239,68,68,.04);}
-.mro-lbl{font-size:13px;font-weight:700;color:#ffffff;text-transform:uppercase;letter-spacing:.04em;}
+.mro-lbl{font-size:13px;font-weight:600;color:var(--text-dim);}
 .mro-val{font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--text-dim);min-width:44px;text-align:center;background:var(--surface3);border:1px solid var(--border);border-radius:4px;height:26px;display:flex;align-items:center;justify-content:center;}
 .mro-val.nz{color:var(--red);}
 .mtot{display:grid;grid-template-columns:1fr auto;align-items:center;padding:5px 14px;background:rgba(239,68,68,.06);border-top:1px solid rgba(239,68,68,.15);margin-top:2px;}
@@ -117,8 +101,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mtot-val{font-family:var(--font-num);font-size:17px;font-weight:700;color:var(--red);min-width:44px;text-align:center;}
 @keyframes pn{0%{transform:scale(1);}50%{transform:scale(1.2);}100%{transform:scale(1);}}
 .mval.pulse{animation:pn .15s ease;}
-
-/* TEAM ACTIONS */
 .team-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
 .team-title{font-size:20px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
 .team-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
@@ -128,8 +110,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .btn-copy{background:var(--green);color:#000;border:none;border-radius:6px;padding:8px 14px;font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
 .btn-sm{font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:4px;cursor:pointer;transition:all .15s;}
 .btn-sm:hover{background:var(--red-dim);color:var(--red);border-color:var(--red);}
-
-/* ─── DASHBOARD ─── */
 .dash-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
 .dash-title{font-size:20px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);}
 .dash-sub{font-size:12px;color:var(--text-dim);margin-top:3px;}
@@ -138,8 +118,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .btn-refresh{background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:7px 12px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
 .btn-refresh:hover{background:var(--blue);color:#000;}
 .dash-loading{text-align:center;padding:60px;color:var(--muted);font-family:var(--font-num);font-size:13px;}
-
-/* KPI CARDS */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;}
 .kpi-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
@@ -147,13 +125,11 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .kpi-sub{font-size:11px;color:var(--muted);line-height:1.4;}
 .kpi-bar{height:3px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden;}
 .kpi-fill{height:100%;border-radius:2px;transition:width .6s ease;}
-.st-ok .kpi-val{color:var(--green);} .st-ok .kpi-fill{background:var(--green);}
-.st-warn .kpi-val{color:var(--accent);} .st-warn .kpi-fill{background:var(--accent);}
-.st-bad .kpi-val{color:var(--red);} .st-bad .kpi-fill{background:var(--red);}
-.st-neutral .kpi-val{color:var(--blue);} .st-neutral .kpi-fill{background:var(--blue);}
+.st-ok .kpi-val{color:var(--green);}.st-ok .kpi-fill{background:var(--green);}
+.st-warn .kpi-val{color:var(--accent);}.st-warn .kpi-fill{background:var(--accent);}
+.st-bad .kpi-val{color:var(--red);}.st-bad .kpi-fill{background:var(--red);}
+.st-neutral .kpi-val{color:var(--blue);}.st-neutral .kpi-fill{background:var(--blue);}
 .st-none .kpi-val{color:var(--text);}
-
-/* FUNNEL */
 .funnel-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
 .sec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
 .funrow{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
@@ -162,8 +138,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .funfill{height:100%;border-radius:3px;transition:width .6s ease;}
 .funnum{font-family:var(--font-num);font-size:12px;font-weight:700;color:var(--text);width:46px;text-align:right;flex-shrink:0;}
 .funpct{font-family:var(--font-num);font-size:11px;color:var(--muted);width:42px;text-align:right;flex-shrink:0;}
-
-/* ALERTS */
 .alerts-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
 .alert-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:5px;margin-bottom:5px;}
 .alert-row.st-ok{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);}
@@ -171,22 +145,18 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .alert-row.st-bad{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.15);}
 .alert-row.st-none{background:var(--surface2);border:1px solid var(--border);}
 .adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.st-ok .adot{background:var(--green);} .st-warn .adot{background:var(--accent);} .st-bad .adot{background:var(--red);} .st-none .adot{background:var(--muted);}
+.st-ok .adot{background:var(--green);}.st-warn .adot{background:var(--accent);}.st-bad .adot{background:var(--red);}.st-none .adot{background:var(--muted);}
 .albl{flex:1;font-size:13px;color:var(--text);}
 .aval{font-family:var(--font-num);font-size:13px;font-weight:700;}
-.st-ok .aval{color:var(--green);} .st-warn .aval{color:var(--accent);} .st-bad .aval{color:var(--red);} .st-none .aval{color:var(--text-dim);}
+.st-ok .aval{color:var(--green);}.st-warn .aval{color:var(--accent);}.st-bad .aval{color:var(--red);}.st-none .aval{color:var(--text-dim);}
 .atgt{font-size:10px;color:var(--muted);margin-left:6px;white-space:nowrap;}
-
-/* HISTORY TABLE */
 .hist-wrap{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;overflow-x:auto;}
 .htable{width:100%;border-collapse:collapse;font-size:12px;}
 .htable th{text-align:left;padding:6px 8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;}
 .htable td{padding:7px 8px;border-bottom:1px solid var(--border);font-family:var(--font-num);white-space:nowrap;}
 .htable tr:last-child td{border-bottom:none;}
-.htable td:first-child,.htable td:nth-child(2){font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--text);}
-.td-ok{color:var(--green);} .td-warn{color:var(--accent);} .td-bad{color:var(--red);}
-
-/* MODAL */
+.htable td:first-child{font-family:var(--font-ui);font-size:13px;font-weight:600;color:var(--text);}
+.td-ok{color:var(--green);}.td-warn{color:var(--accent);}.td-bad{color:var(--red);}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px;}
 .overlay.show{display:flex;}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:26px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:16px;}
@@ -195,7 +165,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mlbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
 .minput{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 12px;font-family:var(--font-num);font-size:13px;color:var(--text);outline:none;transition:border-color .15s;}
 .minput:focus{border-color:var(--accent);}
-.minput.err{border-color:var(--red);}
 .merr{font-size:11px;color:var(--red);height:14px;font-weight:600;}
 .mactions{display:flex;gap:8px;}
 .mbtn-ok{flex:1;background:var(--accent);color:#000;border:none;border-radius:6px;padding:9px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
@@ -203,8 +172,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mstatus{padding:9px 12px;border-radius:6px;font-size:12px;font-weight:600;display:none;}
 .mstatus.ok{display:block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
 .mstatus.err{display:block;background:var(--red-dim);border:1px solid rgba(239,68,68,.3);color:var(--red);}
-
-/* PARAMS PANEL */
 .params-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
 .param-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
 .param-row:last-child{border-bottom:none;}
@@ -216,24 +183,15 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .param-toggle.on{background:var(--green);}
 .param-toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:white;top:3px;left:3px;transition:transform .2s;}
 .param-toggle.on::after{transform:translateX(16px);}
-
-/* TOAST */
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#000;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:9px 18px;border-radius:6px;transition:transform .3s ease;z-index:300;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.acc{background:var(--accent);}
 .toast.err{background:var(--red);color:white;}
-
-@media(max-width:600px){
-  .content{padding:12px;}
-  .sections-grid{grid-template-columns:1fr;}
-  .kpi-grid{grid-template-columns:repeat(2,1fr);}
-  header{padding:10px 12px;}
-}
+@media(max-width:600px){.content{padding:12px;}.sections-grid{grid-template-columns:1fr;}.kpi-grid{grid-template-columns:repeat(2,1fr);}header{padding:10px 12px;}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-logo">Call Counter<span>📊 Sales OS — Terrain</span></div>
   <div class="login-box">
@@ -244,7 +202,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
-<!-- APP -->
 <div id="app">
   <header>
     <div class="logo">Call Counter <span>/ Sales OS</span></div>
@@ -260,11 +217,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   <div class="content" id="mainContent"></div>
 </div>
 
-<!-- MODAL SETTINGS -->
 <div class="overlay" id="overlaySettings">
   <div class="modal">
     <div class="modal-title">⚙ Configuration Airtable</div>
-    <div class="modal-desc">Token stocké uniquement dans ce navigateur — jamais dans le code.<br>
+    <div class="modal-desc">Token stocké uniquement dans ce navigateur.<br>
     <strong style="color:var(--accent)">airtable.com → profil → Developer Hub → Personal access tokens</strong></div>
     <div><div class="mlbl">Token (pat…)</div><input class="minput" type="password" id="atTokenInput" placeholder="patXXXXX…"></div>
     <div class="mstatus" id="atStatus"></div>
@@ -275,7 +231,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
-<!-- MODAL ADD TEAM -->
 <div class="overlay" id="overlayAddTeam">
   <div class="modal">
     <div class="modal-title">➕ Ajouter une team</div>
@@ -289,11 +244,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
-<!-- MODAL PARAMS -->
 <div class="overlay" id="overlayParams">
   <div class="modal" style="max-width:600px;">
     <div class="modal-title">⚡ Paramètres KPI & Objectifs</div>
-    <div class="modal-desc">Active/désactive les KPIs et modifie les objectifs. Cible et minimum en % (ex: 35 pour 35%).</div>
+    <div class="modal-desc">Active/désactive les KPIs et modifie les objectifs (en %).</div>
     <div id="paramsContent"></div>
     <div class="mactions">
       <button class="mbtn-cancel" onclick="closeParams()">Fermer</button>
@@ -305,256 +259,185 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════
-   CONFIG AIRTABLE
-══════════════════════════════════ */
+/* ══ CONFIG ══ */
 const AT_BASE     = 'appOoMhNQEG3pHwpY';
 const AT_SESSIONS = 'tbl7CBa6QlZJQ4XkA';
 const AT_LEADS    = 'tblij8Zh1dUrrqn9z';
 
-/* ══════════════════════════════════
-   AUTH
-══════════════════════════════════ */
-const PWD = 'Juju1506';
-const S_AUTH = 'cg_auth_v1';
-const S_TOKEN = 'cg_at_token_v3';
-const S_STATE = 'cg_counter_v6';
-const S_TEAMS = 'cg_teams_v4';
-const S_PARAMS = 'cg_kpi_params_v1';
+/* ══ AUTH ══ */
+const PWD='Juju1506', S_AUTH='cg_auth_v1', S_TOKEN='cg_at_token_v3', S_STATE='cg_counter_v6', S_TEAMS='cg_teams_v4', S_PARAMS='cg_kpi_params_v1';
 
-function doLogin() {
-  const inp = document.getElementById('pwdInput'), err = document.getElementById('loginError');
-  if (inp.value === PWD) {
-    sessionStorage.setItem(S_AUTH, '1');
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    initApp();
-  } else {
-    inp.classList.add('error'); err.textContent = 'Mot de passe incorrect.'; inp.value = '';
-    setTimeout(() => { inp.classList.remove('error'); err.textContent = ''; }, 1500);
-  }
+function doLogin(){
+  const inp=document.getElementById('pwdInput'),err=document.getElementById('loginError');
+  if(inp.value===PWD){sessionStorage.setItem(S_AUTH,'1');document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';initApp();}
+  else{inp.classList.add('error');err.textContent='Mot de passe incorrect.';inp.value='';setTimeout(()=>{inp.classList.remove('error');err.textContent='';},1500);}
 }
-function doLogout() {
-  sessionStorage.removeItem(S_AUTH);
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('pwdInput').value = '';
-}
-document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+function doLogout(){sessionStorage.removeItem(S_AUTH);document.getElementById('app').style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('pwdInput').value='';}
+document.getElementById('pwdInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-/* ══════════════════════════════════
-   TOKEN
-══════════════════════════════════ */
-const getToken = () => localStorage.getItem(S_TOKEN) || '';
-const hasToken = () => !!getToken();
+/* ══ TOKEN ══ */
+const getToken=()=>localStorage.getItem(S_TOKEN)||'';
+const hasToken=()=>!!getToken();
 
-function openSettings() {
-  const tok = getToken();
-  document.getElementById('atTokenInput').value = tok ? '••••••••••••' : '';
-  document.getElementById('atStatus').className = 'mstatus';
-  if (tok) showModalStatus('✅ Token configuré — sync active', 'ok');
+function openSettings(){
+  const tok=getToken();
+  document.getElementById('atTokenInput').value=tok?'••••••••••••':'';
+  document.getElementById('atStatus').className='mstatus';
+  if(tok)showModalStatus('✅ Token configuré','ok');
   document.getElementById('overlaySettings').classList.add('show');
 }
-function closeSettings() { document.getElementById('overlaySettings').classList.remove('show'); }
-function showModalStatus(msg, type) {
-  const el = document.getElementById('atStatus');
-  el.textContent = msg; el.className = 'mstatus ' + type;
+function closeSettings(){document.getElementById('overlaySettings').classList.remove('show');}
+function showModalStatus(msg,type){const el=document.getElementById('atStatus');el.textContent=msg;el.className='mstatus '+type;}
+function saveToken(){
+  const v=document.getElementById('atTokenInput').value.trim();
+  if(!v||v==='••••••••••••'){showModalStatus('⚠ Saisis un token valide','err');return;}
+  localStorage.setItem(S_TOKEN,v);showModalStatus('✅ Token enregistré !','ok');setSyncBadge('idle');
 }
-function saveToken() {
-  const v = document.getElementById('atTokenInput').value.trim();
-  if (!v || v === '••••••••••••') { showModalStatus('⚠ Saisis un token valide', 'err'); return; }
-  localStorage.setItem(S_TOKEN, v);
-  showModalStatus('✅ Token enregistré !', 'ok');
-  setSyncBadge('idle');
-}
-
-function setSyncBadge(state) {
-  const el = document.getElementById('syncBadge');
-  if (!hasToken()) { el.textContent = '⬡ local'; el.className = 'sync-badge'; return; }
-  const map = { syncing:['⟳ sync…','syncing'], ok:['✓ sync','ok'], err:['✕ erreur','err'], idle:['⬡ Airtable',''] };
-  const [t,c] = map[state] || map.idle;
-  el.textContent = t; el.className = 'sync-badge ' + c;
+function setSyncBadge(state){
+  const el=document.getElementById('syncBadge');
+  if(!hasToken()){el.textContent='⬡ local';el.className='sync-badge';return;}
+  const map={syncing:['⟳ sync…','syncing'],ok:['✓ sync','ok'],err:['✕ erreur','err'],idle:['⬡ Airtable','']};
+  const[t,c]=map[state]||map.idle;el.textContent=t;el.className='sync-badge '+c;
 }
 
-/* ══════════════════════════════════
-   KPI CONFIG & PARAMS
-══════════════════════════════════ */
-const KPI_DEFAULTS = [
-  { id:'joign',    label:'Joignabilité',          fmt:'%', cible:35, min:25, inv:false, active:true },
-  { id:'qual',     label:'Qualification',          fmt:'%', cible:50, min:35, inv:false, active:true },
-  { id:'transf',   label:'Taux de transfert',      fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'booking',  label:'Booking rate',           fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'showup',   label:'Show-up rate',           fmt:'%', cible:80, min:65, inv:false, active:true },
-  { id:'noshow',   label:'No-show rate',           fmt:'%', cible:20, min:35, inv:true,  active:true },
-  { id:'close',    label:'Close rate',             fmt:'%', cible:30, min:20, inv:false, active:true },
-  { id:'funnel',   label:'Conversion funnel',      fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'conv1',    label:'Taux Conv1',             fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'conv2',    label:'Taux Conv2',             fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'conv3',    label:'Taux Conv3',             fmt:'%', cible:null, min:null, inv:false, active:true },
-  { id:'rpl',      label:'RPL (€/lead)',           fmt:'€', cible:null, min:null, inv:false, active:true },
+/* ══ KPI PARAMS ══ */
+const KPI_DEFAULTS=[
+  {id:'joign',   label:'Joignabilité',       fmt:'%',cible:35,min:25, inv:false,active:true},
+  {id:'qual',    label:'Qualification',       fmt:'%',cible:50,min:35, inv:false,active:true},
+  {id:'transf',  label:'Taux de transfert',  fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'booking', label:'Booking rate',        fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'showup',  label:'Show-up rate',        fmt:'%',cible:80,min:65, inv:false,active:true},
+  {id:'noshow',  label:'No-show rate',        fmt:'%',cible:20,min:35, inv:true, active:true},
+  {id:'close',   label:'Close rate',          fmt:'%',cible:30,min:20, inv:false,active:true},
+  {id:'funnel',  label:'Conversion funnel',   fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'conv1',   label:'Taux Conv1',          fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'conv2',   label:'Taux Conv2',          fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'conv3',   label:'Taux Conv3',          fmt:'%',cible:null,min:null,inv:false,active:true},
+  {id:'rpl',     label:'RPL (€/lead)',        fmt:'€',cible:null,min:null,inv:false,active:true},
 ];
-
-function getParams() {
-  try {
-    const raw = localStorage.getItem(S_PARAMS);
-    if (!raw) return JSON.parse(JSON.stringify(KPI_DEFAULTS));
-    const saved = JSON.parse(raw);
-    return KPI_DEFAULTS.map(def => {
-      const s = saved.find(x => x.id === def.id);
-      return s ? {...def, ...s} : def;
-    });
-  } catch { return JSON.parse(JSON.stringify(KPI_DEFAULTS)); }
+function getParams(){
+  try{const r=localStorage.getItem(S_PARAMS);if(!r)return JSON.parse(JSON.stringify(KPI_DEFAULTS));const s=JSON.parse(r);return KPI_DEFAULTS.map(d=>{const x=s.find(p=>p.id===d.id);return x?{...d,...x}:d;});}
+  catch{return JSON.parse(JSON.stringify(KPI_DEFAULTS));}
 }
-
-function openParams() {
-  const params = getParams();
-  document.getElementById('paramsContent').innerHTML = `
-    <div class="params-section">
-      <div style="display:grid;grid-template-columns:1fr 70px 70px 40px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;">
-        <span>KPI</span><span>Cible %</span><span>Min %</span><span>ON</span>
-      </div>
-      ${params.map(p => `
-        <div class="param-row">
-          <div class="param-name">${p.label}</div>
-          <div class="param-inputs">
-            <input class="param-inp" type="number" id="p-cible-${p.id}" value="${p.cible !== null ? p.cible : ''}" placeholder="—" min="0" max="100">
-            <input class="param-inp" type="number" id="p-min-${p.id}" value="${p.min !== null ? p.min : ''}" placeholder="—" min="0" max="100">
-            <button class="param-toggle ${p.active?'on':''}" id="p-tog-${p.id}" onclick="this.classList.toggle('on')"></button>
-          </div>
-        </div>`).join('')}
-    </div>`;
+function openParams(){
+  const params=getParams();
+  document.getElementById('paramsContent').innerHTML=`<div class="params-section">
+    <div style="display:grid;grid-template-columns:1fr 70px 70px 40px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;"><span>KPI</span><span>Cible %</span><span>Min %</span><span>ON</span></div>
+    ${params.map(p=>`<div class="param-row"><div class="param-name">${p.label}</div><div class="param-inputs">
+      <input class="param-inp" type="number" id="p-cible-${p.id}" value="${p.cible!==null?p.cible:''}" placeholder="—" min="0" max="100">
+      <input class="param-inp" type="number" id="p-min-${p.id}" value="${p.min!==null?p.min:''}" placeholder="—" min="0" max="100">
+      <button class="param-toggle ${p.active?'on':''}" id="p-tog-${p.id}" onclick="this.classList.toggle('on')"></button>
+    </div></div>`).join('')}
+  </div>`;
   document.getElementById('overlayParams').classList.add('show');
 }
-function closeParams() { document.getElementById('overlayParams').classList.remove('show'); }
-function saveParams() {
-  const params = getParams().map(p => ({
-    ...p,
-    cible: document.getElementById(`p-cible-${p.id}`).value !== '' ? parseFloat(document.getElementById(`p-cible-${p.id}`).value) : null,
-    min: document.getElementById(`p-min-${p.id}`).value !== '' ? parseFloat(document.getElementById(`p-min-${p.id}`).value) : null,
-    active: document.getElementById(`p-tog-${p.id}`).classList.contains('on'),
+function closeParams(){document.getElementById('overlayParams').classList.remove('show');}
+function saveParams(){
+  const params=getParams().map(p=>({...p,
+    cible:document.getElementById(`p-cible-${p.id}`).value!==''?parseFloat(document.getElementById(`p-cible-${p.id}`).value):null,
+    min:document.getElementById(`p-min-${p.id}`).value!==''?parseFloat(document.getElementById(`p-min-${p.id}`).value):null,
+    active:document.getElementById(`p-tog-${p.id}`).classList.contains('on'),
   }));
-  localStorage.setItem(S_PARAMS, JSON.stringify(params));
-  closeParams();
-  showToast('✅ Paramètres enregistrés');
+  localStorage.setItem(S_PARAMS,JSON.stringify(params));closeParams();showToast('✅ Paramètres enregistrés');
 }
 
-/* ══════════════════════════════════
-   METRICS CONFIG
-══════════════════════════════════ */
-const DEFAULT_TEAMS = ['DV W S','ALE VSL S','ALE SPE S','ARYA S','INDCO S'];
-const METRICS = [
-  { id:'new_leads',     label:'Nbr new leads pris',  group:'act' },
-  { id:'calls_sortants',label:'Nbr calls sortants',  group:'act' },
-  { id:'nrp',           label:'Nbr NRP',             group:'con' },
-  { id:'joints',        label:'Nbr joints',          group:'con' },
-  { id:'jamais_joints', label:'Nbr jamais joints',   group:'con' },
-  { id:'qualifies',     label:'Nbr qualifiés',       group:'qua' },
-  { id:'nq_finances',   label:'Non qual finances',   group:'qua', sub:true },
-  { id:'nq_autres',     label:'Non qual autres',     group:'qua', sub:true },
-  { id:'pas_interesse', label:'Pas/Plus intéressés', group:'qua', sub:true },
-  { id:'raccroche',     label:'Raccroché au nez',    group:'qua', sub:true },
-  { id:'mauvais_num',   label:'Mauvais numéro',      group:'qua', sub:true },
-  { id:'rdv_bookes',    label:'Nbr RDV bookés',      group:'rdv' },
-  { id:'fup',           label:'Nbr FUP',             group:'rdv' },
-  { id:'rdv_prevus',    label:'Nbr RDV prévus',      group:'rdv' },
-  { id:'rdv_honores',   label:'Nbr RDV honorés',     group:'rdv' },
-  { id:'no_shows',      label:'Nbr No shows',        group:'rdv' },
-  { id:'sets',          label:'Nbr sets',            group:'set' },
-  { id:'conv1',         label:'Nbr Conv1',           group:'cvn' },
-  { id:'conv2',         label:'Nbr Conv2',           group:'cvn' },
-  { id:'conv3',         label:'Nbr Conv3',           group:'cvn' },
+/* ══ METRICS ══ */
+const DEFAULT_TEAMS=['DV W S','ALE VSL S','ALE SPE S','ARYA S','INDCO S'];
+const METRICS=[
+  {id:'new_leads',     label:'Nbr new leads pris',  group:'act'},
+  {id:'calls_sortants',label:'Nbr calls sortants',  group:'act'},
+  {id:'nrp',           label:'Nbr NRP',             group:'con'},
+  {id:'joints',        label:'Nbr joints',          group:'con'},
+  {id:'jamais_joints', label:'Nbr jamais joints',   group:'con'},
+  {id:'qualifies',     label:'Nbr qualifiés',       group:'qua'},
+  {id:'nq_finances',   label:'Non qual finances',   group:'qua',sub:true},
+  {id:'nq_autres',     label:'Non qual autres',     group:'qua',sub:true},
+  {id:'pas_interesse', label:'Pas/Plus intéressés', group:'qua',sub:true},
+  {id:'raccroche',     label:'Raccroché au nez',    group:'qua',sub:true},
+  {id:'mauvais_num',   label:'Mauvais numéro',      group:'qua',sub:true},
+  {id:'rdv_bookes',    label:'Nbr RDV bookés',      group:'rdv'},
+  {id:'fup',           label:'Nbr FUP',             group:'rdv'},
+  {id:'rdv_prevus',    label:'Nbr RDV prévus',      group:'rdv'},
+  {id:'rdv_honores',   label:'Nbr RDV honorés',     group:'rdv'},
+  {id:'no_shows',      label:'Nbr No shows',        group:'rdv'},
+  {id:'sets',          label:'Nbr sets',            group:'set'},
+  {id:'conv1',         label:'Nbr Conv1',           group:'cvn'},
+  {id:'conv2',         label:'Nbr Conv2',           group:'cvn'},
+  {id:'conv3',         label:'Nbr Conv3',           group:'cvn'},
 ];
-const GROUPS = {
-  act:{ label:'Activité',      cls:'s-act' },
-  con:{ label:'Connexion',     cls:'s-con' },
-  qua:{ label:'Qualification', cls:'s-qua' },
-  rdv:{ label:'RDV',          cls:'s-rdv' },
-  set:{ label:'Sets',         cls:'s-set' },
-  cvn:{ label:'Conversations', cls:'s-cvn' },
+const GROUPS={
+  act:{label:'Activité',cls:'s-act'},con:{label:'Connexion',cls:'s-con'},
+  qua:{label:'Qualification',cls:'s-qua'},rdv:{label:'RDV',cls:'s-rdv'},
+  set:{label:'Sets',cls:'s-set'},cvn:{label:'Conversations',cls:'s-cvn'},
 };
 
-/* ══════════════════════════════════
-   STATE
-══════════════════════════════════ */
-const getTeams = () => { try { const r=localStorage.getItem(S_TEAMS); return r?JSON.parse(r):[...DEFAULT_TEAMS]; } catch { return [...DEFAULT_TEAMS]; } };
-const saveTeams = t => localStorage.setItem(S_TEAMS, JSON.stringify(t));
-const defData = () => { const d={}; METRICS.forEach(m=>d[m.id]=0); return d; };
-const loadState = () => { try { const r=localStorage.getItem(S_STATE); return r?JSON.parse(r):{activeTab:'dashboard',activeTeam:0,teams:{}}; } catch { return {activeTab:'dashboard',activeTeam:0,teams:{}}; } };
-const saveState = s => localStorage.setItem(S_STATE, JSON.stringify(s));
-function ensureTeam(ti) {
-  if (!STATE.teams[ti]) STATE.teams[ti]=defData();
-  METRICS.forEach(m=>{ if(STATE.teams[ti][m.id]===undefined) STATE.teams[ti][m.id]=0; });
-}
-let STATE, TEAMS;
+/* Mapping exact vers noms de colonnes Airtable */
+const AT_FIELD_MAP={
+  new_leads:'New leads', calls_sortants:'Calls sortants', nrp:'NRP',
+  joints:'Joints', jamais_joints:'Jamais joints', qualifies:'Qualifiés',
+  nq_finances:'NQ finances', nq_autres:'NQ autres',
+  pas_interesse:'Pas/Plus intéressés', raccroche:'Raccroché au nez',
+  mauvais_num:'Mauvais numéro', rdv_bookes:'RDV bookés', fup:'FUP',
+  rdv_prevus:'RDV prévus', rdv_honores:'RDV honorés', no_shows:'No shows',
+  sets:'Sets', conv1:'Conv1', conv2:'Conv2', conv3:'Conv3',
+};
 
-/* ══════════════════════════════════
-   TABS
-══════════════════════════════════ */
-const teamTotal = ti => STATE.teams[ti]?(STATE.teams[ti]['calls_sortants']||0):0;
+/* ══ STATE ══ */
+const getTeams=()=>{try{const r=localStorage.getItem(S_TEAMS);return r?JSON.parse(r):[...DEFAULT_TEAMS];}catch{return[...DEFAULT_TEAMS];}};
+const saveTeams=t=>localStorage.setItem(S_TEAMS,JSON.stringify(t));
+const defData=()=>{const d={};METRICS.forEach(m=>d[m.id]=0);return d;};
+const loadState=()=>{try{const r=localStorage.getItem(S_STATE);return r?JSON.parse(r):{activeTab:'dashboard',activeTeam:0,teams:{}};}catch{return{activeTab:'dashboard',activeTeam:0,teams:{}};}};
+const saveState=s=>localStorage.setItem(S_STATE,JSON.stringify(s));
+function ensureTeam(ti){if(!STATE.teams[ti])STATE.teams[ti]=defData();METRICS.forEach(m=>{if(STATE.teams[ti][m.id]===undefined)STATE.teams[ti][m.id]=0;});}
+let STATE,TEAMS;
 
-function renderTabs() {
-  const wrap = document.getElementById('tabsWrap');
-  wrap.innerHTML = '';
-  const dashBtn = document.createElement('button');
-  dashBtn.className = 'tab dash-tab'+(STATE.activeTab==='dashboard'?' active':'');
-  dashBtn.innerHTML = '📊 Dashboard<span class="tsub">vue globale</span>';
-  dashBtn.onclick = () => { STATE.activeTab='dashboard'; saveState(STATE); renderAll(); };
-  wrap.appendChild(dashBtn);
-  TEAMS.forEach((name,ti) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab'+(STATE.activeTab===`team-${ti}`?' active':'');
-    btn.innerHTML = `${name}<span class="tsub">${teamTotal(ti)} appels</span>`;
-    btn.onclick = () => { STATE.activeTab=`team-${ti}`; STATE.activeTeam=ti; saveState(STATE); renderAll(); };
+/* ══ TABS ══ */
+const teamTotal=ti=>STATE.teams[ti]?(STATE.teams[ti]['calls_sortants']||0):0;
+function renderTabs(){
+  const wrap=document.getElementById('tabsWrap');wrap.innerHTML='';
+  const db=document.createElement('button');
+  db.className='tab dash-tab'+(STATE.activeTab==='dashboard'?' active':'');
+  db.innerHTML='📊 Dashboard<span class="tsub">vue globale</span>';
+  db.onclick=()=>{STATE.activeTab='dashboard';saveState(STATE);renderAll();};
+  wrap.appendChild(db);
+  TEAMS.forEach((name,ti)=>{
+    const btn=document.createElement('button');
+    btn.className='tab'+(STATE.activeTab===`team-${ti}`?' active':'');
+    btn.innerHTML=`${name}<span class="tsub">${teamTotal(ti)} appels</span>`;
+    btn.onclick=()=>{STATE.activeTab=`team-${ti}`;STATE.activeTeam=ti;saveState(STATE);renderAll();};
     wrap.appendChild(btn);
   });
-  const addBtn = document.createElement('button');
-  addBtn.className = 'btn-addteam';
-  addBtn.textContent = '+ Team';
-  addBtn.onclick = openAddTeam;
-  wrap.appendChild(addBtn);
+  const ab=document.createElement('button');ab.className='btn-addteam';ab.textContent='+ Team';ab.onclick=openAddTeam;wrap.appendChild(ab);
 }
-
-function renderAll() {
+function renderAll(){
   renderTabs();
-  if (STATE.activeTab==='dashboard') {
-    document.getElementById('mainContent').innerHTML = '<div id="dashPanel" class="panel active"></div>';
-    loadDashboard();
-  } else {
-    document.getElementById('mainContent').innerHTML = renderTeamPanel(STATE.activeTeam);
-  }
+  if(STATE.activeTab==='dashboard'){document.getElementById('mainContent').innerHTML='<div id="dashPanel" class="panel active"></div>';loadDashboard();}
+  else{document.getElementById('mainContent').innerHTML=renderTeamPanel(STATE.activeTeam);}
 }
 
-/* ══════════════════════════════════
-   TEAM PANEL
-══════════════════════════════════ */
-function renderTeamPanel(ti) {
-  const byG={};
-  METRICS.forEach(m=>{ if(!byG[m.group]) byG[m.group]=[]; byG[m.group].push(m); });
-  const sections = Object.keys(GROUPS).map(gk => {
-    if (!byG[gk]) return '';
-    const g = GROUPS[gk];
-    let body = '';
-    if (gk==='qua') {
+/* ══ TEAM PANEL ══ */
+function renderTeamPanel(ti){
+  const byG={};METRICS.forEach(m=>{if(!byG[m.group])byG[m.group]=[];byG[m.group].push(m);});
+  const sections=Object.keys(GROUPS).map(gk=>{
+    if(!byG[gk])return'';const g=GROUPS[gk];let body='';
+    if(gk==='qua'){
       const t=STATE.teams[ti];
       const nq=(t.nq_finances||0)+(t.nq_autres||0);
       const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
       const qual=byG[gk].find(m=>m.id==='qualifies');
-      body += qual?mrow(qual,ti,true):'';
-      body += `<div class="mro"><div class="mro-lbl">Nbr non qualifiés</div><div class="mro-val${nq>0?' nz':''}" id="nq-${ti}">${nq}</div></div>`;
-      body += byG[gk].filter(m=>m.sub).map(m=>mrow(m,ti,false)).join('');
-      body += `<div class="mtot"><div class="mtot-lbl">Total perdus</div><div class="mtot-val" id="tp-${ti}">${tp}</div></div>`;
-    } else {
-      body = byG[gk].map(m=>mrow(m,ti,false)).join('');
-    }
-    return `<div class="sec ${g.cls}"><div class="sec-hdr"><span class="sdot"></span>${g.label}</div><div class="sec-body">${body}</div></div>`;
+      body+=qual?mrow(qual,ti):'';
+      body+=`<div class="mro"><div class="mro-lbl">Nbr non qualifiés</div><div class="mro-val${nq>0?' nz':''}" id="nq-${ti}">${nq}</div></div>`;
+      body+=byG[gk].filter(m=>m.sub).map(m=>mrow(m,ti)).join('');
+      body+=`<div class="mtot"><div class="mtot-lbl">Total perdus</div><div class="mtot-val" id="tp-${ti}">${tp}</div></div>`;
+    }else{body=byG[gk].map(m=>mrow(m,ti)).join('');}
+    return`<div class="sec ${g.cls}"><div class="sec-hdr"><span class="sdot"></span>${g.label}</div><div class="sec-body">${body}</div></div>`;
   }).join('');
-
   const t=STATE.teams[ti];
-  return `<div class="panel active" id="team-${ti}">
+  return`<div class="panel active" id="team-${ti}">
     <div class="team-hdr">
       <div><div class="team-title">${TEAMS[ti]}</div><div class="team-sub">Session du ${new Date().toLocaleDateString('fr-FR')}</div></div>
       <div class="team-acts">
-        ${hasToken()?`<button class="btn-save" onclick="saveSession(${ti})">💾 Enregistrer Airtable</button>`:'<button class="btn-save" style="background:var(--muted);cursor:default;">⚙ Config Airtable</button>'}
+        ${hasToken()?`<button class="btn-save" onclick="saveSession(${ti})">💾 Enregistrer Airtable</button>`:'<button class="btn-save" style="background:var(--muted);cursor:default;" onclick="openSettings()">⚙ Config Airtable</button>'}
         <button class="btn-copy" onclick="copyData(${ti})">📋 Copier GSheet</button>
         <button class="btn-sm" onclick="resetTeam(${ti})">↺ Reset</button>
         <button class="btn-sm" onclick="deleteTeam(${ti})">🗑</button>
@@ -573,197 +456,137 @@ function renderTeamPanel(ti) {
     <div class="sections-grid">${sections}</div>
   </div>`;
 }
-
-function mrow(m, ti, caps) {
+function mrow(m,ti){
   const val=STATE.teams[ti][m.id]||0;
-  const isSub=!!m.sub;
-  const clr=isSub?'#8b8b98':'#ffffff';
-  const fw=isSub?400:caps?700:500;
-  const fs=isSub?'12px':'13px';
-  const tt=caps?'text-transform:uppercase;letter-spacing:.04em;':'';
-  return `<div class="mrow${isSub?' sub':''}">
-    <div class="mlbl" style="color:${clr};font-size:${fs};font-weight:${fw};${tt}">${m.label}</div>
-    <div class="mctrl">
-      <button class="cbtn m" onclick="adj(${ti},'${m.id}',-1)">-</button>
-      <div class="mval${val>0?' nz':''}" id="val-${ti}-${m.id}">${val}</div>
-      <button class="cbtn p" onclick="adj(${ti},'${m.id}',1)">+</button>
-    </div>
-  </div>`;
+  return`<div class="mrow${m.sub?' sub':''}"><div class="mlbl">${m.label}</div><div class="mctrl">
+    <button class="cbtn m" onclick="adj(${ti},'${m.id}',-1)">−</button>
+    <div class="mval${val>0?' nz':''}" id="val-${ti}-${m.id}">${val}</div>
+    <button class="cbtn p" onclick="adj(${ti},'${m.id}',1)">+</button>
+  </div></div>`;
 }
-
-function adj(ti, id, d) {
-  STATE.teams[ti][id]=Math.max(0,(STATE.teams[ti][id]||0)+d);
-  saveState(STATE);
+function adj(ti,id,d){
+  STATE.teams[ti][id]=Math.max(0,(STATE.teams[ti][id]||0)+d);saveState(STATE);
   const el=document.getElementById(`val-${ti}-${id}`);
-  if (el) {
-    const v=STATE.teams[ti][id];
-    el.textContent=v; el.className='mval'+(v>0?' nz':'');
-    el.classList.add('pulse'); setTimeout(()=>el.classList.remove('pulse'),150);
-  }
-  refreshSummaryBar(ti);
+  if(el){const v=STATE.teams[ti][id];el.textContent=v;el.className='mval'+(v>0?' nz':'');el.classList.add('pulse');setTimeout(()=>el.classList.remove('pulse'),150);}
+  refreshSB(ti);
 }
-
-function refreshSummaryBar(ti) {
+function refreshSB(ti){
   const t=STATE.teams[ti];
-  const map=[['calls','calls_sortants'],['joints','joints'],['qual','qualifies'],['rdv','rdv_bookes'],['sets','sets'],['c1','conv1'],['c2','conv2'],['c3','conv3']];
-  map.forEach(([k,f])=>{ const el=document.getElementById(`sb-${k}-${ti}`); if(el) el.textContent=t[f]||0; });
+  [['calls','calls_sortants'],['joints','joints'],['qual','qualifies'],['rdv','rdv_bookes'],['sets','sets'],['c1','conv1'],['c2','conv2'],['c3','conv3']].forEach(([k,f])=>{const el=document.getElementById(`sb-${k}-${ti}`);if(el)el.textContent=t[f]||0;});
   const nq=(t.nq_finances||0)+(t.nq_autres||0);
-  const nqEl=document.getElementById(`nq-${ti}`); if(nqEl){nqEl.textContent=nq;nqEl.className='mro-val'+(nq>0?' nz':'');}
+  const nqEl=document.getElementById(`nq-${ti}`);if(nqEl){nqEl.textContent=nq;nqEl.className='mro-val'+(nq>0?' nz':'');}
   const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
-  const tpEl=document.getElementById(`tp-${ti}`); if(tpEl) tpEl.textContent=tp;
-  document.querySelectorAll('.tab').forEach(tab=>{
-    const tsub=tab.querySelector('.tsub');
-    if(tsub && tab.textContent.includes(TEAMS[ti])) tsub.textContent=`${teamTotal(ti)} appels`;
-  });
+  const tpEl=document.getElementById(`tp-${ti}`);if(tpEl)tpEl.textContent=tp;
 }
+function resetTeam(ti){if(!confirm(`Reset ${TEAMS[ti]} ?`))return;METRICS.forEach(m=>STATE.teams[ti][m.id]=0);saveState(STATE);renderAll();}
 
-function resetTeam(ti) {
-  if(!confirm(`Reset ${TEAMS[ti]} ?`)) return;
-  METRICS.forEach(m=>STATE.teams[ti][m.id]=0);
-  saveState(STATE); renderAll();
-}
-
-/* ══════════════════════════════════
-   SAVE SESSION TO AIRTABLE
-══════════════════════════════════ */
-function weekNum(d) {
+/* ══ SAVE SESSION TO AIRTABLE ══ */
+function weekNum(d){
   const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-  const day=date.getUTCDay()||7;
-  date.setUTCDate(date.getUTCDate()+4-day);
+  const day=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-day);
   const y=new Date(Date.UTC(date.getUTCFullYear(),0,1));
   return Math.ceil((((date-y)/86400000)+1)/7);
 }
-
-async function saveSession(ti) {
+async function saveSession(ti){
   const token=getToken();
   if(!token){showToast('⚙ Configure ton token Airtable','acc');openSettings();return;}
-  const t=STATE.teams[ti], now=new Date();
+  const t=STATE.teams[ti],now=new Date();
   const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
   const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
   const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
+
+  /* Noms de champs EXACTEMENT comme dans Airtable */
   const fields={
-    'Date':now.toISOString().split('T')[0],'Team':TEAMS[ti],
-    'New leads':t.new_leads||0,'Calls sortants':t.calls_sortants||0,
-    'NRP':t.nrp||0,'Joints':joints,'RDV bookés':t.rdv_bookes||0,'FUP':t.fup||0,
-    'Non qualifiés':nonQual,'Qualifiés':t.qualifies||0,'Sets':t.sets||0,
-    'Jamais joints':t.jamais_joints||0,'RDV prévus':t.rdv_prevus||0,
-    'RDV honorés':rdvHon,'No shows':t.no_shows||0,
-    'NQ finances':t.nq_finances||0,'NQ autres':t.nq_autres||0,
-    'Pas intéressés':t.pas_interesse||0,'Raccroché':t.raccroche||0,'Mauvais numéro':t.mauvais_num||0,
-    'Conv1':t.conv1||0,'Conv2':t.conv2||0,'Conv3':t.conv3||0,
-    'Semaine':weekNum(now),'Mois':now.getMonth()+1,
-    'Trimestre':Math.ceil((now.getMonth()+1)/3),'Année':now.getFullYear(),
+    'Date': now.toISOString().split('T')[0],
+    'Team': TEAMS[ti],
+    'New leads': t.new_leads||0,
+    'Calls sortants': t.calls_sortants||0,
+    'NRP': t.nrp||0,
+    'Joints': joints,
+    'RDV bookés': t.rdv_bookes||0,
+    'FUP': t.fup||0,
+    'Non qualifiés': nonQual,
+    'Qualifiés': t.qualifies||0,
+    'Sets': t.sets||0,
+    'Jamais joints': t.jamais_joints||0,
+    'RDV prévus': t.rdv_prevus||0,
+    'RDV honorés': rdvHon,
+    'No shows': t.no_shows||0,
+    'NQ finances': t.nq_finances||0,
+    'NQ autres': t.nq_autres||0,
+    'Pas/Plus intéressés': t.pas_interesse||0,
+    'Raccroché au nez': t.raccroche||0,
+    'Mauvais numéro': t.mauvais_num||0,
+    'Conv1': t.conv1||0,
+    'Conv2': t.conv2||0,
+    'Conv3': t.conv3||0,
+    'Semaine': weekNum(now),
+    'Mois': now.getMonth()+1,
+    'Trimestre': Math.ceil((now.getMonth()+1)/3),
+    'Année': now.getFullYear(),
   };
+
   setSyncBadge('syncing');
-  try {
+  try{
     const res=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`,{
-      method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      method:'POST',
+      headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
       body:JSON.stringify({fields})
     });
-    if(!res.ok) throw new Error(res.status);
-    setSyncBadge('ok'); showToast(`✓ ${TEAMS[ti]} enregistré`);
+    if(!res.ok){const err=await res.json();throw new Error(err.error?.message||res.status);}
+    setSyncBadge('ok');showToast(`✓ ${TEAMS[ti]} enregistré`);
     setTimeout(()=>setSyncBadge('idle'),3000);
-  } catch(e) {
-    setSyncBadge('err'); showToast(`✕ Erreur: ${e.message}`,'err');
+  }catch(e){
+    setSyncBadge('err');showToast(`✕ ${e.message}`,'err');
     setTimeout(()=>setSyncBadge('idle'),4000);
   }
 }
 
-/* ══════════════════════════════════
-   COPY (GSheet legacy)
-══════════════════════════════════ */
-function copyData(ti) {
-  const t=STATE.teams[ti], d=new Date();
+/* ══ COPY GSHEET ══ */
+function copyData(ti){
+  const t=STATE.teams[ti],d=new Date();
   const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
   const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
   const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
-  const row=[d.toLocaleDateString('fr-FR'),TEAMS[ti],t.new_leads||0,t.calls_sortants||0,t.nrp||0,joints,
-    t.rdv_bookes||0,t.fup||0,nonQual,t.qualifies||0,t.sets||0,t.jamais_joints||0,t.rdv_prevus||0,
-    rdvHon,t.no_shows||0,t.nq_finances||0,t.nq_autres||0,t.pas_interesse||0,t.raccroche||0,
-    t.mauvais_num||0,t.conv1||0,t.conv2||0,t.conv3||0].join('\t');
+  const row=[d.toLocaleDateString('fr-FR'),TEAMS[ti],t.new_leads||0,t.calls_sortants||0,t.nrp||0,joints,t.rdv_bookes||0,t.fup||0,nonQual,t.qualifies||0,t.sets||0,t.jamais_joints||0,t.rdv_prevus||0,rdvHon,t.no_shows||0,t.nq_finances||0,t.nq_autres||0,t.pas_interesse||0,t.raccroche||0,t.mauvais_num||0,t.conv1||0,t.conv2||0,t.conv3||0].join('\t');
   navigator.clipboard.writeText(row).then(()=>showToast('📋 Copié !')).catch(()=>prompt('Copie:',row));
 }
 
-/* ══════════════════════════════════
-   DASHBOARD
-══════════════════════════════════ */
-let SESS_RECORDS=[], LEAD_RECORDS=[];
-let dashPeriod='week', dashTeam='Toutes';
-
-async function loadDashboard() {
-  const panel=document.getElementById('dashPanel');
-  if(!panel) return;
-  if(!hasToken()) { panel.innerHTML=noTokenHTML(); return; }
+/* ══ DASHBOARD ══ */
+let SESS_RECORDS=[],LEAD_RECORDS=[],dashPeriod='week',dashTeam='Toutes';
+async function loadDashboard(){
+  const panel=document.getElementById('dashPanel');if(!panel)return;
+  if(!hasToken()){panel.innerHTML=noTokenHTML();return;}
   panel.innerHTML='<div class="dash-loading">⟳ Chargement Airtable…</div>';
   const token=getToken();
-  try {
-    const [sessRes, leadRes] = await Promise.all([
+  try{
+    const[sr,lr]=await Promise.all([
       fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}}),
       fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_LEADS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}})
     ]);
-    if(!sessRes.ok||!leadRes.ok) throw new Error('Erreur API');
-    const [sd,ld]=await Promise.all([sessRes.json(),leadRes.json()]);
-    SESS_RECORDS=sd.records.map(r=>r.fields);
-    LEAD_RECORDS=ld.records.map(r=>r.fields);
+    if(!sr.ok||!lr.ok)throw new Error('Erreur API '+(!sr.ok?sr.status:lr.status));
+    const[sd,ld]=await Promise.all([sr.json(),lr.json()]);
+    SESS_RECORDS=sd.records.map(r=>r.fields);LEAD_RECORDS=ld.records.map(r=>r.fields);
     renderDashboard();
-  } catch(e) {
-    panel.innerHTML=`<div class="dash-loading" style="color:var(--red);">✕ Erreur: ${e.message}</div>${localSummaryHTML()}`;
-  }
+  }catch(e){panel.innerHTML=`<div class="dash-loading" style="color:var(--red);">✕ ${e.message}</div>${localSummaryHTML()}`;}
 }
+function noTokenHTML(){return`<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;"><div style="color:var(--accent);font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:8px;">⚙ SYNC AIRTABLE NON CONFIGURÉE</div><div style="color:var(--text-dim);font-size:13px;">Configure ton token via <strong style="color:var(--accent)">⚙ Sync</strong> en haut à droite.</div></div>${localSummaryHTML()}`;}
 
-function noTokenHTML() {
-  return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;text-align:center;margin-bottom:16px;">
-    <div style="color:var(--accent);font-size:15px;font-weight:700;letter-spacing:.06em;margin-bottom:8px;">⚙ SYNC AIRTABLE NON CONFIGURÉE</div>
-    <div style="color:var(--text-dim);font-size:13px;">Configure ton token via <strong style="color:var(--accent)">⚙ Sync</strong> pour voir le dashboard historique.</div>
-  </div>${localSummaryHTML()}`;
-}
-
-function renderDashboard() {
-  const panel=document.getElementById('dashPanel');
-  if(!panel) return;
-  const now=new Date(), cW=weekNum(now), cM=now.getMonth()+1, cY=now.getFullYear(), cQ=Math.ceil(cM/3);
-
-  const filterPeriod = r => {
-    if(dashPeriod==='week') return r['Semaine']===cW && r['Année']===cY;
-    if(dashPeriod==='month') return r['Mois']===cM && r['Année']===cY;
-    if(dashPeriod==='quarter') return r['Trimestre']===cQ && r['Année']===cY;
-    return r['Année']===cY;
-  };
-
-  let sessRecs = SESS_RECORDS.filter(filterPeriod);
-  let leadRecs = LEAD_RECORDS.filter(r => {
-    const d=new Date(r['Date']||'');
-    if(isNaN(d)) return false;
-    const rW=weekNum(d), rM=d.getMonth()+1, rY=d.getFullYear(), rQ=Math.ceil(rM/3);
-    if(dashPeriod==='week') return rW===cW&&rY===cY;
-    if(dashPeriod==='month') return rM===cM&&rY===cY;
-    if(dashPeriod==='quarter') return rQ===cQ&&rY===cY;
-    return rY===cY;
-  });
-
-  if(dashTeam!=='Toutes') {
-    sessRecs=sessRecs.filter(r=>r['Team']===dashTeam);
-    leadRecs=leadRecs.filter(r=>r['Team']===dashTeam);
-  }
-
-  const sAgg=aggSessions(sessRecs);
-  const lAgg=aggLeads(leadRecs);
-  const kpis=calcKPIs(sAgg,lAgg);
-  const params=getParams().filter(p=>p.active);
+function renderDashboard(){
+  const panel=document.getElementById('dashPanel');if(!panel)return;
+  const now=new Date(),cW=weekNum(now),cM=now.getMonth()+1,cY=now.getFullYear(),cQ=Math.ceil(cM/3);
+  const fp=r=>{if(dashPeriod==='week')return r['Semaine']===cW&&r['Année']===cY;if(dashPeriod==='month')return r['Mois']===cM&&r['Année']===cY;if(dashPeriod==='quarter')return r['Trimestre']===cQ&&r['Année']===cY;return r['Année']===cY;};
+  const fl=r=>{const d=new Date(r['Date']||'');if(isNaN(d))return false;const rW=weekNum(d),rM=d.getMonth()+1,rY=d.getFullYear(),rQ=Math.ceil(rM/3);if(dashPeriod==='week')return rW===cW&&rY===cY;if(dashPeriod==='month')return rM===cM&&rY===cY;if(dashPeriod==='quarter')return rQ===cQ&&rY===cY;return rY===cY;};
+  let sr=SESS_RECORDS.filter(fp),lr=LEAD_RECORDS.filter(fl);
+  if(dashTeam!=='Toutes'){sr=sr.filter(r=>r['Team']===dashTeam);lr=lr.filter(r=>r['Team']===dashTeam);}
+  const sa=aggS(sr),la=aggL(lr),kpis=calcKPIs(sa,la);
   const allTeams=[...new Set(SESS_RECORDS.map(r=>r['Team']).filter(Boolean))].sort();
-  const periodLabel=dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
-
+  const pl=dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
   panel.innerHTML=`
     <div class="dash-hdr">
-      <div>
-        <div class="dash-title">📊 Dashboard KPI Setting</div>
-        <div class="dash-sub">${periodLabel} · ${dashTeam} · ${sessRecs.length} sessions · ${leadRecs.length} leads</div>
-      </div>
+      <div><div class="dash-title">📊 Dashboard KPI Setting</div><div class="dash-sub">${pl} · ${dashTeam} · ${sr.length} sessions · ${lr.length} leads</div></div>
       <div class="dash-ctrls">
-        <select class="dsel" onchange="dashTeam=this.value;renderDashboard()">
-          <option value="Toutes">Toutes les teams</option>
-          ${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}
-        </select>
+        <select class="dsel" onchange="dashTeam=this.value;renderDashboard()"><option value="Toutes">Toutes les teams</option>${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}</select>
         <select class="dsel" onchange="dashPeriod=this.value;renderDashboard()">
           <option value="week" ${dashPeriod==='week'?'selected':''}>Cette semaine</option>
           <option value="month" ${dashPeriod==='month'?'selected':''}>Ce mois</option>
@@ -773,144 +596,73 @@ function renderDashboard() {
         <button class="btn-refresh" onclick="loadDashboard()">↻</button>
       </div>
     </div>
-    ${renderKPICards(kpis, sAgg, lAgg, params)}
-    ${renderFunnel(sAgg, lAgg)}
-    ${renderAlerts(kpis, params)}
-    ${renderHistoryTable(allTeams, cW, cM, cY, cQ)}
+    ${renderKPIs(kpis,sa,la)}
+    ${renderFunnel(sa,la)}
+    ${renderAlerts(kpis)}
+    ${renderHist(allTeams,cW,cM,cY,cQ)}
     ${localSummaryHTML()}`;
 }
 
-function aggSessions(recs) {
-  const fields=['New leads','Calls sortants','NRP','Joints','RDV bookés','FUP','Non qualifiés','Qualifiés','Sets','Jamais joints','RDV prévus','RDV honorés','No shows','NQ finances','NQ autres','Pas intéressés','Raccroché','Mauvais numéro','Conv1','Conv2','Conv3'];
-  const a={};
-  fields.forEach(f=>a[f]=recs.reduce((s,r)=>s+(r[f]||0),0));
-  return a;
+function aggS(recs){
+  const f=['New leads','Calls sortants','NRP','Joints','RDV bookés','FUP','Non qualifiés','Qualifiés','Sets','Jamais joints','RDV prévus','RDV honorés','No shows','NQ finances','NQ autres','Pas/Plus intéressés','Raccroché au nez','Mauvais numéro','Conv1','Conv2','Conv3'];
+  const a={};f.forEach(k=>a[k]=recs.reduce((s,r)=>s+(r[k]||0),0));return a;
 }
-
-function aggLeads(recs) {
-  return {
-    ventes_c1: recs.filter(r=>r['Conv1']).length,
-    ventes_c2: recs.filter(r=>r['Conv2']).length,
-    ventes_c3: recs.filter(r=>r['Conv3']).length,
-    ca_total: recs.reduce((s,r)=>s+(r['Montant vente']||0),0),
-  };
+function aggL(recs){return{c1:recs.filter(r=>r['Conv1']).length,c2:recs.filter(r=>r['Conv2']).length,c3:recs.filter(r=>r['Conv3']).length,ca:recs.reduce((s,r)=>s+(r['Montant vente']||0),0)};}
+function calcKPIs(s,l){
+  const safe=(n,d)=>d>0?n/d:0;const v=l.c1+l.c2+l.c3;
+  return{joign:safe(s['Joints'],s['Calls sortants']),qual:safe(s['Qualifiés'],s['Joints']),transf:safe(s['Conv1'],s['Joints']),booking:safe(s['RDV bookés'],s['Qualifiés']),showup:safe(s['RDV honorés'],s['RDV bookés']),noshow:safe(s['No shows'],s['RDV bookés']),close:safe(v,s['RDV honorés']),funnel:safe(v,s['New leads']),conv1:safe(l.c1,s['New leads']),conv2:safe(l.c2,s['New leads']),conv3:safe(l.c3,s['New leads']),rpl:s['New leads']>0?l.ca/s['New leads']:0,_v:v,_ca:l.ca};
 }
-
-function calcKPIs(s, l) {
-  const safe=(n,d)=>d>0?n/d:0;
-  const ventes=l.ventes_c1+l.ventes_c2+l.ventes_c3;
-  return {
-    joign:   safe(s['Joints'], s['Calls sortants']),
-    qual:    safe(s['Qualifiés'], s['Joints']),
-    transf:  safe(s['Conv1'], s['Joints']),
-    booking: safe(s['RDV bookés'], s['Qualifiés']),
-    showup:  safe(s['RDV honorés'], s['RDV bookés']),
-    noshow:  safe(s['No shows'], s['RDV bookés']),
-    close:   safe(ventes, s['RDV honorés']),
-    funnel:  safe(ventes, s['New leads']),
-    conv1:   safe(l.ventes_c1, s['New leads']),
-    conv2:   safe(l.ventes_c2, s['New leads']),
-    conv3:   safe(l.ventes_c3, s['New leads']),
-    rpl:     s['New leads']>0 ? l.ca_total/s['New leads'] : 0,
-    _ventes: ventes, _ca: l.ca_total,
-  };
-}
-
-function kpiStatus(pid, val, params) {
-  const p=params.find(x=>x.id===pid); if(!p||p.cible===null) return 'none';
-  const v=val*100;
-  if(p.inv) return v<=p.cible?'ok':v<=p.min?'warn':'bad';
+function kpiSt(id,val){
+  const p=getParams().find(x=>x.id===id);if(!p||p.cible===null)return'none';
+  const v=val*100;if(p.inv)return v<=p.cible?'ok':v<=p.min?'warn':'bad';
   return v>=p.cible?'ok':v>=p.min?'warn':'bad';
 }
+function fmtV(id,val){return id==='rpl'?val.toFixed(0)+'€':(val*100).toFixed(1)+'%';}
 
-function fmtKPI(pid, val) {
-  if(pid==='rpl') return val.toFixed(0)+'€';
-  return (val*100).toFixed(1)+'%';
+function renderKPIs(kpis,s,l){
+  const subs={joign:`${s['Joints']} / ${s['Calls sortants']}`,qual:`${s['Qualifiés']} / ${s['Joints']}`,transf:`${s['Conv1']} / ${s['Joints']}`,booking:`${s['RDV bookés']} / ${s['Qualifiés']}`,showup:`${s['RDV honorés']} / ${s['RDV bookés']}`,noshow:`${s['No shows']} / ${s['RDV bookés']}`,close:`${kpis._v} ventes / ${s['RDV honorés']}`,funnel:`${kpis._v} ventes / ${s['New leads']}`,conv1:`${l.c1} / ${s['New leads']}`,conv2:`${l.c2} / ${s['New leads']}`,conv3:`${l.c3} / ${s['New leads']}`,rpl:`CA ${kpis._ca.toFixed(0)}€ / ${s['New leads']} leads`};
+  return`<div class="kpi-grid">${getParams().filter(p=>p.active).map(p=>{
+    const val=kpis[p.id]||0,st=kpiSt(p.id,val),bar=p.cible?Math.min(100,(val*100/p.cible)*100):0;
+    return`<div class="kpi-card st-${st}"><div class="kpi-lbl">${p.label}</div><div class="kpi-val">${fmtV(p.id,val)}</div><div class="kpi-sub">${subs[p.id]||''}</div>${p.cible?`<div class="kpi-bar"><div class="kpi-fill" style="width:${bar}%"></div></div>`:''}</div>`;
+  }).join('')}</div>`;
 }
 
-function renderKPICards(kpis, s, l, params) {
-  const allParams=getParams();
-  const cards=allParams.filter(p=>p.active).map(p=>{
-    const val=kpis[p.id]||0;
-    const st=kpiStatus(p.id,val,allParams);
-    const cible=p.cible;
-    const barPct=cible?Math.min(100,(val*100/cible)*100):0;
-    let sub='';
-    const subs={joign:`${s['Joints']} / ${s['Calls sortants']}`,qual:`${s['Qualifiés']} / ${s['Joints']}`,transf:`${s['Conv1']} / ${s['Joints']}`,booking:`${s['RDV bookés']} / ${s['Qualifiés']}`,showup:`${s['RDV honorés']} / ${s['RDV bookés']}`,noshow:`${s['No shows']} / ${s['RDV bookés']}`,close:`${kpis._ventes} ventes / ${s['RDV honorés']} honorés`,funnel:`${kpis._ventes} ventes / ${s['New leads']} leads`,conv1:`${l.ventes_c1} / ${s['New leads']}`,conv2:`${l.ventes_c2} / ${s['New leads']}`,conv3:`${l.ventes_c3} / ${s['New leads']}`,rpl:`CA ${kpis._ca.toFixed(0)}€ / ${s['New leads']} leads`};
-    sub=subs[p.id]||'';
-    return `<div class="kpi-card st-${st}">
-      <div class="kpi-lbl">${p.label}</div>
-      <div class="kpi-val">${fmtKPI(p.id,val)}</div>
-      <div class="kpi-sub">${sub}</div>
-      ${cible?`<div class="kpi-bar"><div class="kpi-fill" style="width:${barPct}%"></div></div>`:''}
-    </div>`;
-  }).join('');
-  return `<div class="kpi-grid">${cards}</div>`;
-}
-
-function renderFunnel(s, l) {
+function renderFunnel(s,l){
   const max=s['Calls sortants']||1;
-  const ventes=l.ventes_c1+l.ventes_c2+l.ventes_c3;
-  const rows=[
-    {lbl:'Calls sortants', val:s['Calls sortants'], col:'var(--blue)'},
-    {lbl:'Joints',         val:s['Joints'],         col:'var(--blue)'},
-    {lbl:'Qualifiés',      val:s['Qualifiés'],      col:'var(--accent)'},
-    {lbl:'RDV bookés',     val:s['RDV bookés'],     col:'var(--green)'},
-    {lbl:'RDV honorés',    val:s['RDV honorés'],    col:'var(--green)'},
-    {lbl:'Sets',           val:s['Sets'],           col:'var(--accent)'},
-    {lbl:'Conv1',          val:l.ventes_c1,          col:'var(--purple)'},
-    {lbl:'Conv2',          val:l.ventes_c2,          col:'var(--purple)'},
-    {lbl:'Conv3',          val:l.ventes_c3,          col:'var(--purple)'},
-    {lbl:'Ventes totales', val:ventes,               col:'var(--purple)'},
-  ];
-  return `<div class="funnel-wrap"><div class="sec-title">Entonnoir de conversion</div>
-    ${rows.map(r=>{
-      const w=max>0?Math.max(2,(r.val/max)*100):0;
-      const p=max>0?((r.val/max)*100).toFixed(0)+'%':'—';
-      return `<div class="funrow"><div class="funlbl">${r.lbl}</div><div class="funbar"><div class="funfill" style="width:${w}%;background:${r.col};opacity:.75;"></div></div><div class="funnum">${r.val}</div><div class="funpct">${p}</div></div>`;
-    }).join('')}
-  </div>`;
+  const rows=[{lbl:'Calls sortants',val:s['Calls sortants'],col:'var(--blue)'},{lbl:'Joints',val:s['Joints'],col:'var(--blue)'},{lbl:'Qualifiés',val:s['Qualifiés'],col:'var(--accent)'},{lbl:'RDV bookés',val:s['RDV bookés'],col:'var(--green)'},{lbl:'RDV honorés',val:s['RDV honorés'],col:'var(--green)'},{lbl:'Sets',val:s['Sets'],col:'var(--accent)'},{lbl:'Conv1',val:l.c1,col:'var(--purple)'},{lbl:'Conv2',val:l.c2,col:'var(--purple)'},{lbl:'Conv3',val:l.c3,col:'var(--purple)'},{lbl:'Ventes totales',val:l.c1+l.c2+l.c3,col:'var(--purple)'}];
+  return`<div class="funnel-wrap"><div class="sec-title">Entonnoir de conversion</div>${rows.map(r=>{const w=Math.max(2,(r.val/max)*100);return`<div class="funrow"><div class="funlbl">${r.lbl}</div><div class="funbar"><div class="funfill" style="width:${w}%;background:${r.col};opacity:.75;"></div></div><div class="funnum">${r.val}</div><div class="funpct">${max>0?((r.val/max)*100).toFixed(0)+'%':'—'}</div></div>`;}).join('')}</div>`;
 }
 
-function renderAlerts(kpis, params) {
+function renderAlerts(kpis){
   const rows=getParams().filter(p=>p.active&&p.cible!==null).map(p=>{
-    const val=kpis[p.id]||0;
-    const st=kpiStatus(p.id,val,getParams());
-    const msg=st==='ok'?'✅ Objectif atteint':st==='warn'?'⚠ Sous objectif':'🔴 Sous minimum';
-    return `<div class="alert-row st-${st}"><span class="adot"></span><div class="albl">${p.label}</div><div class="aval">${fmtKPI(p.id,val)}</div><div class="atgt">cible ${p.cible}% / min ${p.min}%</div></div>`;
+    const val=kpis[p.id]||0,st=kpiSt(p.id,val);
+    return`<div class="alert-row st-${st}"><span class="adot"></span><div class="albl">${p.label}</div><div class="aval">${fmtV(p.id,val)}</div><div class="atgt">cible ${p.cible}% / min ${p.min}%</div></div>`;
   }).join('');
-  return `<div class="alerts-wrap"><div class="sec-title">Alertes KPI</div>${rows}</div>`;
+  return`<div class="alerts-wrap"><div class="sec-title">Alertes KPI</div>${rows}</div>`;
 }
 
-function renderHistoryTable(allTeams, cW, cM, cY, cQ) {
-  const filterTeam = recs => dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
+function renderHist(allTeams,cW,cM,cY,cQ){
+  const fT=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
+  const fL=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
   const periods=[
-    {label:'Semaine', recs:filterTeam(SESS_RECORDS.filter(r=>r['Semaine']===cW&&r['Année']===cY)), leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&weekNum(d)===cW&&d.getFullYear()===cY;}))},
-    {label:'Mois',    recs:filterTeam(SESS_RECORDS.filter(r=>r['Mois']===cM&&r['Année']===cY)),    leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&d.getMonth()+1===cM&&d.getFullYear()===cY;}))},
-    {label:'Trimestre',recs:filterTeam(SESS_RECORDS.filter(r=>r['Trimestre']===cQ&&r['Année']===cY)),leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&Math.ceil((d.getMonth()+1)/3)===cQ&&d.getFullYear()===cY;}))},
-    {label:'Année',   recs:filterTeam(SESS_RECORDS.filter(r=>r['Année']===cY)),                    leadRecs:filterTeam(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return !isNaN(d)&&d.getFullYear()===cY;}))},
+    {label:'Semaine',sr:fT(SESS_RECORDS.filter(r=>r['Semaine']===cW&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&weekNum(d)===cW&&d.getFullYear()===cY;}))},
+    {label:'Mois',sr:fT(SESS_RECORDS.filter(r=>r['Mois']===cM&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&d.getMonth()+1===cM&&d.getFullYear()===cY;}))},
+    {label:'Trimestre',sr:fT(SESS_RECORDS.filter(r=>r['Trimestre']===cQ&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&Math.ceil((d.getMonth()+1)/3)===cQ&&d.getFullYear()===cY;}))},
+    {label:'Année',sr:fT(SESS_RECORDS.filter(r=>r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&d.getFullYear()===cY;}))},
   ];
-  const cols=['Calls sortants','Joints','Qualifiés','RDV bookés','RDV honorés','Sets'];
   const rows=periods.map(p=>{
-    const s=aggSessions(p.recs), l=aggLeads(p.leadRecs), k=calcKPIs(s,l);
-    const td=(v,fmt)=>`<td>${fmt?fmt(v):v}</td>`;
-    const tdKpi=(id,v)=>{const st=kpiStatus(id,v,getParams());return `<td class="td-${st==='none'?'':st}">${fmtKPI(id,v)}</td>`;};
-    return `<tr><td>${p.label}</td>${cols.map(f=>`<td>${s[f]||0}</td>`).join('')}${tdKpi('joign',k.joign)}${tdKpi('qual',k.qual)}${tdKpi('showup',k.showup)}${tdKpi('close',k.close)}<td style="color:var(--purple)">${l.ventes_c1+l.ventes_c2+l.ventes_c3}</td><td style="color:var(--purple)">${l.ca_total.toFixed(0)}€</td></tr>`;
-  });
-  return `<div class="hist-wrap"><div class="sec-title">Récapitulatif historique</div>
-    <table class="htable"><thead><tr>
-      <th>Période</th>${cols.map(c=>`<th>${c.replace('Nbr ','')}</th>`).join('')}<th>Joign.</th><th>Qual.</th><th>Show-up</th><th>Close</th><th>Ventes</th><th>CA</th>
-    </tr></thead><tbody>${rows.join('')}</tbody></table>
-  </div>`;
+    const s=aggS(p.sr),l=aggL(p.lr),k=calcKPIs(s,l);
+    const tdK=(id,v)=>{const st=kpiSt(id,v);return`<td class="${st!=='none'?'td-'+st:''}">${fmtV(id,v)}</td>`;};
+    return`<tr><td>${p.label}</td><td>${s['Calls sortants']}</td><td>${s['Joints']}</td><td>${s['Qualifiés']}</td><td>${s['RDV bookés']}</td><td>${s['Sets']}</td>${tdK('joign',k.joign)}${tdK('qual',k.qual)}${tdK('showup',k.showup)}${tdK('close',k.close)}<td style="color:var(--purple)">${l.c1+l.c2+l.c3}</td><td style="color:var(--purple)">${l.ca.toFixed(0)}€</td></tr>`;
+  }).join('');
+  return`<div class="hist-wrap"><div class="sec-title">Récapitulatif historique</div><table class="htable"><thead><tr><th>Période</th><th>Calls</th><th>Joints</th><th>Qualif.</th><th>RDV</th><th>Sets</th><th>Joign.</th><th>Qual.</th><th>Show-up</th><th>Close</th><th>Ventes</th><th>CA</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
-function localSummaryHTML() {
-  const fields=['calls_sortants','joints','qualifies','rdv_bookes','sets','conv1','conv2','conv3'];
-  const tot={};
-  fields.forEach(f=>tot[f]=0);
-  TEAMS.forEach((_,ti)=>{ if(STATE.teams[ti]) fields.forEach(f=>tot[f]+=(STATE.teams[ti][f]||0)); });
-  return `<div class="sum-bar" style="margin-top:14px;">
-    <div style="width:100%;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Session en cours (local)</div>
+function localSummaryHTML(){
+  const f=['calls_sortants','joints','qualifies','rdv_bookes','sets','conv1','conv2','conv3'];
+  const tot={};f.forEach(k=>tot[k]=0);
+  TEAMS.forEach((_,ti)=>{if(STATE.teams[ti])f.forEach(k=>tot[k]+=(STATE.teams[ti][k]||0));});
+  return`<div class="sum-bar" style="margin-top:14px;"><div style="width:100%;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Session en cours (local)</div>
     <div class="si"><div class="si-lbl">Calls</div><div class="si-val c-blue">${tot.calls_sortants}</div></div>
     <div class="si"><div class="si-lbl">Joints</div><div class="si-val c-txt">${tot.joints}</div></div>
     <div class="si"><div class="si-lbl">Qualifiés</div><div class="si-val c-txt">${tot.qualifies}</div></div>
@@ -922,68 +674,37 @@ function localSummaryHTML() {
   </div>`;
 }
 
-/* ══════════════════════════════════
-   TEAM MANAGEMENT
-══════════════════════════════════ */
-function openAddTeam() {
-  document.getElementById('newTeamInput').value='';
-  document.getElementById('newTeamErr').textContent='';
-  document.getElementById('overlayAddTeam').classList.add('show');
-  setTimeout(()=>document.getElementById('newTeamInput').focus(),100);
-}
-function closeAddTeam() { document.getElementById('overlayAddTeam').classList.remove('show'); }
+/* ══ TEAM MANAGEMENT ══ */
+function openAddTeam(){document.getElementById('newTeamInput').value='';document.getElementById('newTeamErr').textContent='';document.getElementById('overlayAddTeam').classList.add('show');setTimeout(()=>document.getElementById('newTeamInput').focus(),100);}
+function closeAddTeam(){document.getElementById('overlayAddTeam').classList.remove('show');}
 document.getElementById('newTeamInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmAddTeam();if(e.key==='Escape')closeAddTeam();});
-function confirmAddTeam() {
-  const inp=document.getElementById('newTeamInput'), err=document.getElementById('newTeamErr');
+function confirmAddTeam(){
+  const inp=document.getElementById('newTeamInput'),err=document.getElementById('newTeamErr');
   const name=inp.value.trim().toUpperCase();
   if(!name){inp.classList.add('err');err.textContent='Nom requis.';return;}
   if(TEAMS.includes(name)){inp.classList.add('err');err.textContent='Team déjà existante.';return;}
-  TEAMS.push(name); saveTeams(TEAMS);
-  const ti=TEAMS.length-1;
-  STATE.teams[ti]=defData(); STATE.activeTeam=ti; STATE.activeTab=`team-${ti}`;
-  saveState(STATE); closeAddTeam(); renderAll();
-  showToast(`✅ ${name} ajoutée`);
+  TEAMS.push(name);saveTeams(TEAMS);const ti=TEAMS.length-1;STATE.teams[ti]=defData();STATE.activeTeam=ti;STATE.activeTab=`team-${ti}`;saveState(STATE);closeAddTeam();renderAll();showToast(`✅ ${name} ajoutée`);
 }
-function deleteTeam(ti) {
+function deleteTeam(ti){
   if(TEAMS.length<=1){showToast('Impossible — dernière team','err');return;}
-  if(!confirm(`Supprimer ${TEAMS[ti]} ?`)) return;
-  const nt=[],nd={};
-  TEAMS.forEach((n,i)=>{if(i!==ti){const ni=nt.length;nt.push(n);nd[ni]=STATE.teams[i]||defData();}});
-  TEAMS.length=0;nt.forEach(n=>TEAMS.push(n));saveTeams(TEAMS);
-  STATE.teams=nd;STATE.activeTeam=Math.min(STATE.activeTeam,TEAMS.length-1);
-  STATE.activeTab='dashboard';saveState(STATE);renderAll();
-  showToast('🗑 Team supprimée');
+  if(!confirm(`Supprimer ${TEAMS[ti]} ?`))return;
+  const nt=[],nd={};TEAMS.forEach((n,i)=>{if(i!==ti){const ni=nt.length;nt.push(n);nd[ni]=STATE.teams[i]||defData();}});
+  TEAMS.length=0;nt.forEach(n=>TEAMS.push(n));saveTeams(TEAMS);STATE.teams=nd;STATE.activeTeam=Math.min(STATE.activeTeam,TEAMS.length-1);STATE.activeTab='dashboard';saveState(STATE);renderAll();showToast('🗑 Supprimée');
 }
 
-/* ══════════════════════════════════
-   TOAST
-══════════════════════════════════ */
+/* ══ TOAST ══ */
 let toastT;
-function showToast(msg,type) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast'+(type?' '+type:'');
-  t.classList.add('show'); clearTimeout(toastT);
-  toastT=setTimeout(()=>t.classList.remove('show'),2800);
-}
+function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
 
-/* ══════════════════════════════════
-   INIT
-══════════════════════════════════ */
-function initApp() {
-  TEAMS=getTeams(); STATE=loadState();
-  TEAMS.forEach((_,ti)=>ensureTeam(ti));
-  if(STATE.activeTeam>=TEAMS.length) STATE.activeTeam=0;
-  if(!STATE.activeTab) STATE.activeTab='dashboard';
+/* ══ INIT ══ */
+function initApp(){
+  TEAMS=getTeams();STATE=loadState();TEAMS.forEach((_,ti)=>ensureTeam(ti));
+  if(STATE.activeTeam>=TEAMS.length)STATE.activeTeam=0;
+  if(!STATE.activeTab)STATE.activeTab='dashboard';
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-  setSyncBadge('idle');
-  renderAll();
+  setSyncBadge('idle');renderAll();
 }
-
-if(sessionStorage.getItem(S_AUTH)==='1'){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('app').style.display='block';
-  initApp();
-}
+if(sessionStorage.getItem(S_AUTH)==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';initApp();}
 </script>
 </body>
 </html>
