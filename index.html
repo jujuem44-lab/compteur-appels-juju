@@ -210,6 +210,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
       <div class="sync-badge" id="syncBadge">⬡ local</div>
       <button class="hbtn" onclick="openSettings()">⚙ Sync</button>
       <button class="hbtn" onclick="openParams()">⚡ Paramètres</button>
+      <button class="hbtn" style="color:var(--accent);border-color:var(--accent);" onclick="saveAllTeams()">💾 Tout enregistrer</button>
       <button class="hbtn" onclick="doLogout()">⏏</button>
     </div>
   </header>
@@ -542,7 +543,86 @@ async function saveSession(ti){
   }
 }
 
-/* ══ COPY GSHEET ══ */
+/* ══ SAVE ALL TEAMS (upsert) ══ */
+async function saveAllTeams() {
+  const token = getToken();
+  if (!token) { showToast('⚙ Configure ton token Airtable', 'acc'); openSettings(); return; }
+  setSyncBadge('syncing');
+  showToast('⟳ Enregistrement de toutes les teams…', 'acc');
+
+  const now = new Date();
+  const todayStr = now.toISOString().split('T')[0];
+  let ok = 0, updated = 0, errors = 0;
+
+  for (let ti = 0; ti < TEAMS.length; ti++) {
+    const t = STATE.teams[ti];
+    const joints = Math.max(0, (t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
+    const nonQual = (t.nq_finances||0)+(t.nq_autres||0);
+    const rdvHon = Math.max(0, (t.rdv_prevus||0)-(t.no_shows||0));
+
+    const fields = {
+      'Date': todayStr, 'Team': TEAMS[ti],
+      'New leads': t.new_leads||0, 'Calls sortants': t.calls_sortants||0,
+      'NRP': t.nrp||0, 'Joints': joints, 'RDV bookés': t.rdv_bookes||0, 'FUP': t.fup||0,
+      'Non qualifiés': nonQual, 'Qualifiés': t.qualifies||0, 'Sets': t.sets||0,
+      'Jamais joints': t.jamais_joints||0, 'RDV prévus': t.rdv_prevus||0,
+      'RDV honorés': rdvHon, 'No shows': t.no_shows||0,
+      'NQ finances': t.nq_finances||0, 'NQ autres': t.nq_autres||0,
+      'Pas/Plus intéressés': t.pas_interesse||0, 'Raccroché au nez': t.raccroche||0,
+      'Mauvais numéro': t.mauvais_num||0,
+      'Conv1': t.conv1||0, 'Conv2': t.conv2||0, 'Conv3': t.conv3||0,
+      'Semaine': weekNum(now), 'Mois': now.getMonth()+1,
+      'Trimestre': Math.ceil((now.getMonth()+1)/3), 'Année': now.getFullYear(),
+    };
+
+    try {
+      // Cherche si une entrée existe déjà aujourd'hui pour cette team
+      const searchUrl = `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND({Date}='${todayStr}',{Team}='${TEAMS[ti]}')&maxRecords=1`;
+      const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!searchRes.ok) throw new Error(searchRes.status);
+      const searchData = await searchRes.json();
+
+      if (searchData.records && searchData.records.length > 0) {
+        // UPDATE — ligne existante
+        const recordId = searchData.records[0].id;
+        const updateRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}/${recordId}`, {
+          method: 'PATCH',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields })
+        });
+        if (!updateRes.ok) { const e = await updateRes.json(); throw new Error(e.error?.message || updateRes.status); }
+        updated++;
+      } else {
+        // INSERT — nouvelle ligne
+        const createRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields })
+        });
+        if (!createRes.ok) { const e = await createRes.json(); throw new Error(e.error?.message || createRes.status); }
+        ok++;
+      }
+    } catch(e) {
+      console.error(`Erreur team ${TEAMS[ti]}:`, e.message);
+      errors++;
+    }
+  }
+
+  if (errors === 0) {
+    setSyncBadge('ok');
+    showToast(`✓ ${ok} créés · ${updated} mis à jour`);
+    setTimeout(() => setSyncBadge('idle'), 3000);
+  } else {
+    setSyncBadge('err');
+    showToast(`✓ ${ok+updated} OK · ✕ ${errors} erreurs`, 'err');
+    setTimeout(() => setSyncBadge('idle'), 4000);
+  }
+
+  // Rafraîchit le dashboard si on est dessus
+  if (STATE.activeTab === 'dashboard') loadDashboard();
+}
+
+
 function copyData(ti){
   const t=STATE.teams[ti],d=new Date();
   const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
@@ -553,7 +633,7 @@ function copyData(ti){
 }
 
 /* ══ DASHBOARD ══ */
-let SESS_RECORDS=[],LEAD_RECORDS=[],dashPeriod='week',dashTeam='Toutes';
+let SESS_RECORDS=[],LEAD_RECORDS=[],dashPeriod='today',dashTeam='Toutes';
 async function loadDashboard(){
   const panel=document.getElementById('dashPanel');if(!panel)return;
   if(!hasToken()){panel.innerHTML=noTokenHTML();return;}
@@ -575,25 +655,28 @@ function noTokenHTML(){return`<div style="background:var(--surface);border:1px s
 function renderDashboard(){
   const panel=document.getElementById('dashPanel');if(!panel)return;
   const now=new Date(),cW=weekNum(now),cM=now.getMonth()+1,cY=now.getFullYear(),cQ=Math.ceil(cM/3);
-  const fp=r=>{if(dashPeriod==='week')return r['Semaine']===cW&&r['Année']===cY;if(dashPeriod==='month')return r['Mois']===cM&&r['Année']===cY;if(dashPeriod==='quarter')return r['Trimestre']===cQ&&r['Année']===cY;return r['Année']===cY;};
-  const fl=r=>{const d=new Date(r['Date']||'');if(isNaN(d))return false;const rW=weekNum(d),rM=d.getMonth()+1,rY=d.getFullYear(),rQ=Math.ceil(rM/3);if(dashPeriod==='week')return rW===cW&&rY===cY;if(dashPeriod==='month')return rM===cM&&rY===cY;if(dashPeriod==='quarter')return rQ===cQ&&rY===cY;return rY===cY;};
+  const today=now.toISOString().split('T')[0];
+  const fp=r=>{if(dashPeriod==='today')return r['Date']===today;if(dashPeriod==='week')return r['Semaine']===cW&&r['Année']===cY;if(dashPeriod==='month')return r['Mois']===cM&&r['Année']===cY;if(dashPeriod==='quarter')return r['Trimestre']===cQ&&r['Année']===cY;return r['Année']===cY;};
+  const fl=r=>{const d=new Date(r['Date']||'');if(isNaN(d))return false;const rStr=d.toISOString().split('T')[0],rW=weekNum(d),rM=d.getMonth()+1,rY=d.getFullYear(),rQ=Math.ceil(rM/3);if(dashPeriod==='today')return rStr===today;if(dashPeriod==='week')return rW===cW&&rY===cY;if(dashPeriod==='month')return rM===cM&&rY===cY;if(dashPeriod==='quarter')return rQ===cQ&&rY===cY;return rY===cY;};
   let sr=SESS_RECORDS.filter(fp),lr=LEAD_RECORDS.filter(fl);
   if(dashTeam!=='Toutes'){sr=sr.filter(r=>r['Team']===dashTeam);lr=lr.filter(r=>r['Team']===dashTeam);}
   const sa=aggS(sr),la=aggL(lr),kpis=calcKPIs(sa,la);
   const allTeams=[...new Set(SESS_RECORDS.map(r=>r['Team']).filter(Boolean))].sort();
-  const pl=dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
+  const pl=dashPeriod==='today'?`Aujourd'hui ${now.toLocaleDateString('fr-FR')}`:dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
   panel.innerHTML=`
     <div class="dash-hdr">
       <div><div class="dash-title">📊 Dashboard KPI Setting</div><div class="dash-sub">${pl} · ${dashTeam} · ${sr.length} sessions · ${lr.length} leads</div></div>
       <div class="dash-ctrls">
         <select class="dsel" onchange="dashTeam=this.value;renderDashboard()"><option value="Toutes">Toutes les teams</option>${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}</select>
         <select class="dsel" onchange="dashPeriod=this.value;renderDashboard()">
+          <option value="today" ${dashPeriod==='today'?'selected':''}>Aujourd'hui</option>
           <option value="week" ${dashPeriod==='week'?'selected':''}>Cette semaine</option>
           <option value="month" ${dashPeriod==='month'?'selected':''}>Ce mois</option>
           <option value="quarter" ${dashPeriod==='quarter'?'selected':''}>Ce trimestre</option>
           <option value="year" ${dashPeriod==='year'?'selected':''}>Cette année</option>
         </select>
         <button class="btn-refresh" onclick="loadDashboard()">↻</button>
+        <button class="btn-refresh" style="background:var(--accent-dim);border-color:var(--accent);color:var(--accent);" onclick="saveAllTeams()">💾 Tout enregistrer</button>
       </div>
     </div>
     ${renderKPIs(kpis,sa,la)}
@@ -644,7 +727,9 @@ function renderAlerts(kpis){
 function renderHist(allTeams,cW,cM,cY,cQ){
   const fT=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
   const fL=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
+  const todayStr=new Date().toISOString().split('T')[0];
   const periods=[
+    {label:"Aujourd'hui",sr:fT(SESS_RECORDS.filter(r=>r['Date']===todayStr)),lr:fL(LEAD_RECORDS.filter(r=>r['Date']===todayStr))},
     {label:'Semaine',sr:fT(SESS_RECORDS.filter(r=>r['Semaine']===cW&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&weekNum(d)===cW&&d.getFullYear()===cY;}))},
     {label:'Mois',sr:fT(SESS_RECORDS.filter(r=>r['Mois']===cM&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&d.getMonth()+1===cM&&d.getFullYear()===cY;}))},
     {label:'Trimestre',sr:fT(SESS_RECORDS.filter(r=>r['Trimestre']===cQ&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&Math.ceil((d.getMonth()+1)/3)===cQ&&d.getFullYear()===cY;}))},
