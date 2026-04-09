@@ -786,12 +786,64 @@ let toastT;
 function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
 
 /* ══ INIT ══ */
+/* ══ LOAD TODAY FROM AIRTABLE ══ */
+const AT_TO_STATE = {
+  'New leads':'new_leads','Calls sortants':'calls_sortants','NRP':'nrp',
+  'Joints':'joints','RDV bookés':'rdv_bookes','FUP':'fup',
+  'Non qualifiés':'non_qual_calc','Qualifiés':'qualifies','Sets':'sets',
+  'Jamais joints':'jamais_joints','RDV prévus':'rdv_prevus','RDV honorés':'rdv_honores',
+  'No shows':'no_shows','NQ finances':'nq_finances','NQ autres':'nq_autres',
+  'Pas/Plus intéressés':'pas_interesse','Raccroché au nez':'raccroche',
+  'Mauvais numéro':'mauvais_num','Conv1':'conv1','Conv2':'conv2','Conv3':'conv3',
+};
+
+async function loadTodayFromAirtable() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    const res = await fetch(
+      `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=IS_SAME({Date},TODAY(),'day')&maxRecords=50`,
+      { headers: { 'Authorization': `Bearer ${token}` } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.records || !data.records.length) return;
+
+    let updated = false;
+    data.records.forEach(record => {
+      const f = record.fields;
+      const teamName = f['Team'];
+      const ti = TEAMS.indexOf(teamName);
+      if (ti === -1) return;
+      // Charge les valeurs Airtable dans STATE
+      Object.entries(AT_TO_STATE).forEach(([atField, stateKey]) => {
+        if (stateKey === 'non_qual_calc') return; // calculé, pas stocké
+        if (f[atField] !== undefined) STATE.teams[ti][stateKey] = f[atField] || 0;
+      });
+      updated = true;
+    });
+
+    if (updated) {
+      saveState(STATE);
+      renderAll();
+      setSyncBadge('ok');
+      showToast('✓ Données du jour chargées depuis Airtable');
+      setTimeout(() => setSyncBadge('idle'), 3000);
+    }
+  } catch(e) {
+    console.warn('Sync load error:', e.message);
+  }
+}
+
 function initApp(){
   TEAMS=getTeams();STATE=loadState();TEAMS.forEach((_,ti)=>ensureTeam(ti));
   if(STATE.activeTeam>=TEAMS.length)STATE.activeTeam=0;
   if(!STATE.activeTab)STATE.activeTab='dashboard';
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-  setSyncBadge('idle');renderAll();
+  setSyncBadge('idle');
+  renderAll();
+  // Charge les données du jour depuis Airtable au démarrage
+  loadTodayFromAirtable();
 }
 if(sessionStorage.getItem(S_AUTH)==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';initApp();}
 </script>
