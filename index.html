@@ -516,7 +516,7 @@ async function saveSession(ti) {
   try {
     // Vérifie si une ligne existe déjà aujourd'hui pour cette team
     const searchRes = await fetch(
-      `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND({Date}='${todayStr}',{Team}='${TEAMS[ti]}')&maxRecords=1`,
+      `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${TEAMS[ti]}')&maxRecords=1`,
       { headers: { 'Authorization': `Bearer ${token}` } }
     );
     if (!searchRes.ok) throw new Error(searchRes.status);
@@ -581,7 +581,7 @@ async function saveAllTeams() {
 
     try {
       // Cherche si une entrée existe déjà aujourd'hui pour cette team
-      const searchUrl = `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND({Date}='${todayStr}',{Team}='${TEAMS[ti]}')&maxRecords=1`;
+      const searchUrl = `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${TEAMS[ti]}')&maxRecords=1`;
       const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${token}` } });
       if (!searchRes.ok) throw new Error(searchRes.status);
       const searchData = await searchRes.json();
