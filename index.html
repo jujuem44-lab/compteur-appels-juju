@@ -34,7 +34,7 @@ body{font-family:var(--font-ui);background:var(--bg);color:var(--text);min-heigh
 header{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
 .logo{font-weight:700;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);}
 .logo span{color:var(--text-dim);font-weight:400;}
-.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.hdr-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .hdr-date{font-family:var(--font-num);font-size:11px;color:var(--muted);}
 .sync-badge{font-family:var(--font-num);font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--border);color:var(--muted);transition:all .3s;}
 .sync-badge.syncing{color:var(--accent);border-color:var(--accent);}
@@ -42,6 +42,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .sync-badge.err{color:var(--red);border-color:var(--red);}
 .hbtn{background:none;color:var(--muted);border:1px solid var(--border);padding:5px 10px;border-radius:4px;cursor:pointer;font-family:var(--font-ui);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:all .15s;}
 .hbtn:hover{color:var(--text);border-color:var(--border2);}
+.hbtn.accent{color:var(--accent);border-color:var(--accent);}
 .tabs{background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;display:flex;gap:2px;overflow-x:auto;align-items:center;}
 .tab{font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;padding:11px 18px 9px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .tab:hover{color:var(--text);}
@@ -52,8 +53,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .btn-addteam{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;color:var(--muted);border:1px dashed var(--border2);padding:5px 10px;border-radius:4px;cursor:pointer;transition:all .15s;margin-left:6px;white-space:nowrap;}
 .btn-addteam:hover{color:var(--accent);border-color:var(--accent);}
 .content{max-width:1200px;margin:0 auto;padding:20px;}
-.panel{display:none;}
-.panel.active{display:block;}
+.panel{display:none;}.panel.active{display:block;}
 .sum-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:18px;display:flex;flex-wrap:wrap;gap:18px;}
 .si{display:flex;flex-direction:column;gap:2px;}
 .si-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
@@ -84,8 +84,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mrow.sub .mlbl{font-size:12px;color:var(--text-dim);}
 .mctrl{display:flex;align-items:center;}
 .cbtn{width:26px;height:26px;border:1px solid var(--border);background:var(--surface2);color:var(--text-dim);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1;flex-shrink:0;}
-.cbtn.m{border-radius:4px 0 0 4px;}
-.cbtn.p{border-radius:0 4px 4px 0;}
+.cbtn.m{border-radius:4px 0 0 4px;}.cbtn.p{border-radius:0 4px 4px 0;}
 .cbtn.m:hover{background:var(--red-dim);color:var(--red);border-color:var(--red);}
 .cbtn.p:hover{background:var(--green-dim);color:var(--green);border-color:var(--green);}
 .cbtn:active{transform:scale(.92);}
@@ -117,6 +116,8 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .dsel{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--font-ui);font-size:13px;font-weight:600;outline:none;cursor:pointer;}
 .btn-refresh{background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:6px;padding:7px 12px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
 .btn-refresh:hover{background:var(--blue);color:#000;}
+.btn-save-all{background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);border-radius:6px;padding:7px 12px;font-family:var(--font-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .15s;}
+.btn-save-all:hover{background:var(--accent);color:#000;}
 .dash-loading{text-align:center;padding:60px;color:var(--muted);font-family:var(--font-num);font-size:13px;}
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:20px;}
 .kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;}
@@ -172,7 +173,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 .mstatus{padding:9px 12px;border-radius:6px;font-size:12px;font-weight:600;display:none;}
 .mstatus.ok{display:block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
 .mstatus.err{display:block;background:var(--red-dim);border:1px solid rgba(239,68,68,.3);color:var(--red);}
-.params-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;}
+.params-section{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;}
 .param-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
 .param-row:last-child{border-bottom:none;}
 .param-name{flex:1;font-size:13px;color:var(--text);}
@@ -209,8 +210,8 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
       <div class="hdr-date" id="hdrDate"></div>
       <div class="sync-badge" id="syncBadge">⬡ local</div>
       <button class="hbtn" onclick="openSettings()">⚙ Sync</button>
-      <button class="hbtn" onclick="openParams()">⚡ Paramètres</button>
-      <button class="hbtn" style="color:var(--accent);border-color:var(--accent);" onclick="saveAllTeams()">💾 Tout enregistrer</button>
+      <button class="hbtn" onclick="openParams()">⚡ KPI</button>
+      <button class="hbtn accent" onclick="saveAllTeams()">💾 Tout enregistrer</button>
       <button class="hbtn" onclick="doLogout()">⏏</button>
     </div>
   </header>
@@ -218,10 +219,11 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   <div class="content" id="mainContent"></div>
 </div>
 
+<!-- MODAL SETTINGS -->
 <div class="overlay" id="overlaySettings">
   <div class="modal">
     <div class="modal-title">⚙ Configuration Airtable</div>
-    <div class="modal-desc">Token stocké uniquement dans ce navigateur.<br>
+    <div class="modal-desc">Token stocké dans ce navigateur uniquement.<br>
     <strong style="color:var(--accent)">airtable.com → profil → Developer Hub → Personal access tokens</strong></div>
     <div><div class="mlbl">Token (pat…)</div><input class="minput" type="password" id="atTokenInput" placeholder="patXXXXX…"></div>
     <div class="mstatus" id="atStatus"></div>
@@ -232,6 +234,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
+<!-- MODAL ADD TEAM -->
 <div class="overlay" id="overlayAddTeam">
   <div class="modal">
     <div class="modal-title">➕ Ajouter une team</div>
@@ -245,10 +248,11 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
+<!-- MODAL PARAMS -->
 <div class="overlay" id="overlayParams">
   <div class="modal" style="max-width:600px;">
     <div class="modal-title">⚡ Paramètres KPI & Objectifs</div>
-    <div class="modal-desc">Active/désactive les KPIs et modifie les objectifs (en %).</div>
+    <div class="modal-desc">Active/désactive les KPIs et modifie les objectifs (en %). Sauvegardé dans Airtable si token configuré.</div>
     <div id="paramsContent"></div>
     <div class="mactions">
       <button class="mbtn-cancel" onclick="closeParams()">Fermer</button>
@@ -260,13 +264,16 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══ CONFIG ══ */
+/* ══ AIRTABLE CONFIG ══ */
 const AT_BASE     = 'appOoMhNQEG3pHwpY';
 const AT_SESSIONS = 'tbl7CBa6QlZJQ4XkA';
 const AT_LEADS    = 'tblij8Zh1dUrrqn9z';
+const AT_TEAMS    = 'tblbahODGSMruZZXs';
+const AT_PARAMS   = 'tblzLDV4CFkCKUDyk';
 
 /* ══ AUTH ══ */
-const PWD='Juju1506', S_AUTH='cg_auth_v1', S_TOKEN='cg_at_token_v3', S_STATE='cg_counter_v6', S_TEAMS='cg_teams_v4', S_PARAMS='cg_kpi_params_v1';
+const PWD='Juju1506', S_AUTH='cg_auth_v1', S_TOKEN='cg_at_token_v3';
+const S_STATE='cg_counter_v6', S_TEAMS='cg_teams_v4', S_PARAMS='cg_kpi_params_v1';
 
 function doLogin(){
   const inp=document.getElementById('pwdInput'),err=document.getElementById('loginError');
@@ -279,7 +286,6 @@ document.getElementById('pwdInput').addEventListener('keydown',e=>{if(e.key==='E
 /* ══ TOKEN ══ */
 const getToken=()=>localStorage.getItem(S_TOKEN)||'';
 const hasToken=()=>!!getToken();
-
 function openSettings(){
   const tok=getToken();
   document.getElementById('atTokenInput').value=tok?'••••••••••••':'';
@@ -301,7 +307,7 @@ function setSyncBadge(state){
   const[t,c]=map[state]||map.idle;el.textContent=t;el.className='sync-badge '+c;
 }
 
-/* ══ KPI PARAMS ══ */
+/* ══ KPI DEFAULTS ══ */
 const KPI_DEFAULTS=[
   {id:'joign',   label:'Joignabilité',       fmt:'%',cible:35,min:25, inv:false,active:true},
   {id:'qual',    label:'Qualification',       fmt:'%',cible:50,min:35, inv:false,active:true},
@@ -323,7 +329,7 @@ function getParams(){
 function openParams(){
   const params=getParams();
   document.getElementById('paramsContent').innerHTML=`<div class="params-section">
-    <div style="display:grid;grid-template-columns:1fr 70px 70px 40px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;"><span>KPI</span><span>Cible %</span><span>Min %</span><span>ON</span></div>
+    <div style="display:grid;grid-template-columns:1fr 70px 70px 40px;gap:8px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 8px;border-bottom:1px solid var(--border);margin-bottom:4px;"><span>KPI</span><span>Cible%</span><span>Min%</span><span>ON</span></div>
     ${params.map(p=>`<div class="param-row"><div class="param-name">${p.label}</div><div class="param-inputs">
       <input class="param-inp" type="number" id="p-cible-${p.id}" value="${p.cible!==null?p.cible:''}" placeholder="—" min="0" max="100">
       <input class="param-inp" type="number" id="p-min-${p.id}" value="${p.min!==null?p.min:''}" placeholder="—" min="0" max="100">
@@ -333,17 +339,31 @@ function openParams(){
   document.getElementById('overlayParams').classList.add('show');
 }
 function closeParams(){document.getElementById('overlayParams').classList.remove('show');}
-function saveParams(){
+async function saveParams(){
+  const token=getToken();
   const params=getParams().map(p=>({...p,
     cible:document.getElementById(`p-cible-${p.id}`).value!==''?parseFloat(document.getElementById(`p-cible-${p.id}`).value):null,
     min:document.getElementById(`p-min-${p.id}`).value!==''?parseFloat(document.getElementById(`p-min-${p.id}`).value):null,
     active:document.getElementById(`p-tog-${p.id}`).classList.contains('on'),
   }));
-  localStorage.setItem(S_PARAMS,JSON.stringify(params));closeParams();showToast('✅ Paramètres enregistrés');
+  localStorage.setItem(S_PARAMS,JSON.stringify(params));
+  // Sync vers Airtable si token dispo
+  if(token){
+    for(const p of params){
+      try{
+        if(p._atId){
+          await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_PARAMS}/${p._atId}`,{method:'PATCH',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({fields:{'Cible':p.cible||0,'Minimum':p.min||0,'Actif':!!p.active}})});
+        } else {
+          await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_PARAMS}`,{method:'POST',headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({fields:{'KPI':p.label,'Cible':p.cible||0,'Minimum':p.min||0,'Actif':!!p.active}})});
+        }
+      }catch(e){console.warn('Param save:',e.message);}
+    }
+  }
+  closeParams();showToast('✅ Paramètres enregistrés');
 }
 
 /* ══ METRICS ══ */
-const DEFAULT_TEAMS=['DV W S','ALE VSL S','ALE SPE S','ARYA S','INDCO S'];
+const DEFAULT_TEAMS=['DV W S','DV INS S','ALE VSL S','ALE CL S','ALE SPE S','ARYA S','INDCO S','SKL CLUB S','UMDB INS S'];
 const METRICS=[
   {id:'new_leads',     label:'Nbr new leads pris',  group:'act'},
   {id:'calls_sortants',label:'Nbr calls sortants',  group:'act'},
@@ -372,17 +392,6 @@ const GROUPS={
   set:{label:'Sets',cls:'s-set'},cvn:{label:'Conversations',cls:'s-cvn'},
 };
 
-/* Mapping exact vers noms de colonnes Airtable */
-const AT_FIELD_MAP={
-  new_leads:'New leads', calls_sortants:'Calls sortants', nrp:'NRP',
-  joints:'Joints', jamais_joints:'Jamais joints', qualifies:'Qualifiés',
-  nq_finances:'NQ finances', nq_autres:'NQ autres',
-  pas_interesse:'Pas/Plus intéressés', raccroche:'Raccroché au nez',
-  mauvais_num:'Mauvais numéro', rdv_bookes:'RDV bookés', fup:'FUP',
-  rdv_prevus:'RDV prévus', rdv_honores:'RDV honorés', no_shows:'No shows',
-  sets:'Sets', conv1:'Conv1', conv2:'Conv2', conv3:'Conv3',
-};
-
 /* ══ STATE ══ */
 const getTeams=()=>{try{const r=localStorage.getItem(S_TEAMS);return r?JSON.parse(r):[...DEFAULT_TEAMS];}catch{return[...DEFAULT_TEAMS];}};
 const saveTeams=t=>localStorage.setItem(S_TEAMS,JSON.stringify(t));
@@ -391,6 +400,49 @@ const loadState=()=>{try{const r=localStorage.getItem(S_STATE);return r?JSON.par
 const saveState=s=>localStorage.setItem(S_STATE,JSON.stringify(s));
 function ensureTeam(ti){if(!STATE.teams[ti])STATE.teams[ti]=defData();METRICS.forEach(m=>{if(STATE.teams[ti][m.id]===undefined)STATE.teams[ti][m.id]=0;});}
 let STATE,TEAMS;
+
+/* ══ LOAD FROM AIRTABLE ON START ══ */
+async function loadFromAirtable(token) {
+  if(!token) return;
+  try {
+    // 1. Charge les teams
+    const tr=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TEAMS}?maxRecords=50&sort[0][field]=Nom&sort[0][direction]=asc`,{headers:{Authorization:`Bearer ${token}`}});
+    if(tr.ok){
+      const td=await tr.json();
+      const teams=td.records.map(r=>r.fields['Nom']).filter(Boolean);
+      if(teams.length){saveTeams(teams);TEAMS.length=0;teams.forEach(t=>TEAMS.push(t));TEAMS.forEach((_,ti)=>ensureTeam(ti));}
+    }
+
+    // 2. Charge les params KPI
+    const pr=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_PARAMS}?maxRecords=20`,{headers:{Authorization:`Bearer ${token}`}});
+    if(pr.ok){
+      const pd=await pr.json();
+      if(pd.records&&pd.records.length){
+        const params=getParams();
+        pd.records.forEach(r=>{const f=r.fields;const p=params.find(x=>x.label===f['KPI']);if(!p)return;if(f['Cible']!==undefined)p.cible=f['Cible'];if(f['Minimum']!==undefined)p.min=f['Minimum'];if(f['Actif']!==undefined)p.active=f['Actif'];p._atId=r.id;});
+        localStorage.setItem(S_PARAMS,JSON.stringify(params));
+      }
+    }
+
+    // 3. Charge les données du jour (toutes les teams)
+    const sr=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=IS_SAME({Date},TODAY(),'day')&maxRecords=50`,{headers:{Authorization:`Bearer ${token}`}});
+    if(sr.ok){
+      const sd=await sr.json();
+      if(sd.records&&sd.records.length){
+        const fieldMap={'New leads':'new_leads','Calls sortants':'calls_sortants','NRP':'nrp','Joints':'joints','RDV bookés':'rdv_bookes','FUP':'fup','Qualifiés':'qualifies','Sets':'sets','Jamais joints':'jamais_joints','RDV prévus':'rdv_prevus','RDV honorés':'rdv_honores','No shows':'no_shows','NQ finances':'nq_finances','NQ autres':'nq_autres','Pas/Plus intéressés':'pas_interesse','Raccroché au nez':'raccroche','Mauvais numéro':'mauvais_num','Conv1':'conv1','Conv2':'conv2','Conv3':'conv3'};
+        sd.records.forEach(r=>{
+          const f=r.fields;
+          const ti=TEAMS.indexOf(f['Team']);
+          if(ti===-1)return;
+          Object.entries(fieldMap).forEach(([atF,stF])=>{if(f[atF]!==undefined)STATE.teams[ti][stF]=f[atF]||0;});
+        });
+        saveState(STATE);
+        showToast('✓ Données du jour synchronisées');
+      }
+    }
+    setSyncBadge('ok');setTimeout(()=>setSyncBadge('idle'),3000);
+  } catch(e){console.warn('Init load error:',e.message);}
+}
 
 /* ══ TABS ══ */
 const teamTotal=ti=>STATE.teams[ti]?(STATE.teams[ti]['calls_sortants']||0):0;
@@ -438,8 +490,8 @@ function renderTeamPanel(ti){
     <div class="team-hdr">
       <div><div class="team-title">${TEAMS[ti]}</div><div class="team-sub">Session du ${new Date().toLocaleDateString('fr-FR')}</div></div>
       <div class="team-acts">
-        ${hasToken()?`<button class="btn-save" onclick="saveSession(${ti})">💾 Enregistrer Airtable</button>`:'<button class="btn-save" style="background:var(--muted);cursor:default;" onclick="openSettings()">⚙ Config Airtable</button>'}
-        <button class="btn-copy" onclick="copyData(${ti})">📋 Copier GSheet</button>
+        ${hasToken()?`<button class="btn-save" onclick="saveSession(${ti})">💾 Enregistrer</button>`:'<button class="btn-save" style="background:var(--muted);cursor:default;" onclick="openSettings()">⚙ Config Airtable</button>'}
+        <button class="btn-copy" onclick="copyData(${ti})">📋 GSheet</button>
         <button class="btn-sm" onclick="resetTeam(${ti})">↺ Reset</button>
         <button class="btn-sm" onclick="deleteTeam(${ti})">🗑</button>
       </div>
@@ -478,155 +530,95 @@ function refreshSB(ti){
   const nqEl=document.getElementById(`nq-${ti}`);if(nqEl){nqEl.textContent=nq;nqEl.className='mro-val'+(nq>0?' nz':'');}
   const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
   const tpEl=document.getElementById(`tp-${ti}`);if(tpEl)tpEl.textContent=tp;
+  // Mise à jour totaux dans les onglets
+  document.querySelectorAll('.tab').forEach(tab=>{const ts=tab.querySelector('.tsub');if(ts&&tab.textContent.includes(TEAMS[ti]))ts.textContent=`${teamTotal(ti)} appels`;});
 }
 function resetTeam(ti){if(!confirm(`Reset ${TEAMS[ti]} ?`))return;METRICS.forEach(m=>STATE.teams[ti][m.id]=0);saveState(STATE);renderAll();}
 
-/* ══ WEEK NUM ══ */
+/* ══ UPSERT HELPER ══ */
 function weekNum(d){
   const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
   const day=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-day);
   const y=new Date(Date.UTC(date.getUTCFullYear(),0,1));
   return Math.ceil((((date-y)/86400000)+1)/7);
 }
-
-/* ══ SAVE SESSION (upsert) ══ */
-async function saveSession(ti) {
-  const token = getToken();
-  if (!token) { showToast('⚙ Configure ton token Airtable', 'acc'); openSettings(); return; }
-  const t = STATE.teams[ti], now = new Date();
-  const todayStr = now.toISOString().split('T')[0];
-  const joints = Math.max(0, (t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
-  const nonQual = (t.nq_finances||0)+(t.nq_autres||0);
-  const rdvHon = Math.max(0, (t.rdv_prevus||0)-(t.no_shows||0));
-  const fields = {
-    'Date': todayStr, 'Team': TEAMS[ti],
-    'New leads': t.new_leads||0, 'Calls sortants': t.calls_sortants||0,
-    'NRP': t.nrp||0, 'Joints': joints, 'RDV bookés': t.rdv_bookes||0, 'FUP': t.fup||0,
-    'Non qualifiés': nonQual, 'Qualifiés': t.qualifies||0, 'Sets': t.sets||0,
-    'Jamais joints': t.jamais_joints||0, 'RDV prévus': t.rdv_prevus||0,
-    'RDV honorés': rdvHon, 'No shows': t.no_shows||0,
-    'NQ finances': t.nq_finances||0, 'NQ autres': t.nq_autres||0,
-    'Pas/Plus intéressés': t.pas_interesse||0, 'Raccroché au nez': t.raccroche||0,
-    'Mauvais numéro': t.mauvais_num||0,
-    'Conv1': t.conv1||0, 'Conv2': t.conv2||0, 'Conv3': t.conv3||0,
-    'Semaine': weekNum(now), 'Mois': now.getMonth()+1,
-    'Trimestre': Math.ceil((now.getMonth()+1)/3), 'Année': now.getFullYear(),
+function buildFields(ti,now){
+  const t=STATE.teams[ti];
+  const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
+  const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
+  const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
+  return{
+    'Date':now.toISOString().split('T')[0],'Team':TEAMS[ti],
+    'New leads':t.new_leads||0,'Calls sortants':t.calls_sortants||0,'NRP':t.nrp||0,
+    'Joints':joints,'RDV bookés':t.rdv_bookes||0,'FUP':t.fup||0,
+    'Non qualifiés':nonQual,'Qualifiés':t.qualifies||0,'Sets':t.sets||0,
+    'Jamais joints':t.jamais_joints||0,'RDV prévus':t.rdv_prevus||0,
+    'RDV honorés':rdvHon,'No shows':t.no_shows||0,
+    'NQ finances':t.nq_finances||0,'NQ autres':t.nq_autres||0,
+    'Pas/Plus intéressés':t.pas_interesse||0,'Raccroché au nez':t.raccroche||0,
+    'Mauvais numéro':t.mauvais_num||0,
+    'Conv1':t.conv1||0,'Conv2':t.conv2||0,'Conv3':t.conv3||0,
+    'Semaine':weekNum(now),'Mois':now.getMonth()+1,
+    'Trimestre':Math.ceil((now.getMonth()+1)/3),'Année':now.getFullYear(),
   };
-  setSyncBadge('syncing');
-  try {
-    // Vérifie si une ligne existe déjà aujourd'hui pour cette team
-    const searchRes = await fetch(
-      `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${TEAMS[ti]}')&maxRecords=1`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    );
-    if (!searchRes.ok) throw new Error(searchRes.status);
-    const searchData = await searchRes.json();
-
-    if (searchData.records && searchData.records.length > 0) {
-      // UPDATE
-      const recordId = searchData.records[0].id;
-      const updateRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}/${recordId}`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields })
-      });
-      if (!updateRes.ok) { const e = await updateRes.json(); throw new Error(e.error?.message || updateRes.status); }
-      setSyncBadge('ok'); showToast(`✓ ${TEAMS[ti]} mis à jour`);
-    } else {
-      // INSERT
-      const createRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields })
-      });
-      if (!createRes.ok) { const e = await createRes.json(); throw new Error(e.error?.message || createRes.status); }
-      setSyncBadge('ok'); showToast(`✓ ${TEAMS[ti]} enregistré`);
-    }
-    setTimeout(() => setSyncBadge('idle'), 3000);
-  } catch(e) {
-    setSyncBadge('err'); showToast(`✕ ${e.message}`, 'err');
-    setTimeout(() => setSyncBadge('idle'), 4000);
-  }
 }
-async function saveAllTeams() {
-  const token = getToken();
-  if (!token) { showToast('⚙ Configure ton token Airtable', 'acc'); openSettings(); return; }
-  setSyncBadge('syncing');
-  showToast('⟳ Enregistrement de toutes les teams…', 'acc');
-
-  const now = new Date();
-  const todayStr = now.toISOString().split('T')[0];
-  let ok = 0, updated = 0, errors = 0;
-
-  for (let ti = 0; ti < TEAMS.length; ti++) {
-    const t = STATE.teams[ti];
-    const joints = Math.max(0, (t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
-    const nonQual = (t.nq_finances||0)+(t.nq_autres||0);
-    const rdvHon = Math.max(0, (t.rdv_prevus||0)-(t.no_shows||0));
-
-    const fields = {
-      'Date': todayStr, 'Team': TEAMS[ti],
-      'New leads': t.new_leads||0, 'Calls sortants': t.calls_sortants||0,
-      'NRP': t.nrp||0, 'Joints': joints, 'RDV bookés': t.rdv_bookes||0, 'FUP': t.fup||0,
-      'Non qualifiés': nonQual, 'Qualifiés': t.qualifies||0, 'Sets': t.sets||0,
-      'Jamais joints': t.jamais_joints||0, 'RDV prévus': t.rdv_prevus||0,
-      'RDV honorés': rdvHon, 'No shows': t.no_shows||0,
-      'NQ finances': t.nq_finances||0, 'NQ autres': t.nq_autres||0,
-      'Pas/Plus intéressés': t.pas_interesse||0, 'Raccroché au nez': t.raccroche||0,
-      'Mauvais numéro': t.mauvais_num||0,
-      'Conv1': t.conv1||0, 'Conv2': t.conv2||0, 'Conv3': t.conv3||0,
-      'Semaine': weekNum(now), 'Mois': now.getMonth()+1,
-      'Trimestre': Math.ceil((now.getMonth()+1)/3), 'Année': now.getFullYear(),
-    };
-
-    try {
-      // Cherche si une entrée existe déjà aujourd'hui pour cette team
-      const searchUrl = `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${TEAMS[ti]}')&maxRecords=1`;
-      const searchRes = await fetch(searchUrl, { headers: { 'Authorization': `Bearer ${token}` } });
-      if (!searchRes.ok) throw new Error(searchRes.status);
-      const searchData = await searchRes.json();
-
-      if (searchData.records && searchData.records.length > 0) {
-        // UPDATE — ligne existante
-        const recordId = searchData.records[0].id;
-        const updateRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}/${recordId}`, {
-          method: 'PATCH',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields })
-        });
-        if (!updateRes.ok) { const e = await updateRes.json(); throw new Error(e.error?.message || updateRes.status); }
-        updated++;
-      } else {
-        // INSERT — nouvelle ligne
-        const createRes = await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields })
-        });
-        if (!createRes.ok) { const e = await createRes.json(); throw new Error(e.error?.message || createRes.status); }
-        ok++;
-      }
-    } catch(e) {
-      console.error(`Erreur team ${TEAMS[ti]}:`, e.message);
-      errors++;
-    }
-  }
-
-  if (errors === 0) {
-    setSyncBadge('ok');
-    showToast(`✓ ${ok} créés · ${updated} mis à jour`);
-    setTimeout(() => setSyncBadge('idle'), 3000);
+async function upsertSession(ti,token,now){
+  const fields=buildFields(ti,now);
+  // Cherche ligne existante aujourd'hui pour cette team
+  const sr=await fetch(
+    `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${encodeURIComponent(TEAMS[ti])}')&maxRecords=1`,
+    {headers:{Authorization:`Bearer ${token}`}}
+  );
+  if(!sr.ok){const e=await sr.json();throw new Error(e.error?.message||sr.status);}
+  const sd=await sr.json();
+  if(sd.records&&sd.records.length){
+    // UPDATE
+    const r=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}/${sd.records[0].id}`,{method:'PATCH',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({fields})});
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||r.status);}
+    return 'updated';
   } else {
-    setSyncBadge('err');
-    showToast(`✓ ${ok+updated} OK · ✕ ${errors} erreurs`, 'err');
-    setTimeout(() => setSyncBadge('idle'), 4000);
+    // INSERT
+    const r=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}`,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({fields})});
+    if(!r.ok){const e=await r.json();throw new Error(e.error?.message||r.status);}
+    return 'created';
   }
-
-  // Rafraîchit le dashboard si on est dessus
-  if (STATE.activeTab === 'dashboard') loadDashboard();
 }
 
+/* ══ SAVE ONE TEAM ══ */
+async function saveSession(ti){
+  const token=getToken();
+  if(!token){showToast('⚙ Configure ton token','acc');openSettings();return;}
+  setSyncBadge('syncing');
+  try{
+    const res=await upsertSession(ti,token,new Date());
+    setSyncBadge('ok');
+    showToast(res==='updated'?`✓ ${TEAMS[ti]} mis à jour`:`✓ ${TEAMS[ti]} enregistré`);
+    setTimeout(()=>setSyncBadge('idle'),3000);
+  }catch(e){
+    setSyncBadge('err');showToast(`✕ ${e.message}`,'err');
+    setTimeout(()=>setSyncBadge('idle'),4000);
+  }
+}
 
+/* ══ SAVE ALL TEAMS ══ */
+async function saveAllTeams(){
+  const token=getToken();
+  if(!token){showToast('⚙ Configure ton token','acc');openSettings();return;}
+  setSyncBadge('syncing');showToast('⟳ Enregistrement de toutes les teams…','acc');
+  const now=new Date();
+  let ok=0,updated=0,errors=0;
+  for(let ti=0;ti<TEAMS.length;ti++){
+    try{
+      const res=await upsertSession(ti,token,now);
+      if(res==='updated')updated++;else ok++;
+    }catch(e){console.error(`Team ${TEAMS[ti]}:`,e.message);errors++;}
+  }
+  if(errors===0){setSyncBadge('ok');showToast(`✓ ${ok} créés · ${updated} mis à jour`);setTimeout(()=>setSyncBadge('idle'),3000);}
+  else{setSyncBadge('err');showToast(`✓ ${ok+updated} OK · ✕ ${errors} erreurs`,'err');setTimeout(()=>setSyncBadge('idle'),4000);}
+  if(STATE.activeTab==='dashboard')loadDashboard();
+}
+
+/* ══ COPY GSHEET ══ */
 function copyData(ti){
   const t=STATE.teams[ti],d=new Date();
   const joints=Math.max(0,(t.calls_sortants||0)-(t.nrp||0)-(t.jamais_joints||0));
@@ -644,13 +636,15 @@ async function loadDashboard(){
   panel.innerHTML='<div class="dash-loading">⟳ Chargement Airtable…</div>';
   const token=getToken();
   try{
+    // Récupère toutes les sessions (pagination simple — 100 max)
     const[sr,lr]=await Promise.all([
       fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}}),
       fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_LEADS}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`,{headers:{Authorization:`Bearer ${token}`}})
     ]);
-    if(!sr.ok||!lr.ok)throw new Error('Erreur API '+(!sr.ok?sr.status:lr.status));
+    if(!sr.ok||!lr.ok)throw new Error('Erreur API '+((!sr.ok)?sr.status:lr.status));
     const[sd,ld]=await Promise.all([sr.json(),lr.json()]);
-    SESS_RECORDS=sd.records.map(r=>r.fields);LEAD_RECORDS=ld.records.map(r=>r.fields);
+    SESS_RECORDS=sd.records.map(r=>r.fields);
+    LEAD_RECORDS=ld.records.map(r=>r.fields);
     renderDashboard();
   }catch(e){panel.innerHTML=`<div class="dash-loading" style="color:var(--red);">✕ ${e.message}</div>${localSummaryHTML()}`;}
 }
@@ -659,19 +653,43 @@ function noTokenHTML(){return`<div style="background:var(--surface);border:1px s
 function renderDashboard(){
   const panel=document.getElementById('dashPanel');if(!panel)return;
   const now=new Date(),cW=weekNum(now),cM=now.getMonth()+1,cY=now.getFullYear(),cQ=Math.ceil(cM/3);
-  const today=now.toISOString().split('T')[0];
-  const fp=r=>{if(dashPeriod==='today')return r['Date']===today;if(dashPeriod==='week')return r['Semaine']===cW&&r['Année']===cY;if(dashPeriod==='month')return r['Mois']===cM&&r['Année']===cY;if(dashPeriod==='quarter')return r['Trimestre']===cQ&&r['Année']===cY;return r['Année']===cY;};
-  const fl=r=>{const d=new Date(r['Date']||'');if(isNaN(d))return false;const rStr=d.toISOString().split('T')[0],rW=weekNum(d),rM=d.getMonth()+1,rY=d.getFullYear(),rQ=Math.ceil(rM/3);if(dashPeriod==='today')return rStr===today;if(dashPeriod==='week')return rW===cW&&rY===cY;if(dashPeriod==='month')return rM===cM&&rY===cY;if(dashPeriod==='quarter')return rQ===cQ&&rY===cY;return rY===cY;};
-  let sr=SESS_RECORDS.filter(fp),lr=LEAD_RECORDS.filter(fl);
+  const todayStr=now.toISOString().split('T')[0];
+
+  // Filtre sessions par période — agrège TOUTES les teams
+  const fpS=r=>{
+    const rDate=r['Date']||'';
+    if(dashPeriod==='today')return rDate===todayStr;
+    if(dashPeriod==='week')return r['Semaine']===cW&&r['Année']===cY;
+    if(dashPeriod==='month')return r['Mois']===cM&&r['Année']===cY;
+    if(dashPeriod==='quarter')return r['Trimestre']===cQ&&r['Année']===cY;
+    return r['Année']===cY;
+  };
+  const fpL=r=>{
+    const d=new Date(r['Date']||'');if(isNaN(d))return false;
+    const rStr=d.toISOString().split('T')[0],rW=weekNum(d),rM=d.getMonth()+1,rY=d.getFullYear(),rQ=Math.ceil(rM/3);
+    if(dashPeriod==='today')return rStr===todayStr;
+    if(dashPeriod==='week')return rW===cW&&rY===cY;
+    if(dashPeriod==='month')return rM===cM&&rY===cY;
+    if(dashPeriod==='quarter')return rQ===cQ&&rY===cY;
+    return rY===cY;
+  };
+
+  let sr=SESS_RECORDS.filter(fpS);
+  let lr=LEAD_RECORDS.filter(fpL);
   if(dashTeam!=='Toutes'){sr=sr.filter(r=>r['Team']===dashTeam);lr=lr.filter(r=>r['Team']===dashTeam);}
+
   const sa=aggS(sr),la=aggL(lr),kpis=calcKPIs(sa,la);
   const allTeams=[...new Set(SESS_RECORDS.map(r=>r['Team']).filter(Boolean))].sort();
   const pl=dashPeriod==='today'?`Aujourd'hui ${now.toLocaleDateString('fr-FR')}`:dashPeriod==='week'?`Semaine ${cW}`:dashPeriod==='month'?`Mois ${cM}/${cY}`:dashPeriod==='quarter'?`T${cQ} ${cY}`:`Année ${cY}`;
+
   panel.innerHTML=`
     <div class="dash-hdr">
       <div><div class="dash-title">📊 Dashboard KPI Setting</div><div class="dash-sub">${pl} · ${dashTeam} · ${sr.length} sessions · ${lr.length} leads</div></div>
       <div class="dash-ctrls">
-        <select class="dsel" onchange="dashTeam=this.value;renderDashboard()"><option value="Toutes">Toutes les teams</option>${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}</select>
+        <select class="dsel" onchange="dashTeam=this.value;renderDashboard()">
+          <option value="Toutes">Toutes les teams</option>
+          ${allTeams.map(t=>`<option ${t===dashTeam?'selected':''}>${t}</option>`).join('')}
+        </select>
         <select class="dsel" onchange="dashPeriod=this.value;renderDashboard()">
           <option value="today" ${dashPeriod==='today'?'selected':''}>Aujourd'hui</option>
           <option value="week" ${dashPeriod==='week'?'selected':''}>Cette semaine</option>
@@ -680,13 +698,13 @@ function renderDashboard(){
           <option value="year" ${dashPeriod==='year'?'selected':''}>Cette année</option>
         </select>
         <button class="btn-refresh" onclick="loadDashboard()">↻</button>
-        <button class="btn-refresh" style="background:var(--accent-dim);border-color:var(--accent);color:var(--accent);" onclick="saveAllTeams()">💾 Tout enregistrer</button>
+        <button class="btn-save-all" onclick="saveAllTeams()">💾 Tout enregistrer</button>
       </div>
     </div>
     ${renderKPIs(kpis,sa,la)}
     ${renderFunnel(sa,la)}
     ${renderAlerts(kpis)}
-    ${renderHist(allTeams,cW,cM,cY,cQ)}
+    ${renderHist(allTeams,cW,cM,cY,cQ,todayStr)}
     ${localSummaryHTML()}`;
 }
 
@@ -699,11 +717,7 @@ function calcKPIs(s,l){
   const safe=(n,d)=>d>0?n/d:0;const v=l.c1+l.c2+l.c3;
   return{joign:safe(s['Joints'],s['Calls sortants']),qual:safe(s['Qualifiés'],s['Joints']),transf:safe(s['Conv1'],s['Joints']),booking:safe(s['RDV bookés'],s['Qualifiés']),showup:safe(s['RDV honorés'],s['RDV bookés']),noshow:safe(s['No shows'],s['RDV bookés']),close:safe(v,s['RDV honorés']),funnel:safe(v,s['New leads']),conv1:safe(l.c1,s['New leads']),conv2:safe(l.c2,s['New leads']),conv3:safe(l.c3,s['New leads']),rpl:s['New leads']>0?l.ca/s['New leads']:0,_v:v,_ca:l.ca};
 }
-function kpiSt(id,val){
-  const p=getParams().find(x=>x.id===id);if(!p||p.cible===null)return'none';
-  const v=val*100;if(p.inv)return v<=p.cible?'ok':v<=p.min?'warn':'bad';
-  return v>=p.cible?'ok':v>=p.min?'warn':'bad';
-}
+function kpiSt(id,val){const p=getParams().find(x=>x.id===id);if(!p||p.cible===null)return'none';const v=val*100;if(p.inv)return v<=p.cible?'ok':v<=p.min?'warn':'bad';return v>=p.cible?'ok':v>=p.min?'warn':'bad';}
 function fmtV(id,val){return id==='rpl'?val.toFixed(0)+'€':(val*100).toFixed(1)+'%';}
 
 function renderKPIs(kpis,s,l){
@@ -728,10 +742,9 @@ function renderAlerts(kpis){
   return`<div class="alerts-wrap"><div class="sec-title">Alertes KPI</div>${rows}</div>`;
 }
 
-function renderHist(allTeams,cW,cM,cY,cQ){
+function renderHist(allTeams,cW,cM,cY,cQ,todayStr){
   const fT=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
   const fL=recs=>dashTeam==='Toutes'?recs:recs.filter(r=>r['Team']===dashTeam);
-  const todayStr=new Date().toISOString().split('T')[0];
   const periods=[
     {label:"Aujourd'hui",sr:fT(SESS_RECORDS.filter(r=>r['Date']===todayStr)),lr:fL(LEAD_RECORDS.filter(r=>r['Date']===todayStr))},
     {label:'Semaine',sr:fT(SESS_RECORDS.filter(r=>r['Semaine']===cW&&r['Année']===cY)),lr:fL(LEAD_RECORDS.filter(r=>{const d=new Date(r['Date']||'');return!isNaN(d)&&weekNum(d)===cW&&d.getFullYear()===cY;}))},
@@ -742,16 +755,16 @@ function renderHist(allTeams,cW,cM,cY,cQ){
   const rows=periods.map(p=>{
     const s=aggS(p.sr),l=aggL(p.lr),k=calcKPIs(s,l);
     const tdK=(id,v)=>{const st=kpiSt(id,v);return`<td class="${st!=='none'?'td-'+st:''}">${fmtV(id,v)}</td>`;};
-    return`<tr><td>${p.label}</td><td>${s['Calls sortants']}</td><td>${s['Joints']}</td><td>${s['Qualifiés']}</td><td>${s['RDV bookés']}</td><td>${s['Sets']}</td>${tdK('joign',k.joign)}${tdK('qual',k.qual)}${tdK('showup',k.showup)}${tdK('close',k.close)}<td style="color:var(--purple)">${l.c1+l.c2+l.c3}</td><td style="color:var(--purple)">${l.ca.toFixed(0)}€</td></tr>`;
+    return`<tr><td>${p.label}</td><td>${s['New leads']}</td><td>${s['Calls sortants']}</td><td>${s['Joints']}</td><td>${s['Qualifiés']}</td><td>${s['RDV bookés']}</td><td>${s['Sets']}</td>${tdK('joign',k.joign)}${tdK('qual',k.qual)}${tdK('showup',k.showup)}${tdK('close',k.close)}<td style="color:var(--purple)">${l.c1+l.c2+l.c3}</td><td style="color:var(--purple)">${l.ca.toFixed(0)}€</td></tr>`;
   }).join('');
-  return`<div class="hist-wrap"><div class="sec-title">Récapitulatif historique</div><table class="htable"><thead><tr><th>Période</th><th>Calls</th><th>Joints</th><th>Qualif.</th><th>RDV</th><th>Sets</th><th>Joign.</th><th>Qual.</th><th>Show-up</th><th>Close</th><th>Ventes</th><th>CA</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  return`<div class="hist-wrap"><div class="sec-title">Récapitulatif — toutes les teams agrégées</div><table class="htable"><thead><tr><th>Période</th><th>Leads</th><th>Calls</th><th>Joints</th><th>Qualif.</th><th>RDV</th><th>Sets</th><th>Joign.</th><th>Qual.</th><th>Show-up</th><th>Close</th><th>Ventes</th><th>CA</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function localSummaryHTML(){
   const f=['calls_sortants','joints','qualifies','rdv_bookes','sets','conv1','conv2','conv3'];
   const tot={};f.forEach(k=>tot[k]=0);
   TEAMS.forEach((_,ti)=>{if(STATE.teams[ti])f.forEach(k=>tot[k]+=(STATE.teams[ti][k]||0));});
-  return`<div class="sum-bar" style="margin-top:14px;"><div style="width:100%;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Session en cours (local)</div>
+  return`<div class="sum-bar" style="margin-top:14px;"><div style="width:100%;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">Session locale en cours</div>
     <div class="si"><div class="si-lbl">Calls</div><div class="si-val c-blue">${tot.calls_sortants}</div></div>
     <div class="si"><div class="si-lbl">Joints</div><div class="si-val c-txt">${tot.joints}</div></div>
     <div class="si"><div class="si-lbl">Qualifiés</div><div class="si-val c-txt">${tot.qualifies}</div></div>
@@ -767,18 +780,39 @@ function localSummaryHTML(){
 function openAddTeam(){document.getElementById('newTeamInput').value='';document.getElementById('newTeamErr').textContent='';document.getElementById('overlayAddTeam').classList.add('show');setTimeout(()=>document.getElementById('newTeamInput').focus(),100);}
 function closeAddTeam(){document.getElementById('overlayAddTeam').classList.remove('show');}
 document.getElementById('newTeamInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmAddTeam();if(e.key==='Escape')closeAddTeam();});
-function confirmAddTeam(){
+async function confirmAddTeam(){
   const inp=document.getElementById('newTeamInput'),err=document.getElementById('newTeamErr');
   const name=inp.value.trim().toUpperCase();
   if(!name){inp.classList.add('err');err.textContent='Nom requis.';return;}
   if(TEAMS.includes(name)){inp.classList.add('err');err.textContent='Team déjà existante.';return;}
-  TEAMS.push(name);saveTeams(TEAMS);const ti=TEAMS.length-1;STATE.teams[ti]=defData();STATE.activeTeam=ti;STATE.activeTab=`team-${ti}`;saveState(STATE);closeAddTeam();renderAll();showToast(`✅ ${name} ajoutée`);
+  TEAMS.push(name);saveTeams(TEAMS);
+  const ti=TEAMS.length-1;STATE.teams[ti]=defData();STATE.activeTeam=ti;STATE.activeTab=`team-${ti}`;
+  saveState(STATE);
+  // Sauvegarde dans Airtable
+  const token=getToken();
+  if(token){
+    try{await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TEAMS}`,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({fields:{Nom:name}})});}
+    catch(e){console.warn('Team add AT:',e.message);}
+  }
+  closeAddTeam();renderAll();showToast(`✅ ${name} ajoutée`);
 }
-function deleteTeam(ti){
+async function deleteTeam(ti){
   if(TEAMS.length<=1){showToast('Impossible — dernière team','err');return;}
   if(!confirm(`Supprimer ${TEAMS[ti]} ?`))return;
-  const nt=[],nd={};TEAMS.forEach((n,i)=>{if(i!==ti){const ni=nt.length;nt.push(n);nd[ni]=STATE.teams[i]||defData();}});
-  TEAMS.length=0;nt.forEach(n=>TEAMS.push(n));saveTeams(TEAMS);STATE.teams=nd;STATE.activeTeam=Math.min(STATE.activeTeam,TEAMS.length-1);STATE.activeTab='dashboard';saveState(STATE);renderAll();showToast('🗑 Supprimée');
+  const name=TEAMS[ti];
+  const nt=[],nd={};
+  TEAMS.forEach((n,i)=>{if(i!==ti){const ni=nt.length;nt.push(n);nd[ni]=STATE.teams[i]||defData();}});
+  TEAMS.length=0;nt.forEach(n=>TEAMS.push(n));saveTeams(TEAMS);
+  STATE.teams=nd;STATE.activeTeam=Math.min(STATE.activeTeam,TEAMS.length-1);STATE.activeTab='dashboard';saveState(STATE);
+  // Supprime dans Airtable
+  const token=getToken();
+  if(token){
+    try{
+      const r=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TEAMS}?filterByFormula={Nom}='${encodeURIComponent(name)}'&maxRecords=1`,{headers:{Authorization:`Bearer ${token}`}});
+      if(r.ok){const d=await r.json();if(d.records&&d.records.length)await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_TEAMS}/${d.records[0].id}`,{method:'DELETE',headers:{Authorization:`Bearer ${token}`}});}
+    }catch(e){console.warn('Team del AT:',e.message);}
+  }
+  renderAll();showToast('🗑 Team supprimée');
 }
 
 /* ══ TOAST ══ */
@@ -786,64 +820,16 @@ let toastT;
 function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
 
 /* ══ INIT ══ */
-/* ══ LOAD TODAY FROM AIRTABLE ══ */
-const AT_TO_STATE = {
-  'New leads':'new_leads','Calls sortants':'calls_sortants','NRP':'nrp',
-  'Joints':'joints','RDV bookés':'rdv_bookes','FUP':'fup',
-  'Non qualifiés':'non_qual_calc','Qualifiés':'qualifies','Sets':'sets',
-  'Jamais joints':'jamais_joints','RDV prévus':'rdv_prevus','RDV honorés':'rdv_honores',
-  'No shows':'no_shows','NQ finances':'nq_finances','NQ autres':'nq_autres',
-  'Pas/Plus intéressés':'pas_interesse','Raccroché au nez':'raccroche',
-  'Mauvais numéro':'mauvais_num','Conv1':'conv1','Conv2':'conv2','Conv3':'conv3',
-};
-
-async function loadTodayFromAirtable() {
-  const token = getToken();
-  if (!token) return;
-  try {
-    const res = await fetch(
-      `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=IS_SAME({Date},TODAY(),'day')&maxRecords=50`,
-      { headers: { 'Authorization': `Bearer ${token}` } }
-    );
-    if (!res.ok) return;
-    const data = await res.json();
-    if (!data.records || !data.records.length) return;
-
-    let updated = false;
-    data.records.forEach(record => {
-      const f = record.fields;
-      const teamName = f['Team'];
-      const ti = TEAMS.indexOf(teamName);
-      if (ti === -1) return;
-      // Charge les valeurs Airtable dans STATE
-      Object.entries(AT_TO_STATE).forEach(([atField, stateKey]) => {
-        if (stateKey === 'non_qual_calc') return; // calculé, pas stocké
-        if (f[atField] !== undefined) STATE.teams[ti][stateKey] = f[atField] || 0;
-      });
-      updated = true;
-    });
-
-    if (updated) {
-      saveState(STATE);
-      renderAll();
-      setSyncBadge('ok');
-      showToast('✓ Données du jour chargées depuis Airtable');
-      setTimeout(() => setSyncBadge('idle'), 3000);
-    }
-  } catch(e) {
-    console.warn('Sync load error:', e.message);
-  }
-}
-
 function initApp(){
-  TEAMS=getTeams();STATE=loadState();TEAMS.forEach((_,ti)=>ensureTeam(ti));
+  TEAMS=getTeams();STATE=loadState();
+  TEAMS.forEach((_,ti)=>ensureTeam(ti));
   if(STATE.activeTeam>=TEAMS.length)STATE.activeTeam=0;
   if(!STATE.activeTab)STATE.activeTab='dashboard';
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
   setSyncBadge('idle');
   renderAll();
-  // Charge les données du jour depuis Airtable au démarrage
-  loadTodayFromAirtable();
+  // Charge tout depuis Airtable au démarrage (teams + params + données du jour)
+  if(hasToken()) loadFromAirtable(getToken()).then(()=>renderAll());
 }
 if(sessionStorage.getItem(S_AUTH)==='1'){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='block';initApp();}
 </script>
