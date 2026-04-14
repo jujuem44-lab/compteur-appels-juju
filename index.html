@@ -276,7 +276,7 @@ const AT_CHALLENGES = 'tblWBehdMXc6aBP4O';
 
 /* ══ AUTH ══ */
 const PWD='Juju1506', S_AUTH='cg_auth_v1', S_TOKEN='cg_at_token_v3';
-const S_STATE='cg_counter_v6', S_TEAMS='cg_teams_v4', S_PARAMS='cg_kpi_params_v1';
+const S_STATE='cg_counter_v6', S_TEAMS='cg_teams_v4', S_PARAMS='cg_kpi_params_v1', S_LASTDATE='cg_last_date_v1';
 
 function doLogin(){
   const inp=document.getElementById('pwdInput'),err=document.getElementById('loginError');
@@ -428,7 +428,7 @@ async function loadFromAirtable(token) {
     }
 
     // 3. Charge les données du jour (toutes les teams)
-    const sr=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=IS_SAME({Date},TODAY(),'day')&maxRecords=50`,{headers:{Authorization:`Bearer ${token}`}});
+    const sr=await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=IS_SAME({Date},'${localDateStr()}','day')&maxRecords=50`,{headers:{Authorization:`Bearer ${token}`}});
     if(sr.ok){
       const sd=await sr.json();
       if(sd.records&&sd.records.length){
@@ -548,6 +548,12 @@ function refreshSB(ti){
 function resetTeam(ti){if(!confirm(`Reset ${TEAMS[ti]} ?`))return;METRICS.forEach(m=>STATE.teams[ti][m.id]=0);saveState(STATE);renderAll();}
 
 /* ══ UPSERT HELPER ══ */
+/* Date locale (pas UTC) pour éviter le bug de fuseau horaire avec Airtable */
+function localDateStr(d) {
+  const dt = d || new Date();
+  return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+}
+
 function weekNum(d){
   const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
   const day=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-day);
@@ -560,7 +566,7 @@ function buildFields(ti,now){
   const nonQual=(t.nq_finances||0)+(t.nq_autres||0);
   const rdvHon=Math.max(0,(t.rdv_prevus||0)-(t.no_shows||0));
   return{
-    'Date':now.toISOString().split('T')[0],'Team':TEAMS[ti],
+    'Date':localDateStr(now),'Team':TEAMS[ti],
     'New leads':t.new_leads||0,'Calls sortants':t.calls_sortants||0,'NRP':t.nrp||0,
     'Joints':joints,'RDV bookés':t.rdv_bookes||0,'FUP':t.fup||0,
     'Non qualifiés':nonQual,'Qualifiés':t.qualifies||0,'Sets':t.sets||0,
@@ -578,7 +584,7 @@ async function upsertSession(ti,token,now){
   const fields=buildFields(ti,now);
   // Cherche ligne existante aujourd'hui pour cette team
   const sr=await fetch(
-    `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},TODAY(),'day'),{Team}='${encodeURIComponent(TEAMS[ti])}')&maxRecords=1`,
+    `https://api.airtable.com/v0/${AT_BASE}/${AT_SESSIONS}?filterByFormula=AND(IS_SAME({Date},'${localDateStr(now)}','day'),{Team}='${encodeURIComponent(TEAMS[ti])}')&maxRecords=1`,
     {headers:{Authorization:`Bearer ${token}`}}
   );
   if(!sr.ok){const e=await sr.json();throw new Error(e.error?.message||sr.status);}
@@ -665,7 +671,7 @@ function noTokenHTML(){return`<div style="background:var(--surface);border:1px s
 function renderDashboard(){
   const panel=document.getElementById('dashPanel');if(!panel)return;
   const now=new Date(),cW=weekNum(now),cM=now.getMonth()+1,cY=now.getFullYear(),cQ=Math.ceil(cM/3);
-  const todayStr=now.toISOString().split('T')[0];
+  const todayStr=localDateStr(now);
 
   // Filtre sessions par période — agrège TOUTES les teams
   const fpS=r=>{
@@ -1003,6 +1009,18 @@ function initApp(){
   TEAMS.forEach((_,ti)=>ensureTeam(ti));
   if(STATE.activeTeam>=TEAMS.length)STATE.activeTeam=0;
   if(!STATE.activeTab)STATE.activeTab='dashboard';
+
+  // Détection changement de jour → reset des compteurs
+  const todayStr=localDateStr();
+  const lastDate=localStorage.getItem(S_LASTDATE);
+  if(lastDate && lastDate!==todayStr){
+    // Nouveau jour — on remet tous les compteurs à zéro
+    TEAMS.forEach((_,ti)=>{ STATE.teams[ti]=defData(); });
+    saveState(STATE);
+    showToast('Nouveau jour — compteurs remis à zéro');
+  }
+  localStorage.setItem(S_LASTDATE, todayStr);
+
   document.getElementById('hdrDate').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
   setSyncBadge('idle');
   renderAll();
