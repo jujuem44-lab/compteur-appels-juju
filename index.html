@@ -261,15 +261,18 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:1
   </div>
 </div>
 
+<div class="overlay" id="overlayChallenge"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 /* ══ AIRTABLE CONFIG ══ */
-const AT_BASE     = 'appOoMhNQEG3pHwpY';
-const AT_SESSIONS = 'tbl7CBa6QlZJQ4XkA';
-const AT_LEADS    = 'tblij8Zh1dUrrqn9z';
-const AT_TEAMS    = 'tblbahODGSMruZZXs';
-const AT_PARAMS   = 'tblzLDV4CFkCKUDyk';
+const AT_BASE       = 'appOoMhNQEG3pHwpY';
+const AT_SESSIONS   = 'tbl7CBa6QlZJQ4XkA';
+const AT_LEADS      = 'tblij8Zh1dUrrqn9z';
+const AT_TEAMS      = 'tblbahODGSMruZZXs';
+const AT_PARAMS     = 'tblzLDV4CFkCKUDyk';
+const AT_CHALLENGES = 'tblWBehdMXc6aBP4O';
 
 /* ══ AUTH ══ */
 const PWD='Juju1506', S_AUTH='cg_auth_v1', S_TOKEN='cg_at_token_v3';
@@ -461,10 +464,19 @@ function renderTabs(){
     wrap.appendChild(btn);
   });
   const ab=document.createElement('button');ab.className='btn-addteam';ab.textContent='+ Team';ab.onclick=openAddTeam;wrap.appendChild(ab);
+  // Onglet Challenges
+  const cb=document.createElement('button');
+  cb.className='tab'+(STATE.activeTab==='challenges'?' active':'');
+  cb.style.color=STATE.activeTab==='challenges'?'var(--purple)':'';
+  cb.style.borderBottomColor=STATE.activeTab==='challenges'?'var(--purple)':'';
+  cb.innerHTML='⚡ Challenges<span class="tsub">réinscriptions</span>';
+  cb.onclick=()=>{STATE.activeTab='challenges';saveState(STATE);renderAll();};
+  wrap.appendChild(cb);
 }
 function renderAll(){
   renderTabs();
   if(STATE.activeTab==='dashboard'){document.getElementById('mainContent').innerHTML='<div id="dashPanel" class="panel active"></div>';loadDashboard();}
+  else if(STATE.activeTab==='challenges'){document.getElementById('mainContent').innerHTML='<div id="challengesPanel" class="panel active"></div>';loadChallenges();}
   else{document.getElementById('mainContent').innerHTML=renderTeamPanel(STATE.activeTeam);}
 }
 
@@ -815,7 +827,173 @@ async function deleteTeam(ti){
   renderAll();showToast('🗑 Team supprimée');
 }
 
-/* ══ TOAST ══ */
+/* ══ CHALLENGES ══ */
+let CHALLENGE_RECORDS = [];
+
+async function loadChallenges() {
+  const panel = document.getElementById('challengesPanel');
+  if (!panel) return;
+  if (!hasToken()) { panel.innerHTML = noTokenHTML(); return; }
+  panel.innerHTML = '<div class="dash-loading">⟳ Chargement challenges…</div>';
+  const token = getToken();
+  try {
+    const res = await fetch(
+      `https://api.airtable.com/v0/${AT_BASE}/${AT_CHALLENGES}?maxRecords=100&sort[0][field]=Année&sort[0][direction]=desc&sort[1][field]=Mois&sort[1][direction]=desc`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    CHALLENGE_RECORDS = data.records;
+    renderChallenges();
+  } catch(e) {
+    panel.innerHTML = `<div class="dash-loading" style="color:var(--red);">✕ ${e.message}</div>`;
+  }
+}
+
+function renderChallenges() {
+  const panel = document.getElementById('challengesPanel');
+  if (!panel) return;
+  const now = new Date();
+  const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+  const rows = CHALLENGE_RECORDS.map(r => {
+    const f = r.fields;
+    return `<tr>
+      <td style="font-family:var(--font-ui);font-size:14px;font-weight:600;color:var(--text);">${f['Nom du challenge']||'—'}</td>
+      <td>${f['Team']||'—'}</td>
+      <td>${f['Mois']?months[(f['Mois']||1)-1]+' '+(f['Année']||''):'—'}</td>
+      <td style="color:var(--accent);font-weight:700;">${f['New leads']||0}</td>
+      <td style="color:var(--green);font-weight:700;">${f['Commission générée']?f['Commission générée'].toFixed(0)+'€':'—'}</td>
+      <td style="color:var(--text-dim);font-size:12px;">${f['Notes']||''}</td>
+      <td>
+        <button onclick="editChallenge('${r.id}')" style="background:none;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);cursor:pointer;padding:4px 8px;font-family:var(--font-ui);font-size:11px;">✏</button>
+        <button onclick="deleteChallenge('${r.id}')" style="background:none;border:1px solid var(--border);border-radius:4px;color:var(--text-dim);cursor:pointer;padding:4px 8px;font-family:var(--font-ui);font-size:11px;margin-left:4px;">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Total commissions
+  const totalCA = CHALLENGE_RECORDS.reduce((s,r) => s+(r.fields['Commission générée']||0), 0);
+  const totalLeads = CHALLENGE_RECORDS.reduce((s,r) => s+(r.fields['New leads']||0), 0);
+
+  panel.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div>
+        <div style="font-size:20px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--purple);">⚡ Challenges & Réinscriptions</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-top:3px;">${CHALLENGE_RECORDS.length} entrées</div>
+      </div>
+      <button onclick="openAddChallenge()" style="background:var(--purple);color:white;border:none;border-radius:6px;padding:9px 18px;font-family:var(--font-ui);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;">+ Ajouter</button>
+    </div>
+
+    <div class="sum-bar" style="margin-bottom:20px;">
+      <div class="si"><div class="si-lbl">Total leads</div><div class="si-val c-acc">${totalLeads}</div></div>
+      <div class="si"><div class="si-lbl">Total commissions</div><div class="si-val c-green">${totalCA.toFixed(0)}€</div></div>
+      <div class="si"><div class="si-lbl">Challenges</div><div class="si-val c-purple">${CHALLENGE_RECORDS.length}</div></div>
+    </div>
+
+    <div class="hist-wrap">
+      <table class="htable" style="min-width:600px;">
+        <thead><tr>
+          <th>Nom du challenge</th><th>Team</th><th>Période</th>
+          <th>New leads</th><th>Commission</th><th>Notes</th><th></th>
+        </tr></thead>
+        <tbody>${rows||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px;">Aucun challenge — clique sur + Ajouter</td></tr>'}</tbody>
+      </table>
+    </div>`;
+}
+
+function openAddChallenge(record) {
+  const f = record ? record.fields : {};
+  const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const now = new Date();
+  document.getElementById('overlayChallenge').innerHTML = `
+    <div class="modal" style="max-width:440px;">
+      <div class="modal-title" style="color:var(--purple);">${record?'✏️ Modifier':'➕ Nouveau challenge'}</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div><div class="mlbl">Nom du challenge *</div><input class="minput" id="ch-nom" value="${f['Nom du challenge']||''}" placeholder="Ex : DV INS S — Avril 2026"></div>
+        <div><div class="mlbl">Team</div><input class="minput" id="ch-team" value="${f['Team']||''}" placeholder="Ex : DV INS S"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><div class="mlbl">Mois</div>
+            <select class="minput" id="ch-mois">
+              ${months.map((m,i)=>`<option value="${i+1}" ${(f['Mois']||now.getMonth()+1)===i+1?'selected':''}>${m}</option>`).join('')}
+            </select>
+          </div>
+          <div><div class="mlbl">Année</div><input class="minput" type="number" id="ch-annee" value="${f['Année']||now.getFullYear()}"></div>
+        </div>
+        <div><div class="mlbl">New leads</div><input class="minput" type="number" id="ch-leads" value="${f['New leads']||''}" placeholder="0"></div>
+        <div><div class="mlbl">Commission générée (€)</div><input class="minput" type="number" id="ch-commission" value="${f['Commission générée']||''}" placeholder="0"></div>
+        <div><div class="mlbl">Notes</div><textarea class="minput" id="ch-notes" rows="2" style="resize:vertical;">${f['Notes']||''}</textarea></div>
+        <div class="mactions">
+          <button class="mbtn-cancel" onclick="closeChallenge()">Annuler</button>
+          <button class="mbtn-ok" style="background:var(--purple);" onclick="saveChallenge('${record?record.id:''}')">Enregistrer</button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('overlayChallenge').classList.add('show');
+  setTimeout(()=>document.getElementById('ch-nom').focus(),100);
+}
+
+function editChallenge(id) {
+  const record = CHALLENGE_RECORDS.find(r => r.id === id);
+  if (record) openAddChallenge(record);
+}
+
+function closeChallenge() {
+  document.getElementById('overlayChallenge').classList.remove('show');
+}
+
+async function saveChallenge(recordId) {
+  const token = getToken();
+  if (!token) return;
+  const nom = document.getElementById('ch-nom').value.trim();
+  if (!nom) { showToast('Nom requis', 'err'); return; }
+  const fields = {
+    'Nom du challenge': nom,
+    'Team': document.getElementById('ch-team').value.trim(),
+    'Mois': parseInt(document.getElementById('ch-mois').value),
+    'Année': parseInt(document.getElementById('ch-annee').value),
+  };
+  const leads = document.getElementById('ch-leads').value;
+  if (leads !== '') fields['New leads'] = parseInt(leads);
+  const comm = document.getElementById('ch-commission').value;
+  if (comm !== '') fields['Commission générée'] = parseFloat(comm);
+  const notes = document.getElementById('ch-notes').value.trim();
+  if (notes) fields['Notes'] = notes;
+
+  try {
+    if (recordId) {
+      await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_CHALLENGES}/${recordId}`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      showToast('✓ Challenge mis à jour');
+    } else {
+      await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_CHALLENGES}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      showToast('✓ Challenge ajouté');
+    }
+    closeChallenge();
+    loadChallenges();
+  } catch(e) { showToast(`✕ ${e.message}`, 'err'); }
+}
+
+async function deleteChallenge(id) {
+  if (!confirm('Supprimer ce challenge ?')) return;
+  const token = getToken();
+  try {
+    await fetch(`https://api.airtable.com/v0/${AT_BASE}/${AT_CHALLENGES}/${id}`, {
+      method: 'DELETE', headers: { Authorization: `Bearer ${token}` }
+    });
+    showToast('🗑 Supprimé');
+    loadChallenges();
+  } catch(e) { showToast(`✕ ${e.message}`, 'err'); }
+}
+
+
 let toastT;
 function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
 
