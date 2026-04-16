@@ -379,6 +379,8 @@ const METRICS=[
   {id:'pas_interesse', label:'Pas/Plus intéressés', group:'qua',sub:true},
   {id:'raccroche',     label:'Raccroché au nez',    group:'qua',sub:true},
   {id:'mauvais_num',   label:'Mauvais numéro',      group:'qua',sub:true},
+  {id:'team_interne',  label:'Team interne',        group:'qua',sub:true},
+  {id:'deja_client',   label:'Déjà client',         group:'qua',sub:true},
   {id:'rdv_bookes',    label:'Nbr RDV bookés',      group:'rdv'},
   {id:'fup',           label:'Nbr FUP',             group:'rdv'},
   {id:'rdv_prevus',    label:'Nbr RDV prévus',      group:'rdv'},
@@ -432,7 +434,7 @@ async function loadFromAirtable(token) {
     if(sr.ok){
       const sd=await sr.json();
       if(sd.records&&sd.records.length){
-        const fieldMap={'New leads':'new_leads','Calls sortants':'calls_sortants','NRP':'nrp','Joints':'joints','RDV bookés':'rdv_bookes','FUP':'fup','Qualifiés':'qualifies','Sets':'sets','Jamais joints':'jamais_joints','RDV prévus':'rdv_prevus','RDV honorés':'rdv_honores','No shows':'no_shows','NQ finances':'nq_finances','NQ autres':'nq_autres','Pas/Plus intéressés':'pas_interesse','Raccroché au nez':'raccroche','Mauvais numéro':'mauvais_num','Conv1':'conv1','Conv2':'conv2','Conv3':'conv3'};
+        const fieldMap={'New leads':'new_leads','Calls sortants':'calls_sortants','NRP':'nrp','Joints':'joints','RDV bookés':'rdv_bookes','FUP':'fup','Qualifiés':'qualifies','Sets':'sets','Jamais joints':'jamais_joints','RDV prévus':'rdv_prevus','RDV honorés':'rdv_honores','No shows':'no_shows','NQ finances':'nq_finances','NQ autres':'nq_autres','Pas/Plus intéressés':'pas_interesse','Raccroché au nez':'raccroche','Mauvais numéro':'mauvais_num','Team interne':'team_interne','Déjà client':'deja_client','Conv1':'conv1','Conv2':'conv2','Conv3':'conv3'};
         sd.records.forEach(r=>{
           const f=r.fields;
           const ti=TEAMS.indexOf(f['Team']);
@@ -488,7 +490,7 @@ function renderTeamPanel(ti){
     if(gk==='qua'){
       const t=STATE.teams[ti];
       const nq=(t.nq_finances||0)+(t.nq_autres||0);
-      const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
+      const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0)+(t.team_interne||0)+(t.deja_client||0);
       const qual=byG[gk].find(m=>m.id==='qualifies');
       body+=qual?mrow(qual,ti):'';
       body+=`<div class="mro"><div class="mro-lbl">Nbr non qualifiés</div><div class="mro-val${nq>0?' nz':''}" id="nq-${ti}">${nq}</div></div>`;
@@ -540,7 +542,7 @@ function refreshSB(ti){
   [['calls','calls_sortants'],['joints','joints'],['qual','qualifies'],['rdv','rdv_bookes'],['sets','sets'],['c1','conv1'],['c2','conv2'],['c3','conv3']].forEach(([k,f])=>{const el=document.getElementById(`sb-${k}-${ti}`);if(el)el.textContent=t[f]||0;});
   const nq=(t.nq_finances||0)+(t.nq_autres||0);
   const nqEl=document.getElementById(`nq-${ti}`);if(nqEl){nqEl.textContent=nq;nqEl.className='mro-val'+(nq>0?' nz':'');}
-  const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0);
+  const tp=nq+(t.pas_interesse||0)+(t.raccroche||0)+(t.mauvais_num||0)+(t.team_interne||0)+(t.deja_client||0);
   const tpEl=document.getElementById(`tp-${ti}`);if(tpEl)tpEl.textContent=tp;
   // Mise à jour totaux dans les onglets
   document.querySelectorAll('.tab').forEach(tab=>{const ts=tab.querySelector('.tsub');if(ts&&tab.textContent.includes(TEAMS[ti]))ts.textContent=`${teamTotal(ti)} appels`;});
@@ -574,7 +576,7 @@ function buildFields(ti,now){
     'RDV honorés':rdvHon,'No shows':t.no_shows||0,
     'NQ finances':t.nq_finances||0,'NQ autres':t.nq_autres||0,
     'Pas/Plus intéressés':t.pas_interesse||0,'Raccroché au nez':t.raccroche||0,
-    'Mauvais numéro':t.mauvais_num||0,
+    'Mauvais numéro':t.mauvais_num||0,'Team interne':t.team_interne||0,'Déjà client':t.deja_client||0,
     'Conv1':t.conv1||0,'Conv2':t.conv2||0,'Conv3':t.conv3||0,
     'Semaine':weekNum(now),'Mois':now.getMonth()+1,
     'Trimestre':Math.ceil((now.getMonth()+1)/3),'Année':now.getFullYear(),
